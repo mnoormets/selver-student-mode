@@ -1357,7 +1357,7 @@ function HeroCookCard({ onOpen }: { onOpen: () => void }) {
         </span>
         <div className="min-w-0 space-y-1">
           <h2 className="font-display text-base font-bold leading-snug text-black">
-            Mida ma täna süüa saaks?
+            Mida ma täna süüa teeks?
           </h2>
           <p className="text-sm leading-relaxed text-neutral-600">
             Ütle, mis sul kodus on või mille järele isu on. Pakun roa ja näitan,

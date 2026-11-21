@@ -13,7 +13,7 @@ Häkatoni prototüüp: **Tudengirežiim** kui eraldiseisev moodul Partnerkaardi 
 
 ### B) Tänane söök (Ava vestlus) — ilma nädalaplaanita
 
-1. Student Mode avalehel teine kaart: **Mida ma täna süüa saaks?**
+1. Student Mode avalehel teine kaart: **Mida ma täna süüa teeks?**
 2. **Ava vestlus**
 3. Kirjuta: `Mul on 100 g spagette ja kaks muna. Mida ma kiiresti teha saaks?`
 4. Oota muna-köögiviljaspagette + 130 g köögiviljasegu puudu + **1× 600 g** pakk (2.39 €)
