@@ -138,7 +138,8 @@ export function formatLiveHitLine(hit: LiveSelverHit): string {
   const pack = hit.packHint ? ` · ${hit.packHint}` : "";
   const sku = hit.sku ? ` · ${hit.sku}` : "";
   const tag = hit.source === "live" ? "Live Selver" : "Kataloog (fallback)";
-  return `• ${hit.name}${pack} — ${hit.priceLabel}${sku}\n  ${tag}: ${hit.url}`;
+  // Keep a bare https URL on its own so the chat UI can linkify it.
+  return `• ${hit.name}${pack} — ${hit.priceLabel}${sku}\n  ${tag} → ${hit.url}`;
 }
 
 /**

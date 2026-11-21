@@ -1470,6 +1470,37 @@ function PlanAskCard({
   );
 }
 
+function linkifyChatText(text: string, onOrange = false) {
+  const parts = text.split(/(https?:\/\/[^\s]+)/g);
+  return parts.map((part, i) => {
+    if (/^https?:\/\//.test(part)) {
+      const href = part.replace(/[),.;!?]+$/g, "");
+      const trailing = part.slice(href.length);
+      return (
+        <span key={i}>
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              "break-all underline underline-offset-2",
+              onOrange
+                ? "text-white decoration-white/80 hover:decoration-white"
+                : "font-semibold decoration-[#F97D00]/80 hover:text-[#F97D00]",
+            )}
+            style={onOrange ? undefined : { color: PK_ORANGE }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {href}
+          </a>
+          {trailing}
+        </span>
+      );
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 function ChatView({
   chat,
   draft,
@@ -1532,7 +1563,7 @@ function ChatView({
               m.role === "user" ? { backgroundColor: PK_ORANGE } : undefined
             }
           >
-            {m.text}
+            {linkifyChatText(m.text, m.role === "user")}
           </div>
         ))}
         {sending && (
