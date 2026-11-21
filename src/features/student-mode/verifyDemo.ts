@@ -7,6 +7,7 @@ import {
   LEGACY_DEMO_TOTAL_CENTS,
 } from "../../lib/demo-plan";
 import { computeBasketCents, eurosFromCents } from "./computeBasket";
+import { answerBudgetPastaQuestion } from "./budgetPasta";
 import { answerCookChatTurn } from "./cookChat";
 import { answerPantryCookQuestion } from "./pantryCook";
 import { answerSpaghettiEggsQuickMeal } from "./quickMeal";
@@ -206,6 +207,34 @@ export function verifyDemoMath(): string[] {
   );
   logs.push(hakkliha);
   logs.push("hakkliha empty-pantry list without veg ok");
+
+  const pastaQuestion = "Mul on 10 eurot. Tahaks hakklihapastat ja salatit, nii palju kui võimalik.";
+  const pasta = answerBudgetPastaQuestion(pastaQuestion, {});
+  assert(pasta, "10€ pasta request should be recognized");
+  assert(pasta.reply.startsWith("7 portsjonit"), "10€ pasta should make seven portions");
+  assert(pasta.reply.includes("Korv 9,95 € · alles 0,05 €"), "10€ pasta basket totals");
+  assert(
+    pasta.reply.includes("5 portsjonit") && pasta.reply.includes("7,17 €"),
+    "cheaper pasta alternative",
+  );
+  const tightPasta = answerBudgetPastaQuestion("Mul on 7,20 €. Tahan hakklihaga pastat ja salatit.", {});
+  assert(
+    tightPasta?.reply.startsWith("5 portsjonit") && tightPasta.reply.includes("Korv 7,17 €"),
+    "lower budget changes the pasta batch",
+  );
+  const noFit = answerBudgetPastaQuestion("Mul on 5 €. Tahan hakklihaga pastat ja salatit.", {});
+  assert(noFit?.reply.includes("ei mahu"), "underfunded pasta basket should report no fit");
+  const stocked = answerBudgetPastaQuestion("0 € eest hakklihapastat ja salatit", {
+    spaghetti: 90,
+    "minced-meat": 100,
+    "cabbage-carrot": 60,
+  });
+  assert(stocked?.readyToCook && stocked.reply.startsWith("1 portsjon ·"), "pantry can cover a full portion");
+  assert(
+    answerBudgetPastaQuestion("Mul on 30 € nädalaks, tahan hakklihapastat ja salatit.", {}) === null,
+    "weekly requests stay on the existing flow",
+  );
+  logs.push("budget pasta portion, basket, pantry and low-budget checks passed");
 
   return logs;
 }

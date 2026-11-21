@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { answerBudgetPastaQuestion } from "@/features/student-mode/budgetPasta";
 import {
   answerCookChatTurn,
   cookChatCatalogPrompt,
@@ -35,6 +36,19 @@ function isCookChatBody(value: unknown): value is Body {
   );
 }
 
+function budgetPastaResponse(
+  result: { reply: string; readyToCook: boolean },
+  pantry: CookPantry,
+) {
+  return NextResponse.json({
+    ...result,
+    pantry,
+    recipeId: null,
+    demo: true,
+    shoppingEmpty: result.readyToCook,
+  });
+}
+
 /**
  * Cook-chat turn. Prefer live OpenAI when OPENAI_API_KEY is set; always fall
  * back to deterministic catalog maths (clearly marked as näidisvastus).
@@ -56,11 +70,18 @@ export async function POST(request: Request) {
   const pantryIn = body.pantry ?? {};
   const forceRecipeId = body.recipeId ?? null;
 
+  const budgetReply = answerBudgetPastaQuestion(message, pantryIn);
+  if (budgetReply) return budgetPastaResponse(budgetReply, pantryIn);
+
   const apiKey = process.env.OPENAI_API_KEY?.trim();
   if (apiKey) {
     try {
       const ai = await callOpenAi(apiKey, message, pantryIn, forceRecipeId);
       if (ai) {
+        if (ai.intent === "budget-minced-pasta-salad") {
+          const reply = answerBudgetPastaQuestion(message, pantryIn, true);
+          if (reply) return budgetPastaResponse(reply, pantryIn);
+        }
         // Re-run pack maths so shopping list always matches catalog packs.
         const grounded = answerCookChatTurn(message, pantryIn, {
           demo: false,
@@ -94,10 +115,13 @@ async function callOpenAi(
   message: string,
   pantry: CookPantry,
   forceRecipeId: string | null,
-): Promise<{ recipeId: string | null; preamble: string } | null> {
+): Promise<{ recipeId: string | null; preamble: string; intent: string | null } | null> {
   const system = `${cookChatCatalogPrompt()}
 
-Return JSON only: {"recipeId":"<id or null>","preamble":"<one short Estonian sentence>"}
+Return JSON only with recipeId, preamble and intent.
+If the user wants a single meal of minced-meat pasta with a side salad under a stated budget,
+set intent to "budget-minced-pasta-salad" and recipeId to null. For other requests use null intent
+and a catalog recipeId or null. Preamble is a short Estonian sentence without prices or quantities.
 Current pantry (productId → amount): ${JSON.stringify(pantry)}
 Preferred recipeId if any: ${forceRecipeId ?? "null"}`;
 
@@ -128,9 +152,11 @@ Preferred recipeId if any: ${forceRecipeId ?? "null"}`;
   const parsed = JSON.parse(raw) as {
     recipeId?: string | null;
     preamble?: string;
+    intent?: string | null;
   };
   return {
     recipeId: parsed.recipeId ?? forceRecipeId,
     preamble: parsed.preamble ?? "",
+    intent: parsed.intent ?? null,
   };
 }

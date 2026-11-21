@@ -730,7 +730,7 @@ export function StudentModeApp() {
               <div className="rounded-[14px] border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
                 <span className="font-bold">Näidisrežiim</span> — vastused
                 demo + TheMealDB retseptidest (kaardistatud Selveri
-                demokataloogile). Spageti + muna näide töötab alati.
+                demokataloogile). Proovi hakklihapastat 10 € eelarvega.
               </div>
               <ChatView
                 chat={cookChat}
@@ -738,6 +738,7 @@ export function StudentModeApp() {
                 setDraft={setCookDraft}
                 onSend={() => void sendCookChat()}
                 chips={[
+                  "10 € eest hakklihapastat ja salatit",
                   "Mul on 100 g spagette ja kaks muna. Mida ma kiiresti teha saaks?",
                   "Mul on ka 130 g köögiviljasegu",
                   "Mul on kodus taigen ja mune, tahan hakkliha pannkooke — mida osta?",
