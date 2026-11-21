@@ -1,8 +1,10 @@
-import type { Recipe } from '../types';
+import type { Recipe } from "../types";
+import extraRecipes from "./imports/extra-recipes.json";
 
 // Each entry is one serving. Ingredient quantities inherit the product's unit.
-// Water, salt, pepper, and a little cooking oil are assumed pantry staples.
-export const recipes: readonly Recipe[] = [
+// Water, salt, pepper, onion, and a little cooking oil are assumed pantry staples.
+// Extra student recipes: data/imports/extra-recipes.json (`npm run import:recipes`).
+const coreRecipes: readonly Recipe[] = [
   {
     id: "berry-oats",
     title: "Warm berry oats",
@@ -101,4 +103,47 @@ export const recipes: readonly Recipe[] = [
       { productId: "mixed-veg", quantity: 80 },
     ],
   },
+  {
+    id: "hakkliha-pannkoogid",
+    title: "Minced meat pancakes",
+    totalMinutes: 25,
+    mealSlots: ["lunch", "dinner"],
+    vegetarian: false,
+    // Classic filling: minced meat (+ onion/spice from pantry). Batter/dough
+    // (taigen) is assumed at home when the student says so — no mixed-veg pack.
+    ingredients: [
+      { productId: "eggs", quantity: 2 },
+      { productId: "minced-meat", quantity: 300 },
+    ],
+  },
+  {
+    id: "chicken-stew",
+    title: "Chicken and vegetable stew",
+    totalMinutes: 22,
+    mealSlots: ["lunch", "dinner"],
+    vegetarian: false,
+    ingredients: [
+      { productId: "chicken", quantity: 150 },
+      { productId: "tomatoes", quantity: 140 },
+      { productId: "mixed-veg", quantity: 150 },
+    ],
+  },
 ];
+
+function mergeRecipes(
+  core: readonly Recipe[],
+  extras: readonly Recipe[],
+): readonly Recipe[] {
+  const byId = new Map<string, Recipe>();
+  for (const r of core) byId.set(r.id, r);
+  for (const r of extras) {
+    if (!r?.id || !r.title) continue;
+    byId.set(r.id, r);
+  }
+  return Array.from(byId.values());
+}
+
+export const recipes: readonly Recipe[] = mergeRecipes(
+  coreRecipes,
+  extraRecipes as Recipe[],
+);

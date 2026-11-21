@@ -1,205 +1,372 @@
-import { productById, RECIPES, type Recipe } from "./catalog";
-import type { BasketLine, PlannedMeal, PlanResult } from "./planner";
+import {
+  computeBasketCents,
+  eurosFromCents,
+  formatEurosFromCents,
+  type PantryStockCents,
+} from "@/features/student-mode/computeBasket";
+import { demoWeek } from "@/features/student-mode/data/demoWeek";
+import { recipes } from "@/features/student-mode/data/recipes";
+import { recipeEtTitle } from "@/features/student-mode/quickMeal";
+import type { BasketLine, PlannedMeal, PlanResult, Prefs } from "./planner";
 
-/** Egg pack size in the catalog ("Munad M 10tk"). */
+/** Pitch reference totals from the earlier hand-tuned full week (euro cents). */
+export const LEGACY_DEMO_TOTAL_CENTS = 3424;
+export const LEGACY_DEMO_PANTRY10_TOTAL_CENTS = 3235;
+
 export const EGGS_PER_PACK = 10;
-
-/** Demo egg pack unit price — 2 packs → 3.78 €; removing one pack → −1.89 € (34.24 → 32.35). */
 export const DEMO_EGG_PACK_PRICE = 1.89;
 
-const DEMO_BUDGET = 35;
+export type DemoPlanOptions = {
+  budgetEuros?: number;
+  days?: number;
+  style?: Prefs["style"];
+};
 
-/**
- * Hackathon C+ demo week: pasta-leaning, quick meals, fixed 34.24 € basket.
- * Week needs 14 eggs → 2×10 packs without pantry stock.
- */
-export function buildHackathonDemoPlan(): PlanResult {
-  // Egg-bearing meals: 2×omlett (3+3) + 2×kartul-muna (4+4) = 14 eggs → 2 packs.
-  const mealIds: { day: number; slot: PlannedMeal["slot"]; recipeId: string }[] =
-    [
-      { day: 1, slot: "hommik", recipeId: "puder" },
-      { day: 1, slot: "lõuna", recipeId: "voileib" },
-      { day: 1, slot: "õhtu", recipeId: "hakk-pasta" },
-      { day: 2, slot: "hommik", recipeId: "omlett" },
-      { day: 2, slot: "lõuna", recipeId: "pasta-kana" },
-      { day: 2, slot: "õhtu", recipeId: "kartul-muna" },
-      { day: 3, slot: "hommik", recipeId: "puder" },
-      { day: 3, slot: "lõuna", recipeId: "voileib" },
-      { day: 3, slot: "õhtu", recipeId: "hakk-pasta" },
-      { day: 4, slot: "hommik", recipeId: "puder" },
-      { day: 4, slot: "lõuna", recipeId: "pasta-kana" },
-      { day: 4, slot: "õhtu", recipeId: "hakk-pasta" },
-      { day: 5, slot: "hommik", recipeId: "omlett" },
-      { day: 5, slot: "lõuna", recipeId: "voileib" },
-      { day: 5, slot: "õhtu", recipeId: "kartul-muna" },
-      { day: 6, slot: "hommik", recipeId: "puder" },
-      { day: 6, slot: "lõuna", recipeId: "hakk-pasta" },
-      { day: 6, slot: "õhtu", recipeId: "pasta-kana" },
-      { day: 7, slot: "hommik", recipeId: "puder" },
-      { day: 7, slot: "lõuna", recipeId: "voileib" },
-      { day: 7, slot: "õhtu", recipeId: "hakk-pasta" },
-    ];
+const SLOT_ET = {
+  breakfast: "hommik",
+  lunch: "lõuna",
+  dinner: "õhtu",
+} as const;
 
-  const meals: PlannedMeal[] = mealIds.map(({ day, slot, recipeId }) => {
-    const recipe = RECIPES.find((r) => r.id === recipeId) as Recipe;
-    return { day, slot, recipe, cost: recipeLineCost(recipe) };
+const DAY_INDEX: Record<string, number> = {
+  Monday: 1,
+  Tuesday: 2,
+  Wednesday: 3,
+  Thursday: 4,
+  Friday: 5,
+  Saturday: 6,
+  Sunday: 7,
+};
+
+function recipeById(id: string) {
+  const recipe = recipes.find((r) => r.id === id);
+  if (!recipe) throw new Error(`Unknown demo recipe ${id}`);
+  return recipe;
+}
+
+function mealIngredients(meals: PlannedMeal[]) {
+  return meals.flatMap((meal) =>
+    meal.recipe.ingredients.map((ing) => ({
+      productId: ing.productId,
+      quantity: ing.qty,
+    })),
+  );
+}
+
+function toBasketLines(
+  centsBasket: ReturnType<typeof computeBasketCents>,
+): BasketLine[] {
+  return centsBasket.lines.map((line) => ({
+    productId: line.productId,
+    name: line.name,
+    qty: line.packs,
+    unit: line.unit === "pcs" ? "karp" : "pk",
+    lineTotal: eurosFromCents(line.lineTotalCents),
+    saved: 0,
+    onPromo: false,
+    sourceUrl: line.sourceUrl,
+    selverSku: line.selverSku,
+    eSelverUrl: line.eSelverUrl,
+  }));
+}
+
+function explainTotalDelta(computedCents: number, legacyCents: number): string {
+  if (computedCents === legacyCents) {
+    return `Allikaviidetega andmestikust: ${formatEurosFromCents(computedCents)} (sama mis vana demosumma ${formatEurosFromCents(legacyCents)}).`;
+  }
+  const delta = computedCents - legacyCents;
+  const sign = delta > 0 ? "+" : "−";
+  return `Arvutatud korv ${formatEurosFromCents(computedCents)} (vana demosumma oli ${formatEurosFromCents(legacyCents)}, vahe ${sign}${formatEurosFromCents(Math.abs(delta))} — nüüd kehtib andmestikust arvutatud summa).`;
+}
+
+function styleLabel(style: Prefs["style"]): string {
+  switch (style) {
+    case "odav":
+      return "soodne";
+    case "taimne":
+      return "taimne";
+    case "liha":
+      return "liha";
+    default:
+      return "kiire";
+  }
+}
+
+function pickRecipeId(
+  preferredId: string,
+  style: Prefs["style"],
+  slot: "breakfast" | "lunch" | "dinner",
+): string {
+  const preferred = recipeById(preferredId);
+  if (style === "kiire" || style === "odav") return preferredId;
+
+  if (style === "taimne") {
+    if (preferred.vegetarian) return preferredId;
+    const veg = recipes.find(
+      (r) => r.vegetarian && r.mealSlots.includes(slot),
+    );
+    return veg?.id ?? preferredId;
+  }
+
+  // liha — prefer non-vegetarian when swapping dinners/lunches
+  if (preferred.vegetarian && slot !== "breakfast") {
+    const meat = recipes.find(
+      (r) => !r.vegetarian && r.mealSlots.includes(slot),
+    );
+    return meat?.id ?? preferredId;
+  }
+  return preferredId;
+}
+
+function buildMealsForDays(
+  dayCount: number,
+  style: Prefs["style"],
+): PlannedMeal[] {
+  const weekSlice = demoWeek.slice(0, Math.max(1, Math.min(7, dayCount)));
+
+  return weekSlice.flatMap((day) => {
+    const dayNum = DAY_INDEX[day.day] ?? 1;
+    return (["breakfast", "lunch", "dinner"] as const).map((slot) => {
+      const recipeId = pickRecipeId(day.meals[slot], style, slot);
+      const recipe = recipeById(recipeId);
+      const costCents = computeBasketCents(
+        recipe.ingredients.map((ing) => ({
+          productId: ing.productId,
+          quantity: ing.quantity,
+        })),
+      ).totalCents;
+
+      return {
+        day: dayNum,
+        slot: SLOT_ET[slot],
+        recipe: {
+          id: recipe.id,
+          name: recipeEtTitle(recipe.id),
+          minutes: recipe.totalMinutes,
+          servings: 1,
+          tags: recipe.vegetarian ? ["kiire", "taimne"] : ["kiire", "liha"],
+          ingredients: recipe.ingredients.map((ing) => ({
+            productId: ing.productId,
+            qty: ing.quantity,
+          })),
+          tip: "Retsepti kogused on seotud allikaviidetega toote ID-dega.",
+        },
+        cost: eurosFromCents(costCents),
+      };
+    });
   });
+}
 
-  const eggsNeeded = countEggsNeeded(meals);
-  const eggPacksToBuy = Math.ceil(eggsNeeded / EGGS_PER_PACK);
+const CHEAP_DAY_TEMPLATES: {
+  breakfast: string;
+  lunch: string;
+  dinner: string;
+}[] = [
+  {
+    breakfast: "berry-oats",
+    lunch: "chickpea-pasta",
+    dinner: "chickpea-stew",
+  },
+  {
+    breakfast: "egg-oats",
+    lunch: "egg-pasta",
+    dinner: "tomato-eggs",
+  },
+  {
+    breakfast: "berry-oats",
+    lunch: "chickpea-stew",
+    dinner: "egg-pasta",
+  },
+];
 
-  const basket: BasketLine[] = [
-    line("hakkliha", 3, 2.79),
-    line("pasta", 3, 0.89),
-    line("kana", 1, 3.99),
-    line("munad", eggPacksToBuy, DEMO_EGG_PACK_PRICE),
-    line("piim", 2, 0.95),
-    line("juust", 1, 2.29),
-    line("leib", 1, 1.29),
-    line("kaerahelbed", 1, 1.19),
-    line("banaan", 1, 1.49),
-    line("kartul", 1, 1.49),
-    line("sibul", 1, 0.79),
-    line("tomat", 2, 0.95),
-    line("porgand", 1, 0.89),
-    line("oun", 1, 1.29),
-    line("oliivioli", 1, 1.79),
-    line("vursts", 1, 0.59),
-  ];
-
-  // Pin exact demo totals the pitch uses.
-  const total = 34.24;
-  const saved = 4.12;
-  const leftoverBudget = Math.round((DEMO_BUDGET - total) * 100) / 100;
-
+function mealFromRecipe(
+  dayNum: number,
+  slot: PlannedMeal["slot"],
+  recipeId: string,
+): PlannedMeal {
+  const recipe = recipeById(recipeId);
+  const costCents = computeBasketCents(
+    recipe.ingredients.map((ing) => ({
+      productId: ing.productId,
+      quantity: ing.quantity,
+    })),
+  ).totalCents;
   return {
-    meals,
-    basket: scaleBasketToTotal(basket, total),
-    total,
-    saved,
-    leftoverBudget,
-    summary: `Näidisplaan 7 päevaks ~${total.toFixed(2)} € (eelarve ${DEMO_BUDGET} €). Kiired toidud sinu eelarve piires — pasta ja soodsad road.`,
+    day: dayNum,
+    slot,
+    recipe: {
+      id: recipe.id,
+      name: recipeEtTitle(recipe.id),
+      minutes: recipe.totalMinutes,
+      servings: 1,
+      tags: recipe.vegetarian ? ["kiire", "taimne"] : ["kiire", "liha"],
+      ingredients: recipe.ingredients.map((ing) => ({
+        productId: ing.productId,
+        qty: ing.quantity,
+      })),
+      tip: "Retsepti kogused on seotud allikaviidetega toote ID-dega.",
+    },
+    cost: eurosFromCents(costCents),
   };
 }
 
-export type PantryStock = {
-  /** Whole eggs already at home. */
+/** Build as many cheap days as fit under budget (at least one day). */
+function buildAffordablePlan(
+  budgetCents: number,
+  maxDays: number,
+): PlannedMeal[] {
+  const meals: PlannedMeal[] = [];
+  for (let day = 1; day <= Math.max(1, Math.min(7, maxDays)); day++) {
+    const template = CHEAP_DAY_TEMPLATES[(day - 1) % CHEAP_DAY_TEMPLATES.length]!;
+    const candidate = [
+      ...meals,
+      mealFromRecipe(day, "hommik", template.breakfast),
+      mealFromRecipe(day, "lõuna", template.lunch),
+      mealFromRecipe(day, "õhtu", template.dinner),
+    ];
+    const total = computeBasketCents(mealIngredients(candidate)).totalCents;
+    if (total > budgetCents && meals.length > 0) break;
+    // Always accept the first day even if slightly over (pack rounding).
+    meals.push(...candidate.slice(meals.length));
+    if (total > budgetCents) break;
+  }
+  return meals;
+}
+
+/**
+ * Fit meals into the selected budget by dropping trailing days, then falling
+ * back to a cheaper vegetarian-leaning template if even one default day
+ * exceeds the budget (e.g. 20 €).
+ */
+function fitMealsToBudget(
+  meals: PlannedMeal[],
+  budgetCents: number,
+  maxDays: number,
+): PlannedMeal[] {
+  let current = meals;
+  while (true) {
+    const total = computeBasketCents(mealIngredients(current)).totalCents;
+    if (total <= budgetCents) return current;
+    const dayNums = [...new Set(current.map((m) => m.day))].sort(
+      (a, b) => a - b,
+    );
+    if (dayNums.length <= 1) break;
+    const drop = dayNums[dayNums.length - 1]!;
+    current = current.filter((m) => m.day !== drop);
+  }
+
+  const singleTotal = computeBasketCents(mealIngredients(current)).totalCents;
+  if (singleTotal <= budgetCents) return current;
+  return buildAffordablePlan(budgetCents, maxDays);
+}
+
+/**
+ * Hackathon demo plan from sourced products, fitted to the student's budget.
+ */
+export function buildHackathonDemoPlan(
+  options: DemoPlanOptions = {},
+): PlanResult {
+  const budgetEuros = options.budgetEuros ?? 35;
+  const requestedDays = options.days ?? 7;
+  const style = options.style ?? "kiire";
+  const budgetCents = Math.round(budgetEuros * 100);
+
+  let meals = buildMealsForDays(requestedDays, style);
+  meals = fitMealsToBudget(meals, budgetCents, requestedDays);
+
+  const keptDays = new Set(meals.map((m) => m.day)).size;
+  const centsBasket = computeBasketCents(mealIngredients(meals));
+  const totalCents = centsBasket.totalCents;
+  const total = eurosFromCents(totalCents);
+  const leftoverBudget = eurosFromCents(budgetCents - totalCents);
+  const deltaNote =
+    keptDays === 7 && style === "kiire"
+      ? explainTotalDelta(totalCents, LEGACY_DEMO_TOTAL_CENTS)
+      : `Korv ${formatEurosFromCents(totalCents)} sinu ${budgetEuros} € eelarve jaoks.`;
+
+  const fitNote =
+    keptDays < requestedDays
+      ? ` Mahutasime ${keptDays}/${requestedDays} päeva, et jääda eelarve sisse.`
+      : "";
+
+  return {
+    meals,
+    basket: toBasketLines(centsBasket),
+    total,
+    saved: 0,
+    leftoverBudget,
+    budgetCents,
+    days: keptDays,
+    summary: `Näidisplaan ${keptDays} päevaks — ${styleLabel(style)} toidud sinu eelarve piires (eelarve ${budgetEuros} €).${fitNote} ${deltaNote}`,
+  };
+}
+
+export type PantryStock = PantryStockCents & {
+  /** Whole eggs already at home (alias for pantry.eggs). */
   eggs?: number;
 };
 
 /**
- * Apply pantry stock. Demo beat: 10 eggs at home → buy 1 pack instead of 2
- * (need 14 eggs) → basket 34.24 € → 32.35 €.
+ * Apply pantry stock via the cents basket calculator.
+ * Demo beat (full 7-day plan): 10 eggs at home → 1 pack instead of 2.
  */
 export function applyPantryStock(
   plan: PlanResult,
   stock: PantryStock,
 ): PlanResult {
-  const eggsAtHome = stock.eggs ?? 0;
-  if (eggsAtHome <= 0) return plan;
+  const eggsAtHome =
+    typeof stock.eggs === "number" ? stock.eggs : (stock["eggs"] ?? 0);
+  const pantry: PantryStockCents = { ...stock, eggs: eggsAtHome };
+  const budgetCents = plan.budgetCents;
 
   const eggsNeeded = countEggsNeeded(plan.meals);
   const packsBefore = Math.ceil(eggsNeeded / EGGS_PER_PACK);
-  const packsAfter = Math.ceil(
-    Math.max(0, eggsNeeded - eggsAtHome) / EGGS_PER_PACK,
-  );
-  const packsRemoved = packsBefore - packsAfter;
-  if (packsRemoved <= 0) {
-    return {
-      ...plan,
-      summary: `Kodus on ${eggsAtHome} muna — nädala jaoks (${eggsNeeded} tk) sellest ei piisa, et ostu vähendada.`,
-    };
-  }
+  const missingEggs = Math.max(0, eggsNeeded - (pantry.eggs ?? 0));
+  const packsAfter =
+    missingEggs <= 0 ? 0 : Math.ceil(missingEggs / EGGS_PER_PACK);
 
-  const eggPrice = DEMO_EGG_PACK_PRICE;
-  const savedOnEggs = Math.round(packsRemoved * eggPrice * 100) / 100;
+  const centsBasket = computeBasketCents(mealIngredients(plan.meals), pantry);
+  const totalCents = centsBasket.totalCents;
+  const total = eurosFromCents(totalCents);
+  const leftoverBudget = eurosFromCents(budgetCents - totalCents);
 
-  const basket = plan.basket
-    .map((line) => {
-      if (line.productId !== "munad") return line;
-      if (packsAfter <= 0) return null;
-      return {
-        ...line,
-        qty: packsAfter,
-        lineTotal: Math.round(packsAfter * eggPrice * 100) / 100,
-      };
-    })
-    .filter((l): l is BasketLine => l !== null);
-
-  const total = Math.round((plan.total - savedOnEggs) * 100) / 100;
-  // Pitch numbers: 34.24 → 32.35
-  const pinnedTotal =
-    plan.total === 34.24 && eggsAtHome === 10 && packsAfter === 1
-      ? 32.35
-      : total;
+  const legacyRef =
+    plan.days === 7 && (pantry.eggs ?? 0) === 10
+      ? LEGACY_DEMO_PANTRY10_TOTAL_CENTS
+      : plan.days === 7 && (pantry.eggs ?? 0) === 0
+        ? LEGACY_DEMO_TOTAL_CENTS
+        : totalCents;
+  const deltaNote = explainTotalDelta(totalCents, legacyRef);
 
   return {
     ...plan,
-    basket,
-    total: pinnedTotal,
-    leftoverBudget: Math.round((DEMO_BUDGET - pinnedTotal) * 100) / 100,
-    saved: Math.round((plan.saved + savedOnEggs) * 100) / 100,
-    summary: `Mul on kodus ${eggsAtHome} muna. Nädalaks vaja ${eggsNeeded} tk → ostunimekirja ${packsAfter} karp (varem ${packsBefore}). Korv ${plan.total.toFixed(2)} € → ${pinnedTotal.toFixed(2)} €.`,
+    basket: toBasketLines(centsBasket),
+    total,
+    leftoverBudget,
+    saved: 0,
+    summary: `Mul on kodus ${pantry.eggs ?? 0} muna. Plaaniks vaja ${eggsNeeded} tk → ostunimekirja ${packsAfter} karp (varem ${packsBefore}). Korv ${plan.total.toFixed(2)} € → ${total.toFixed(2)} € (eelarve ${eurosFromCents(budgetCents).toFixed(0)} €). ${deltaNote}`,
   };
 }
 
 export function countEggsNeeded(meals: PlannedMeal[]): number {
-  let packs = 0;
+  let eggs = 0;
   for (const meal of meals) {
     for (const ing of meal.recipe.ingredients) {
-      if (ing.productId === "munad") packs += ing.qty;
+      if (ing.productId === "eggs" || ing.productId === "munad") {
+        eggs +=
+          ing.productId === "munad"
+            ? Math.round(ing.qty * EGGS_PER_PACK)
+            : ing.qty;
+      }
     }
   }
-  // Catalog qty is fraction of a 10-pack; convert to whole eggs.
-  return Math.round(packs * EGGS_PER_PACK);
+  return eggs;
 }
 
-function recipeLineCost(recipe: Recipe): number {
-  return (
-    Math.round(
-      recipe.ingredients.reduce((sum, ing) => {
-        const p = productById(ing.productId);
-        const unit =
-          ing.productId === "munad" ? DEMO_EGG_PACK_PRICE : (p.promo ?? p.price);
-        return sum + unit * ing.qty;
-      }, 0) * 100,
-    ) / 100
-  );
-}
-
-function line(productId: string, qty: number, unit: number): BasketLine {
-  const p = productById(productId);
-  const lineTotal = Math.round(unit * qty * 100) / 100;
-  const full = Math.round(p.price * qty * 100) / 100;
-  return {
-    productId,
-    name: p.name,
-    qty,
-    unit: p.unit,
-    lineTotal,
-    saved: Math.max(0, Math.round((full - lineTotal) * 100) / 100),
-    privateLabel: p.privateLabel,
-    onPromo: p.promo !== undefined || productId === "munad",
-  };
-}
-
-/** Nudge the largest non-egg line so basket sums to the pitch total. */
-function scaleBasketToTotal(basket: BasketLine[], target: number): BasketLine[] {
-  const withoutEggs = basket.filter((l) => l.productId !== "munad");
-  const eggs = basket.find((l) => l.productId === "munad");
-  const eggTotal = eggs?.lineTotal ?? 0;
-  const current = withoutEggs.reduce((s, l) => s + l.lineTotal, 0);
-  const desired = Math.round((target - eggTotal) * 100) / 100;
-  const delta = Math.round((desired - current) * 100) / 100;
-  if (delta === 0 || withoutEggs.length === 0) return basket;
-
-  const anchor = withoutEggs[0]!;
-  const adjusted: BasketLine = {
-    ...anchor,
-    lineTotal: Math.round((anchor.lineTotal + delta) * 100) / 100,
-  };
-
-  return [adjusted, ...withoutEggs.slice(1), ...(eggs ? [eggs] : [])].sort(
-    (a, b) => b.lineTotal - a.lineTotal,
-  );
+/** Egg packs to buy for the default 35€ / 7-day demo week. */
+export function demoEggPacksToBuy(eggsAtHome: number): number {
+  const plan = buildHackathonDemoPlan({ budgetEuros: 35, days: 7 });
+  const needed = countEggsNeeded(plan.meals);
+  const missing = Math.max(0, needed - eggsAtHome);
+  return missing <= 0 ? 0 : Math.ceil(missing / EGGS_PER_PACK);
 }

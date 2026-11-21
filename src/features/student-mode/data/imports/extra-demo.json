@@ -1,0 +1,82 @@
+[
+  {
+    "id": "rice",
+    "name": "Lõunariis, FIRST PRICE",
+    "packQuantity": 1000,
+    "unit": "g",
+    "priceCents": 149,
+    "sourceUrl": "https://www.selver.ee/lounariis-first-price-1-kg",
+    "eSelverUrl": "https://www.selver.ee/lounariis-first-price-1-kg",
+    "checkedAt": "2026-11-21"
+  },
+  {
+    "id": "flour",
+    "name": "Nisujahu peenike, TARTU MILL",
+    "packQuantity": 1000,
+    "unit": "g",
+    "priceCents": 99,
+    "sourceUrl": "https://www.selver.ee/nisujahu-peenike-tartu-mill-1-kg",
+    "eSelverUrl": "https://www.selver.ee/nisujahu-peenike-tartu-mill-1-kg",
+    "checkedAt": "2026-11-21"
+  },
+  {
+    "id": "butter",
+    "name": "Või 82%, FARMI",
+    "packQuantity": 200,
+    "unit": "g",
+    "priceCents": 189,
+    "sourceUrl": "https://www.selver.ee/voi-82-farmi-200-g",
+    "eSelverUrl": "https://www.selver.ee/voi-82-farmi-200-g",
+    "checkedAt": "2026-11-21"
+  },
+  {
+    "id": "yogurt",
+    "name": "Naturaalne jogurt 3,5%, ALMA",
+    "packQuantity": 1000,
+    "unit": "ml",
+    "priceCents": 129,
+    "sourceUrl": "https://www.selver.ee/naturaalne-jogurt-3-5-alma-1-kg",
+    "eSelverUrl": "https://www.selver.ee/naturaalne-jogurt-3-5-alma-1-kg",
+    "checkedAt": "2026-11-21"
+  },
+  {
+    "id": "beans",
+    "name": "Punased oad, FIRST PRICE",
+    "packQuantity": 400,
+    "unit": "g",
+    "priceCents": 89,
+    "sourceUrl": "https://www.selver.ee/punased-oad-tomatiga-first-price-400-g",
+    "eSelverUrl": "https://www.selver.ee/punased-oad-tomatiga-first-price-400-g",
+    "checkedAt": "2026-11-21"
+  },
+  {
+    "id": "cheese",
+    "name": "Juust Eesti 15%, ESTOVER",
+    "packQuantity": 500,
+    "unit": "g",
+    "priceCents": 449,
+    "sourceUrl": "https://www.selver.ee/juust-eesti-15-estover-500-g",
+    "eSelverUrl": "https://www.selver.ee/juust-eesti-15-estover-500-g",
+    "checkedAt": "2026-11-21"
+  },
+  {
+    "id": "bread",
+    "name": "Rukkipala, Fazer",
+    "packQuantity": 280,
+    "unit": "g",
+    "priceCents": 129,
+    "sourceUrl": "https://www.selver.ee/rukkipala-fazer-280-g",
+    "eSelverUrl": "https://www.selver.ee/rukkipala-fazer-280-g",
+    "checkedAt": "2026-11-21"
+  },
+  {
+    "id": "potato",
+    "name": "Kartulid, Iclass",
+    "packQuantity": 2000,
+    "unit": "g",
+    "priceCents": 249,
+    "sourceUrl": "https://www.selver.ee/kartul-pesemata-2-kg",
+    "eSelverUrl": "https://www.selver.ee/kartul-pesemata-2-kg",
+    "checkedAt": "2026-11-21"
+  }
+]

@@ -1,0 +1,4103 @@
+{
+  "exportedAt": "2026-11-21T00:00:00.000Z",
+  "priceSnapshotDate": "2026-11-21",
+  "profile": {
+    "budgetCents": 3500,
+    "diet": "standard",
+    "cookUnderMinutes": 20
+  },
+  "products": [
+    {
+      "id": "oats",
+      "name": "Täistera kiirkaerahelbed, TARTU MILL",
+      "packQuantity": 1000,
+      "unit": "g",
+      "priceCents": 239,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/hsvd7t/taistera-kiirkaerahelbed-tartu-mill-1-kg?kategooria=hommikuhelbed",
+      "eSelverUrl": "https://www.selver.ee/taistera-kiirkaerahelbed-tartu-mill-1-kg"
+    },
+    {
+      "id": "milk",
+      "name": "Piim 2,5%, ALMA",
+      "packQuantity": 1500,
+      "unit": "ml",
+      "priceCents": 139,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/x5ww6f/piim-2-5-alma-1-5-l?kategooria=piim-koor",
+      "selverSku": "T000008889",
+      "eSelverUrl": "https://www.selver.ee/piim-2-5-alma-1-5-l",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "berries",
+      "name": "Marjasegu vaarikatega, HORTEX",
+      "packQuantity": 300,
+      "unit": "g",
+      "priceCents": 329,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/rxd34k/marjasegu-vaarikatega-hortex-300-g?kategooria=kulm-koogiviljad",
+      "selverSku": "T000056734",
+      "eSelverUrl": "https://www.selver.ee/marjasegu-vaarikatega-hortex-300-g",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "eggs",
+      "name": "Munad M10 valged, SELVER",
+      "packQuantity": 10,
+      "unit": "pcs",
+      "priceCents": 189,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/tqcftg/munad-m10-valged-selver-10-tk?kategooria=munad",
+      "selverSku": "T000032551",
+      "eSelverUrl": "https://www.selver.ee/munad-m10-valged-selver-10-tk",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "spaghetti",
+      "name": "Spagetid, FIRST PRICE",
+      "packQuantity": 1000,
+      "unit": "g",
+      "priceCents": 229,
+      "sourceUrl": "https://soodsadhinnad.ee/p/v3b22p/spagetid-first-price-1-kg?kategooria=pasta"
+    },
+    {
+      "id": "chickpeas",
+      "name": "Kikerherned, FIRST PRICE",
+      "packQuantity": 240,
+      "unit": "g",
+      "priceCents": 99,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/r5v9j6/kikerherned-first-price-240-g?kategooria=aedviljakonservid"
+    },
+    {
+      "id": "tomatoes",
+      "name": "Tükeldatud mahe tomatid, FIRST PRICE",
+      "packQuantity": 400,
+      "unit": "g",
+      "priceCents": 189,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/3nv229/tukeldatud-mahe-tomatid-first-price-400-g?kategooria=aedviljakonservid"
+    },
+    {
+      "id": "mixed-veg",
+      "name": "Ameerika köögiviljasegu, FIRST PRICE",
+      "packQuantity": 600,
+      "unit": "g",
+      "priceCents": 239,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/qtzwkv/ameerika-koogiviljasegu-first-price-600-g?kategooria=kulm-koogiviljad",
+      "eSelverUrl": "https://www.selver.ee/ameerika-koogiviljasegu-first-price-600-g",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "chicken",
+      "name": "Eestimaine broileririnnafilee sisetükk, TALLEGG",
+      "packQuantity": 400,
+      "unit": "g",
+      "priceCents": 539,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/t64rn3/eestimaine-broileririnnafilee-sisetukk-tallegg-400-g?kategooria=linnuliha"
+    },
+    {
+      "id": "minced-meat",
+      "name": "Kodune hakkliha, MAKS & MOORITS",
+      "packQuantity": 500,
+      "unit": "g",
+      "priceCents": 349,
+      "sourceUrl": "https://www.selver.ee/kodune-hakkliha-maks-moorits-500-g",
+      "selverSku": "T000027309",
+      "eSelverUrl": "https://www.selver.ee/kodune-hakkliha-maks-moorits-500-g",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "rice",
+      "name": "Lõunariis, FIRST PRICE",
+      "packQuantity": 1000,
+      "unit": "g",
+      "priceCents": 149,
+      "sourceUrl": "https://www.selver.ee/lounariis-first-price-1-kg",
+      "eSelverUrl": "https://www.selver.ee/lounariis-first-price-1-kg",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "flour",
+      "name": "Nisujahu peenike, TARTU MILL",
+      "packQuantity": 1000,
+      "unit": "g",
+      "priceCents": 99,
+      "sourceUrl": "https://www.selver.ee/nisujahu-peenike-tartu-mill-1-kg",
+      "eSelverUrl": "https://www.selver.ee/nisujahu-peenike-tartu-mill-1-kg",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "butter",
+      "name": "Või 82%, FARMI",
+      "packQuantity": 200,
+      "unit": "g",
+      "priceCents": 189,
+      "sourceUrl": "https://www.selver.ee/voi-82-farmi-200-g",
+      "eSelverUrl": "https://www.selver.ee/voi-82-farmi-200-g",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "yogurt",
+      "name": "Naturaalne jogurt 3,5%, ALMA",
+      "packQuantity": 1000,
+      "unit": "ml",
+      "priceCents": 129,
+      "sourceUrl": "https://www.selver.ee/naturaalne-jogurt-3-5-alma-1-kg",
+      "eSelverUrl": "https://www.selver.ee/naturaalne-jogurt-3-5-alma-1-kg",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "beans",
+      "name": "Punased oad, FIRST PRICE",
+      "packQuantity": 400,
+      "unit": "g",
+      "priceCents": 89,
+      "sourceUrl": "https://www.selver.ee/punased-oad-tomatiga-first-price-400-g",
+      "eSelverUrl": "https://www.selver.ee/punased-oad-tomatiga-first-price-400-g",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "cheese",
+      "name": "Juust Eesti 15%, ESTOVER",
+      "packQuantity": 500,
+      "unit": "g",
+      "priceCents": 449,
+      "sourceUrl": "https://www.selver.ee/juust-eesti-15-estover-500-g",
+      "eSelverUrl": "https://www.selver.ee/juust-eesti-15-estover-500-g",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "bread",
+      "name": "Rukkipala, Fazer",
+      "packQuantity": 280,
+      "unit": "g",
+      "priceCents": 129,
+      "sourceUrl": "https://www.selver.ee/rukkipala-fazer-280-g",
+      "eSelverUrl": "https://www.selver.ee/rukkipala-fazer-280-g",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "potato",
+      "name": "Kartulid, Iclass",
+      "packQuantity": 2000,
+      "unit": "g",
+      "priceCents": 249,
+      "sourceUrl": "https://www.selver.ee/kartul-pesemata-2-kg",
+      "eSelverUrl": "https://www.selver.ee/kartul-pesemata-2-kg",
+      "checkedAt": "2026-11-21"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "berry-oats",
+      "title": "Warm berry oats",
+      "totalMinutes": 8,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "oats",
+          "quantity": 70
+        },
+        {
+          "productId": "milk",
+          "quantity": 200
+        },
+        {
+          "productId": "berries",
+          "quantity": 60
+        }
+      ]
+    },
+    {
+      "id": "egg-oats",
+      "title": "Savory egg and vegetable oats",
+      "totalMinutes": 13,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "oats",
+          "quantity": 65
+        },
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 80
+        }
+      ]
+    },
+    {
+      "id": "chickpea-pasta",
+      "title": "Tomato and chickpea spaghetti",
+      "totalMinutes": 17,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 90
+        },
+        {
+          "productId": "chickpeas",
+          "quantity": 100
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 100
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 80
+        }
+      ]
+    },
+    {
+      "id": "egg-pasta",
+      "title": "Egg and vegetable spaghetti",
+      "totalMinutes": 16,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 90
+        },
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 130
+        }
+      ]
+    },
+    {
+      "id": "chickpea-stew",
+      "title": "Chickpea and vegetable tomato stew",
+      "totalMinutes": 15,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "chickpeas",
+          "quantity": 120
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 120
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 150
+        }
+      ]
+    },
+    {
+      "id": "chicken-tomato-pasta",
+      "title": "Chicken and tomato spaghetti",
+      "totalMinutes": 19,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 130
+        },
+        {
+          "productId": "spaghetti",
+          "quantity": 90
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 130
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 60
+        }
+      ]
+    },
+    {
+      "id": "chicken-veg-pasta",
+      "title": "Chicken and vegetable spaghetti",
+      "totalMinutes": 19,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 130
+        },
+        {
+          "productId": "spaghetti",
+          "quantity": 90
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 150
+        }
+      ]
+    },
+    {
+      "id": "tomato-eggs",
+      "title": "Tomato and egg skillet",
+      "totalMinutes": 16,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 140
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 80
+        }
+      ]
+    },
+    {
+      "id": "hakkliha-pannkoogid",
+      "title": "Minced meat pancakes",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "minced-meat",
+          "quantity": 300
+        }
+      ]
+    },
+    {
+      "id": "chicken-stew",
+      "title": "Chicken and vegetable stew",
+      "totalMinutes": 22,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 150
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 140
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 150
+        }
+      ]
+    },
+    {
+      "id": "mealdb-53064-fettuccine-alfredo",
+      "title": "Fettuccine Alfredo",
+      "titleEt": "Fettuccine Alfredo",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "butter",
+          "quantity": 150
+        },
+        {
+          "productId": "cheese",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "fettuccine alfredo",
+        "fettuccine",
+        "alfredo"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.delish.com/cooking/recipe-ideas/a55312/best-homemade-fettuccine-alfredo-recipe/"
+    },
+    {
+      "id": "mealdb-52835-fettucine-alfredo",
+      "title": "Fettucine alfredo",
+      "titleEt": "Fettucine alfredo",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "butter",
+          "quantity": 25
+        },
+        {
+          "productId": "flour",
+          "quantity": 3
+        },
+        {
+          "productId": "cheese",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "fettucine alfredo",
+        "fettucine",
+        "alfredo"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/fettucine-alfredo"
+    },
+    {
+      "id": "mealdb-52829-grilled-mac-and-cheese-sandwich",
+      "title": "Grilled Mac and Cheese Sandwich",
+      "titleEt": "Grilled Mac and Cheese Sandwich",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 8
+        },
+        {
+          "productId": "flour",
+          "quantity": 150
+        },
+        {
+          "productId": "butter",
+          "quantity": 140
+        },
+        {
+          "productId": "milk",
+          "quantity": 240
+        },
+        {
+          "productId": "cheese",
+          "quantity": 2050
+        },
+        {
+          "productId": "bread",
+          "quantity": 1600
+        }
+      ],
+      "aliases": [
+        "grilled mac and cheese sandwich",
+        "grilled",
+        "cheese",
+        "sandwich"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://leitesculinaria.com/103647/recipes-grilled-mac-and-cheese-sandwich.html"
+    },
+    {
+      "id": "mealdb-52987-lasagna-sandwiches",
+      "title": "Lasagna Sandwiches",
+      "titleEt": "Lasagna Sandwiches",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "bread",
+          "quantity": 800
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 800
+        },
+        {
+          "productId": "cheese",
+          "quantity": 400
+        },
+        {
+          "productId": "butter",
+          "quantity": 200
+        }
+      ],
+      "aliases": [
+        "lasagna sandwiches",
+        "lasagna",
+        "sandwiches"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.themealdb.com/images/media/meals/xr0n4r1576788363.jpg"
+    },
+    {
+      "id": "mealdb-53461-macaroni-pie",
+      "title": "Macaroni Pie",
+      "titleEt": "Macaroni Pie",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 250
+        },
+        {
+          "productId": "butter",
+          "quantity": 16
+        },
+        {
+          "productId": "cheese",
+          "quantity": 395
+        },
+        {
+          "productId": "eggs",
+          "quantity": 1
+        },
+        {
+          "productId": "milk",
+          "quantity": 250
+        },
+        {
+          "productId": "bread",
+          "quantity": 20
+        }
+      ],
+      "aliases": [
+        "macaroni pie",
+        "macaroni"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.totallybarbados.com/articles/barbados-recipes/macaroni-pie-recipe/"
+    },
+    {
+      "id": "mealdb-53504-macaroni-pudding",
+      "title": "Macaroni Pudding",
+      "titleEt": "Macaroni Pudding",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 600
+        },
+        {
+          "productId": "milk",
+          "quantity": 960
+        },
+        {
+          "productId": "eggs",
+          "quantity": 4
+        },
+        {
+          "productId": "butter",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "macaroni pudding",
+        "macaroni",
+        "pudding"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.ourcayman.ky/en-us/about/more-about-cayman/recipes"
+    },
+    {
+      "id": "mealdb-52837-pilchard-puttanesca",
+      "title": "Pilchard puttanesca",
+      "titleEt": "Pilchard puttanesca",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 300
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 100
+        },
+        {
+          "productId": "cheese",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "pilchard puttanesca",
+        "pilchard",
+        "puttanesca"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/pilchard-puttanesca"
+    },
+    {
+      "id": "mealdb-52982-spaghetti-alla-carbonara",
+      "title": "Spaghetti alla Carbonara",
+      "titleEt": "Spaghetti alla Carbonara",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 320
+        },
+        {
+          "productId": "eggs",
+          "quantity": 6
+        }
+      ],
+      "aliases": [
+        "spaghetti alla carbonara",
+        "spaghetti",
+        "alla",
+        "carbonara"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/ultimate-spaghetti-carbonara-recipe"
+    },
+    {
+      "id": "mealdb-53093-syrian-spaghetti",
+      "title": "Syrian Spaghetti",
+      "titleEt": "Syrian Spaghetti",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 1600
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 968
+        }
+      ],
+      "aliases": [
+        "syrian spaghetti",
+        "syrian",
+        "spaghetti"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.allrecipes.com/recipe/26303/syrian-spaghetti/"
+    },
+    {
+      "id": "mealdb-52838-venetian-duck-ragu",
+      "title": "Venetian Duck Ragu",
+      "titleEt": "Venetian Duck Ragu",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "flour",
+          "quantity": 6
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 800
+        },
+        {
+          "productId": "milk",
+          "quantity": 2
+        },
+        {
+          "productId": "spaghetti",
+          "quantity": 600
+        },
+        {
+          "productId": "cheese",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "venetian duck ragu",
+        "venetian",
+        "duck",
+        "ragu"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/venetian-duck-ragu"
+    },
+    {
+      "id": "mealdb-52940-brown-stew-chicken",
+      "title": "Brown Stew Chicken",
+      "titleEt": "Brown Stew Chicken",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 100
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 100
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 100
+        },
+        {
+          "productId": "milk",
+          "quantity": 480
+        }
+      ],
+      "aliases": [
+        "brown stew chicken",
+        "brown",
+        "stew",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "http://www.geniuskitchen.com/recipe/authentic-jamaican-brown-stew-chicken-347996"
+    },
+    {
+      "id": "mealdb-53016-chick-fil-a-sandwich",
+      "title": "Chick-Fil-A Sandwich",
+      "titleEt": "Chick-Fil-A Sandwich",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 100
+        },
+        {
+          "productId": "eggs",
+          "quantity": 1
+        },
+        {
+          "productId": "milk",
+          "quantity": 240
+        },
+        {
+          "productId": "flour",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "chick-fil-a sandwich",
+        "chick",
+        "sandwich",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://hilahcooking.com/chick-fil-a-copycat/"
+    },
+    {
+      "id": "mealdb-53161-chicken-chorizo-rice-pot",
+      "title": "Chicken & chorizo rice pot",
+      "titleEt": "Chicken & chorizo rice pot",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 100
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 100
+        },
+        {
+          "productId": "rice",
+          "quantity": 400
+        }
+      ],
+      "aliases": [
+        "chicken & chorizo rice pot",
+        "chicken",
+        "chorizo",
+        "rice"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/chicken-chorizo-rice-pot"
+    },
+    {
+      "id": "mealdb-52846-chicken-mushroom-hotpot",
+      "title": "Chicken & mushroom Hotpot",
+      "titleEt": "Chicken & mushroom Hotpot",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "butter",
+          "quantity": 150
+        },
+        {
+          "productId": "flour",
+          "quantity": 40
+        },
+        {
+          "productId": "chicken",
+          "quantity": 250
+        },
+        {
+          "productId": "potato",
+          "quantity": 2
+        }
+      ],
+      "aliases": [
+        "chicken & mushroom hotpot",
+        "chicken",
+        "mushroom",
+        "hotpot"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/chicken-mushroom-hot-pot"
+    },
+    {
+      "id": "mealdb-52796-chicken-alfredo-primavera",
+      "title": "Chicken Alfredo Primavera",
+      "titleEt": "Chicken Alfredo Primavera",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "butter",
+          "quantity": 20
+        },
+        {
+          "productId": "chicken",
+          "quantity": 500
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 100
+        },
+        {
+          "productId": "milk",
+          "quantity": 240
+        },
+        {
+          "productId": "cheese",
+          "quantity": 150
+        },
+        {
+          "productId": "spaghetti",
+          "quantity": 1600
+        }
+      ],
+      "aliases": [
+        "chicken alfredo primavera",
+        "chicken",
+        "alfredo",
+        "primavera"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.themealdb.com/images/media/meals/syqypv1486981727.jpg"
+    },
+    {
+      "id": "mealdb-53459-chicken-and-potato-roti",
+      "title": "Chicken and Potato Roti",
+      "titleEt": "Chicken and Potato Roti",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "flour",
+          "quantity": 450
+        },
+        {
+          "productId": "chicken",
+          "quantity": 600
+        },
+        {
+          "productId": "potato",
+          "quantity": 450
+        }
+      ],
+      "aliases": [
+        "chicken and potato roti",
+        "chicken",
+        "potato",
+        "roti"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.totallybarbados.com/articles/barbados-recipes/chicken-potato-roti-recipe/"
+    },
+    {
+      "id": "mealdb-52956-chicken-congee",
+      "title": "Chicken Congee",
+      "titleEt": "Chicken Congee",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 224
+        },
+        {
+          "productId": "rice",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "chicken congee",
+        "chicken",
+        "congee"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://sueandgambo.com/pages/chicken-congee"
+    },
+    {
+      "id": "mealdb-52850-chicken-couscous",
+      "title": "Chicken Couscous",
+      "titleEt": "Chicken Couscous",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 200
+        },
+        {
+          "productId": "chickpeas",
+          "quantity": 220
+        }
+      ],
+      "aliases": [
+        "chicken couscous",
+        "chicken",
+        "couscous"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/13139/onepan-chicken-couscous"
+    },
+    {
+      "id": "mealdb-52765-chicken-enchilada-casserole",
+      "title": "Chicken Enchilada Casserole",
+      "titleEt": "Chicken Enchilada Casserole",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "cheese",
+          "quantity": 450
+        },
+        {
+          "productId": "chicken",
+          "quantity": 200
+        }
+      ],
+      "aliases": [
+        "chicken enchilada casserole",
+        "chicken",
+        "enchilada",
+        "casserole"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.themealdb.com/images/media/meals/qtuwxu1468233098.jpg"
+    },
+    {
+      "id": "mealdb-52818-chicken-fajita-mac-and-cheese",
+      "title": "Chicken Fajita Mac and Cheese",
+      "titleEt": "Chicken Fajita Mac and Cheese",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 500
+        },
+        {
+          "productId": "chicken",
+          "quantity": 300
+        },
+        {
+          "productId": "cheese",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "chicken fajita mac and cheese",
+        "chicken",
+        "fajita",
+        "cheese"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "http://twistedfood.co.uk/chicken-fajita-mac-n-cheese/"
+    },
+    {
+      "id": "mealdb-53367-chicken-fried-rice",
+      "title": "Chicken Fried Rice",
+      "titleEt": "Chicken Fried Rice",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 450
+        },
+        {
+          "productId": "eggs",
+          "quantity": 3
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 301
+        },
+        {
+          "productId": "rice",
+          "quantity": 600
+        }
+      ],
+      "aliases": [
+        "chicken fried rice",
+        "chicken",
+        "fried",
+        "rice"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.simplyrecipes.com/recipes/chicken_fried_rice/"
+    },
+    {
+      "id": "mealdb-52875-chicken-ham-and-leek-pie",
+      "title": "Chicken Ham and Leek Pie",
+      "titleEt": "Chicken Ham and Leek Pie",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 300
+        },
+        {
+          "productId": "butter",
+          "quantity": 275
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 200
+        },
+        {
+          "productId": "flour",
+          "quantity": 400
+        },
+        {
+          "productId": "milk",
+          "quantity": 200
+        },
+        {
+          "productId": "eggs",
+          "quantity": 2
+        }
+      ],
+      "aliases": [
+        "chicken ham and leek pie",
+        "chicken",
+        "leek"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbc.co.uk/food/recipes/creamy_chicken_ham_and_03877"
+    },
+    {
+      "id": "mealdb-53531-chicken-in-orange-sauce-recipe-pollo-a-la-naranj",
+      "title": "Chicken in Orange Sauce Recipe (Pollo a la Naranja)",
+      "titleEt": "Chicken in Orange Sauce Recipe (Pollo a la Naranja)",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 400
+        },
+        {
+          "productId": "butter",
+          "quantity": 20
+        }
+      ],
+      "aliases": [
+        "chicken in orange sauce recipe (pollo a la naranja)",
+        "chicken",
+        "orange",
+        "sauce",
+        "recipe",
+        "pollo",
+        "naranja"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.mycolombianrecipes.com/chicken-in-orange-sauce-pollo-a-la-naranja/#recipe"
+    },
+    {
+      "id": "mealdb-52831-chicken-karaage",
+      "title": "Chicken Karaage",
+      "titleEt": "Chicken Karaage",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 450
+        },
+        {
+          "productId": "potato",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "chicken karaage",
+        "chicken",
+        "karaage"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://norecipes.com/karaage-recipe"
+    },
+    {
+      "id": "mealdb-53455-chicken-liver-pate-recipe",
+      "title": "Chicken Liver Pate Recipe",
+      "titleEt": "Chicken Liver Pate Recipe",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 450
+        },
+        {
+          "productId": "milk",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "chicken liver pate recipe",
+        "chicken",
+        "liver",
+        "pate",
+        "recipe"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.totallybarbados.com/articles/barbados-recipes/chicken-liver-pate/"
+    },
+    {
+      "id": "mealdb-52920-chicken-marengo",
+      "title": "Chicken Marengo",
+      "titleEt": "Chicken Marengo",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 400
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 500
+        }
+      ],
+      "aliases": [
+        "chicken marengo",
+        "chicken",
+        "marengo"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/3146682/chicken-marengo"
+    },
+    {
+      "id": "mealdb-52879-chicken-parmentier",
+      "title": "Chicken Parmentier",
+      "titleEt": "Chicken Parmentier",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "potato",
+          "quantity": 1500
+        },
+        {
+          "productId": "butter",
+          "quantity": 60
+        },
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 500
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 500
+        },
+        {
+          "productId": "chicken",
+          "quantity": 600
+        },
+        {
+          "productId": "cheese",
+          "quantity": 50
+        }
+      ],
+      "aliases": [
+        "chicken parmentier",
+        "chicken",
+        "parmentier"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbc.co.uk/food/recipes/chicken_parmentier_25434"
+    },
+    {
+      "id": "mealdb-53218-chicken-shawarma-with-homemade-garlic-herb-yoghu",
+      "title": "Chicken Shawarma with homemade garlic herb yoghurt sauce",
+      "titleEt": "Chicken Shawarma with homemade garlic herb yoghurt sauce",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 1000
+        },
+        {
+          "productId": "yogurt",
+          "quantity": 240
+        }
+      ],
+      "aliases": [
+        "chicken shawarma with homemade garlic herb yoghurt sauce",
+        "chicken",
+        "shawarma",
+        "homemade",
+        "garlic",
+        "herb",
+        "yoghurt",
+        "sauce"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://cookpad.com/eng/recipes/24343467?ref=search&search_term=saudi+arabia"
+    },
+    {
+      "id": "mealdb-52830-crock-pot-chicken-baked-tacos",
+      "title": "Crock Pot Chicken Baked Tacos",
+      "titleEt": "Crock Pot Chicken Baked Tacos",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 400
+        },
+        {
+          "productId": "beans",
+          "quantity": 100
+        },
+        {
+          "productId": "cheese",
+          "quantity": 300
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 100
+        },
+        {
+          "productId": "milk",
+          "quantity": 15
+        }
+      ],
+      "aliases": [
+        "crock pot chicken baked tacos",
+        "crock",
+        "chicken",
+        "baked",
+        "tacos"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "http://www.nobiggie.net/crock-pot-chicken-baked-tacos/"
+    },
+    {
+      "id": "mealdb-53143-easy-spanish-chicken",
+      "title": "Easy Spanish chicken",
+      "titleEt": "Easy Spanish chicken",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "tomatoes",
+          "quantity": 400
+        },
+        {
+          "productId": "butter",
+          "quantity": 400
+        },
+        {
+          "productId": "chicken",
+          "quantity": 800
+        }
+      ],
+      "aliases": [
+        "easy spanish chicken",
+        "easy",
+        "spanish",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/easy-spanish-chicken"
+    },
+    {
+      "id": "mealdb-52996-french-onion-chicken-with-roasted-carrots-mashed",
+      "title": "French Onion Chicken with Roasted Carrots & Mashed Potatoes",
+      "titleEt": "French Onion Chicken with Roasted Carrots & Mashed Potatoes",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 200
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 1200
+        },
+        {
+          "productId": "potato",
+          "quantity": 500
+        },
+        {
+          "productId": "cheese",
+          "quantity": 150
+        },
+        {
+          "productId": "butter",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "french onion chicken with roasted carrots & mashed potatoes",
+        "french",
+        "onion",
+        "chicken",
+        "roasted",
+        "carrots",
+        "mashed",
+        "potatoes"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.themealdb.com/images/media/meals/b5ft861583188991.jpg"
+    },
+    {
+      "id": "mealdb-52993-honey-balsamic-chicken-with-crispy-broccoli-pota",
+      "title": "Honey Balsamic Chicken with Crispy Broccoli & Potatoes",
+      "titleEt": "Honey Balsamic Chicken with Crispy Broccoli & Potatoes",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "potato",
+          "quantity": 500
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 100
+        },
+        {
+          "productId": "chicken",
+          "quantity": 200
+        },
+        {
+          "productId": "butter",
+          "quantity": 10
+        }
+      ],
+      "aliases": [
+        "honey balsamic chicken with crispy broccoli & potatoes",
+        "honey",
+        "balsamic",
+        "chicken",
+        "crispy",
+        "broccoli",
+        "potatoes"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.themealdb.com/images/media/meals/kvbotn1581012881.jpg"
+    },
+    {
+      "id": "mealdb-52937-jerk-chicken-with-rice-peas",
+      "title": "Jerk chicken with rice & peas",
+      "titleEt": "Jerk chicken with rice & peas",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 1200
+        },
+        {
+          "productId": "rice",
+          "quantity": 200
+        },
+        {
+          "productId": "milk",
+          "quantity": 400
+        },
+        {
+          "productId": "beans",
+          "quantity": 800
+        }
+      ],
+      "aliases": [
+        "jerk chicken with rice & peas",
+        "jerk",
+        "chicken",
+        "rice",
+        "peas"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/2369635/jerk-chicken-with-rice-and-peas"
+    },
+    {
+      "id": "mealdb-52820-katsu-chicken-curry",
+      "title": "Katsu Chicken curry",
+      "titleEt": "Katsu Chicken curry",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 1800
+        },
+        {
+          "productId": "flour",
+          "quantity": 40
+        },
+        {
+          "productId": "eggs",
+          "quantity": 1
+        },
+        {
+          "productId": "bread",
+          "quantity": 100
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 200
+        }
+      ],
+      "aliases": [
+        "katsu chicken curry",
+        "katsu",
+        "chicken",
+        "curry"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "http://allrecipes.co.uk/recipe/29578/chicken-katsu-curry.aspx"
+    },
+    {
+      "id": "mealdb-52813-kentucky-fried-chicken",
+      "title": "Kentucky Fried Chicken",
+      "titleEt": "Kentucky Fried Chicken",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 100
+        },
+        {
+          "productId": "eggs",
+          "quantity": 1
+        },
+        {
+          "productId": "flour",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "kentucky fried chicken",
+        "kentucky",
+        "fried",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "http://www.tablespoon.com/recipes/copycat-kfc-original-style-chicken/97c93d14-9d8c-4bc7-96dc-1e0b37e4fcaa"
+    },
+    {
+      "id": "mealdb-52945-kung-pao-chicken",
+      "title": "Kung Pao Chicken",
+      "titleEt": "Kung Pao Chicken",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "flour",
+          "quantity": 200
+        },
+        {
+          "productId": "chicken",
+          "quantity": 500
+        }
+      ],
+      "aliases": [
+        "kung pao chicken",
+        "kung",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "http://allrecipes.co.uk/recipe/1773/kung-pao-chicken.aspx"
+    },
+    {
+      "id": "mealdb-52851-nutty-chicken-curry",
+      "title": "Nutty Chicken Curry",
+      "titleEt": "Nutty Chicken Curry",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 400
+        },
+        {
+          "productId": "butter",
+          "quantity": 500
+        },
+        {
+          "productId": "yogurt",
+          "quantity": 200
+        }
+      ],
+      "aliases": [
+        "nutty chicken curry",
+        "nutty",
+        "chicken",
+        "curry"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/11753/nutty-chicken-curry"
+    },
+    {
+      "id": "mealdb-52774-pad-see-ew",
+      "title": "Pad See Ew",
+      "titleEt": "Pad See Ew",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 168
+        },
+        {
+          "productId": "chicken",
+          "quantity": 150
+        },
+        {
+          "productId": "eggs",
+          "quantity": 1
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 600
+        }
+      ],
+      "aliases": [
+        "pad see ew",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.themealdb.com/images/media/meals/uuuspp1468263334.jpg"
+    },
+    {
+      "id": "mealdb-53520-pastel-de-choclo",
+      "title": "Pastel de Choclo",
+      "titleEt": "Pastel de Choclo",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "minced-meat",
+          "quantity": 450
+        },
+        {
+          "productId": "chicken",
+          "quantity": 100
+        },
+        {
+          "productId": "butter",
+          "quantity": 10
+        },
+        {
+          "productId": "milk",
+          "quantity": 240
+        }
+      ],
+      "aliases": [
+        "pastel de choclo",
+        "pastel",
+        "choclo",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.allrecipes.com/recipe/268354/pastel-de-choclo/"
+    },
+    {
+      "id": "mealdb-53039-piri-piri-chicken-and-slaw",
+      "title": "Piri-piri chicken and slaw",
+      "titleEt": "Piri-piri chicken and slaw",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 1500
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 600
+        },
+        {
+          "productId": "yogurt",
+          "quantity": 2
+        }
+      ],
+      "aliases": [
+        "piri-piri chicken and slaw",
+        "piri",
+        "chicken",
+        "slaw"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.olivemagazine.com/recipes/family/piri-piri-chicken-and-winter-slaw/"
+    },
+    {
+      "id": "mealdb-53540-pollo-en-salsa",
+      "title": "Pollo en Salsa",
+      "titleEt": "Pollo en Salsa",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 400
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 1
+        }
+      ],
+      "aliases": [
+        "pollo en salsa",
+        "pollo",
+        "salsa",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.recipesfromcostarica.com/recipes"
+    },
+    {
+      "id": "mealdb-52780-potato-gratin-with-chicken",
+      "title": "Potato Gratin with Chicken",
+      "titleEt": "Potato Gratin with Chicken",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "potato",
+          "quantity": 800
+        },
+        {
+          "productId": "cheese",
+          "quantity": 100
+        },
+        {
+          "productId": "chicken",
+          "quantity": 400
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 200
+        }
+      ],
+      "aliases": [
+        "potato gratin with chicken",
+        "potato",
+        "gratin",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.instagram.com/p/BHxR7hYBJ6P"
+    },
+    {
+      "id": "mealdb-52933-rappie-pie",
+      "title": "Rappie Pie",
+      "titleEt": "Rappie Pie",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "butter",
+          "quantity": 200
+        },
+        {
+          "productId": "chicken",
+          "quantity": 1500
+        },
+        {
+          "productId": "potato",
+          "quantity": 4000
+        }
+      ],
+      "aliases": [
+        "rappie pie",
+        "rappie",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "http://allrecipes.com/recipe/234025/rappie-pie/"
+    },
+    {
+      "id": "mealdb-53204-red-curry-chicken-kebabs",
+      "title": "Red curry chicken kebabs",
+      "titleEt": "Red curry chicken kebabs",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 200
+        },
+        {
+          "productId": "milk",
+          "quantity": 2
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "red curry chicken kebabs",
+        "curry",
+        "chicken",
+        "kebabs"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/red-curry-chicken-kebabs"
+    },
+    {
+      "id": "mealdb-53028-shawarma",
+      "title": "Shawarma",
+      "titleEt": "Shawarma",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 1000
+        },
+        {
+          "productId": "yogurt",
+          "quantity": 240
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 100
+        },
+        {
+          "productId": "bread",
+          "quantity": 600
+        }
+      ],
+      "aliases": [
+        "shawarma",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.recipetineats.com/chicken-sharwama-middle-eastern/"
+    },
+    {
+      "id": "mealdb-53181-spanish-beans-with-chicken-chorizo",
+      "title": "Spanish beans with chicken & chorizo",
+      "titleEt": "Spanish beans with chicken & chorizo",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "beans",
+          "quantity": 300
+        },
+        {
+          "productId": "chicken",
+          "quantity": 400
+        },
+        {
+          "productId": "potato",
+          "quantity": 250
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "spanish beans with chicken & chorizo",
+        "spanish",
+        "beans",
+        "chicken",
+        "chorizo"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/spanish-beans-chicken-chorizo"
+    },
+    {
+      "id": "mealdb-53155-spanish-chicken-pie",
+      "title": "Spanish chicken pie",
+      "titleEt": "Spanish chicken pie",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "potato",
+          "quantity": 1000
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 800
+        },
+        {
+          "productId": "chicken",
+          "quantity": 300
+        }
+      ],
+      "aliases": [
+        "spanish chicken pie",
+        "spanish",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/spanish-chicken-pie"
+    },
+    {
+      "id": "mealdb-53110-sticky-chicken",
+      "title": "Sticky Chicken",
+      "titleEt": "Sticky Chicken",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 800
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 3
+        }
+      ],
+      "aliases": [
+        "sticky chicken",
+        "sticky",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/sticky-chicken"
+    },
+    {
+      "id": "mealdb-52772-teriyaki-chicken-casserole",
+      "title": "Teriyaki Chicken Casserole",
+      "titleEt": "Teriyaki Chicken Casserole",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 200
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 28
+        },
+        {
+          "productId": "rice",
+          "quantity": 450
+        }
+      ],
+      "aliases": [
+        "teriyaki chicken casserole",
+        "teriyaki",
+        "chicken",
+        "casserole"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg"
+    },
+    {
+      "id": "mealdb-52814-thai-green-curry",
+      "title": "Thai Green Curry",
+      "titleEt": "Thai Green Curry",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "potato",
+          "quantity": 225
+        },
+        {
+          "productId": "beans",
+          "quantity": 100
+        },
+        {
+          "productId": "milk",
+          "quantity": 400
+        },
+        {
+          "productId": "chicken",
+          "quantity": 450
+        },
+        {
+          "productId": "rice",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "thai green curry",
+        "thai",
+        "green",
+        "curry",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "http://www.bbcgoodfood.com/recipes/3235/thai-green-chicken-curry"
+    },
+    {
+      "id": "mealdb-53327-venezuelan-coconut-chicken",
+      "title": "Venezuelan Coconut Chicken",
+      "titleEt": "Venezuelan Coconut Chicken",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 200
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 300
+        },
+        {
+          "productId": "milk",
+          "quantity": 1
+        }
+      ],
+      "aliases": [
+        "venezuelan coconut chicken",
+        "venezuelan",
+        "coconut",
+        "chicken"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.reluctantgourmet.com/venezuelan-coconut-chicken/#recipe"
+    },
+    {
+      "id": "mealdb-53430-antiguan-breakfast-chop-up-and-saltfish",
+      "title": "Antiguan Breakfast (Chop Up and ‘Saltfish’)",
+      "titleEt": "Antiguan Breakfast (Chop Up and ‘Saltfish’)",
+      "totalMinutes": 15,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 4
+        },
+        {
+          "productId": "butter",
+          "quantity": 56
+        }
+      ],
+      "aliases": [
+        "antiguan breakfast (chop up and ‘saltfish’)",
+        "antiguan",
+        "breakfast",
+        "chop",
+        "saltfish"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.atastefortravel.ca/24626-antigua-chop-up/#recipe"
+    },
+    {
+      "id": "mealdb-53076-bread-omelette",
+      "title": "Bread omelette",
+      "titleEt": "Bread omelette",
+      "totalMinutes": 15,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "bread",
+          "quantity": 200
+        },
+        {
+          "productId": "eggs",
+          "quantity": 2
+        }
+      ],
+      "aliases": [
+        "bread omelette",
+        "bread",
+        "omelette"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.themealdb.com/images/media/meals/hqaejl1695738653.jpg"
+    },
+    {
+      "id": "mealdb-53379-dutch-poffertjes-mini-pancakes",
+      "title": "Dutch poffertjes (mini pancakes)",
+      "titleEt": "Dutch poffertjes (mini pancakes)",
+      "totalMinutes": 15,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "flour",
+          "quantity": 250
+        },
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "butter",
+          "quantity": 200
+        },
+        {
+          "productId": "milk",
+          "quantity": 300
+        }
+      ],
+      "aliases": [
+        "dutch poffertjes (mini pancakes)",
+        "dutch",
+        "poffertjes",
+        "mini",
+        "pancakes"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://insimoneskitchen.com/old-dutch-poffertjes/#recipe"
+    },
+    {
+      "id": "mealdb-52896-full-english-breakfast",
+      "title": "Full English Breakfast",
+      "titleEt": "Full English Breakfast",
+      "totalMinutes": 15,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "tomatoes",
+          "quantity": 300
+        },
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "bread",
+          "quantity": 100
+        },
+        {
+          "productId": "beans",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "full english breakfast",
+        "full",
+        "english",
+        "breakfast"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbc.co.uk/food/recipes/stressfreefullenglis_67721"
+    },
+    {
+      "id": "mealdb-52967-home-made-mandazi",
+      "title": "Home-made Mandazi",
+      "titleEt": "Home-made Mandazi",
+      "totalMinutes": 15,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "flour",
+          "quantity": 750
+        },
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "milk",
+          "quantity": 240
+        }
+      ],
+      "aliases": [
+        "home-made mandazi",
+        "home",
+        "made",
+        "mandazi"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "http://chef-raphael.com/home-made-mandazi-recipe/#more-106"
+    },
+    {
+      "id": "mealdb-53331-oatmeal-pancakes",
+      "title": "Oatmeal pancakes",
+      "titleEt": "Oatmeal pancakes",
+      "totalMinutes": 15,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 1
+        },
+        {
+          "productId": "milk",
+          "quantity": 80
+        },
+        {
+          "productId": "oats",
+          "quantity": 150
+        },
+        {
+          "productId": "butter",
+          "quantity": 150
+        },
+        {
+          "productId": "berries",
+          "quantity": 300
+        }
+      ],
+      "aliases": [
+        "oatmeal pancakes",
+        "oatmeal",
+        "pancakes"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://goya.es/en/recipes/oatmeal-pancakes"
+    },
+    {
+      "id": "mealdb-53118-r-mmegr-t-norwegian-sour-cream-porridge",
+      "title": "Rømmegrøt – Norwegian Sour Cream Porridge",
+      "titleEt": "Rømmegrøt – Norwegian Sour Cream Porridge",
+      "totalMinutes": 15,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "flour",
+          "quantity": 450
+        },
+        {
+          "productId": "milk",
+          "quantity": 480
+        },
+        {
+          "productId": "butter",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "rømmegrøt – norwegian sour cream porridge",
+        "mmegr",
+        "norwegian",
+        "sour",
+        "cream",
+        "porridge"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://scandinaviancookbook.com/rommegrot-norwegian-sour-cream-porridge/"
+    },
+    {
+      "id": "mealdb-53165-torrijas-with-sherry",
+      "title": "Torrijas with sherry",
+      "titleEt": "Torrijas with sherry",
+      "totalMinutes": 15,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "milk",
+          "quantity": 2
+        },
+        {
+          "productId": "bread",
+          "quantity": 400
+        }
+      ],
+      "aliases": [
+        "torrijas with sherry",
+        "torrijas",
+        "sherry"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/torrijas-sherry"
+    },
+    {
+      "id": "mealdb-53225-yemeni-lahsa-elite-shakshuka",
+      "title": "Yemeni Lahsa (Elite Shakshuka)",
+      "titleEt": "Yemeni Lahsa (Elite Shakshuka)",
+      "totalMinutes": 15,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 5
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 100
+        },
+        {
+          "productId": "cheese",
+          "quantity": 30
+        }
+      ],
+      "aliases": [
+        "yemeni lahsa (elite shakshuka)",
+        "yemeni",
+        "lahsa",
+        "elite",
+        "shakshuka"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://cookpad.com/eng/recipes/24629321?ref=search&search_term=saudi+arabia"
+    },
+    {
+      "id": "mealdb-53158-air-fryer-patatas-bravas",
+      "title": "Air fryer patatas bravas",
+      "titleEt": "Air fryer patatas bravas",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "potato",
+          "quantity": 900
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 325
+        }
+      ],
+      "aliases": [
+        "air fryer patatas bravas",
+        "fryer",
+        "patatas",
+        "bravas"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/air-fryer-patatas-bravas"
+    },
+    {
+      "id": "mealdb-53078-beetroot-soup-borscht",
+      "title": "Beetroot Soup (Borscht)",
+      "titleEt": "Beetroot Soup (Borscht)",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "potato",
+          "quantity": 300
+        },
+        {
+          "productId": "beans",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "beetroot soup (borscht)",
+        "beetroot",
+        "soup",
+        "borscht"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://natashaskitchen.com/classic-russian-borscht-recipe/"
+    },
+    {
+      "id": "mealdb-53536-black-beans-hotpot",
+      "title": "Black Beans Hotpot",
+      "titleEt": "Black Beans Hotpot",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "beans",
+          "quantity": 400
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "black beans hotpot",
+        "black",
+        "beans",
+        "hotpot"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.recipesfromcostarica.com/recipes"
+    },
+    {
+      "id": "mealdb-53305-braised-stuffed-cabbage",
+      "title": "Braised stuffed cabbage",
+      "titleEt": "Braised stuffed cabbage",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "mixed-veg",
+          "quantity": 106
+        },
+        {
+          "productId": "rice",
+          "quantity": 140
+        },
+        {
+          "productId": "berries",
+          "quantity": 50
+        }
+      ],
+      "aliases": [
+        "braised stuffed cabbage",
+        "braised",
+        "stuffed",
+        "cabbage"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/braised-stuffed-cabbage"
+    },
+    {
+      "id": "mealdb-53576-carrot-and-bean-fritters",
+      "title": "Carrot and Bean Fritters",
+      "titleEt": "Carrot and Bean Fritters",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "mixed-veg",
+          "quantity": 400
+        },
+        {
+          "productId": "beans",
+          "quantity": 200
+        },
+        {
+          "productId": "flour",
+          "quantity": 10
+        },
+        {
+          "productId": "bread",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "carrot and bean fritters",
+        "carrot",
+        "bean",
+        "fritters"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://estoniancuisine.com/2021/01/15/carrot-and-bean-fritters-porgandi-oakotletid/#more-12384"
+    },
+    {
+      "id": "mealdb-53372-chinese-tomato-egg-stir-fry",
+      "title": "Chinese Tomato Egg Stir Fry",
+      "titleEt": "Chinese Tomato Egg Stir Fry",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "tomatoes",
+          "quantity": 450
+        },
+        {
+          "productId": "eggs",
+          "quantity": 5
+        },
+        {
+          "productId": "rice",
+          "quantity": 300
+        }
+      ],
+      "aliases": [
+        "chinese tomato egg stir fry",
+        "chinese",
+        "tomato",
+        "stir"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.simplyrecipes.com/chinese-tomato-egg-recipe-7562056"
+    },
+    {
+      "id": "mealdb-53283-chtitha-batata-algerian-potato-stew",
+      "title": "Chtitha Batata (Algerian Potato Stew)",
+      "titleEt": "Chtitha Batata (Algerian Potato Stew)",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "potato",
+          "quantity": 900
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 10
+        }
+      ],
+      "aliases": [
+        "chtitha batata (algerian potato stew)",
+        "chtitha",
+        "batata",
+        "algerian",
+        "potato",
+        "stew"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.allrecipes.com/recipe/265319/chtitha-batata-algerian-potato-stew/"
+    },
+    {
+      "id": "mealdb-53072-crispy-eggplant",
+      "title": "Crispy Eggplant",
+      "titleEt": "Crispy Eggplant",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 3
+        },
+        {
+          "productId": "bread",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "crispy eggplant",
+        "crispy",
+        "eggplant"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://yummyfood.ph/recipe/crispiest-fried-eggplant/"
+    },
+    {
+      "id": "mealdb-53486-easy-white-bean-soup",
+      "title": "Easy White Bean Soup",
+      "titleEt": "Easy White Bean Soup",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "beans",
+          "quantity": 450
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 150
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 200
+        }
+      ],
+      "aliases": [
+        "easy white bean soup",
+        "easy",
+        "white",
+        "bean",
+        "soup"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://cookinglsl.com/bulgarian-white-bean-soup/"
+    },
+    {
+      "id": "mealdb-53518-empanadas-fritas-de-queso",
+      "title": "Empanadas Fritas de Queso",
+      "titleEt": "Empanadas Fritas de Queso",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "flour",
+          "quantity": 450
+        },
+        {
+          "productId": "milk",
+          "quantity": 240
+        },
+        {
+          "productId": "eggs",
+          "quantity": 1
+        },
+        {
+          "productId": "cheese",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "empanadas fritas de queso",
+        "empanadas",
+        "fritas",
+        "queso"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.allrecipes.com/recipe/134319/empanadas-fritas-de-queso/"
+    },
+    {
+      "id": "mealdb-53266-falafel",
+      "title": "Falafel",
+      "titleEt": "Falafel",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "chickpeas",
+          "quantity": 400
+        },
+        {
+          "productId": "eggs",
+          "quantity": 1
+        }
+      ],
+      "aliases": [
+        "falafel"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/spicy-falafels"
+    },
+    {
+      "id": "mealdb-52906-flamiche",
+      "title": "Flamiche",
+      "titleEt": "Flamiche",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "butter",
+          "quantity": 135
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 1000
+        },
+        {
+          "productId": "eggs",
+          "quantity": 4
+        },
+        {
+          "productId": "flour",
+          "quantity": 225
+        },
+        {
+          "productId": "cheese",
+          "quantity": 50
+        }
+      ],
+      "aliases": [
+        "flamiche"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "http://www.deliciousmagazine.co.uk/recipes/flamiche-flemish-leek-tart/"
+    },
+    {
+      "id": "mealdb-53541-gallo-pinto",
+      "title": "Gallo pinto",
+      "titleEt": "Gallo pinto",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "beans",
+          "quantity": 300
+        },
+        {
+          "productId": "rice",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "gallo pinto",
+        "gallo",
+        "pinto"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.recipesfromcostarica.com/recipes"
+    },
+    {
+      "id": "mealdb-53012-gigantes-plaki",
+      "title": "Gigantes Plaki",
+      "titleEt": "Gigantes Plaki",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "butter",
+          "quantity": 400
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 1000
+        }
+      ],
+      "aliases": [
+        "gigantes plaki",
+        "gigantes",
+        "plaki"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/gigantes-plaki"
+    },
+    {
+      "id": "mealdb-53255-grilled-aubergines-with-spicy-chickpeas-walnut-s",
+      "title": "Grilled aubergines with spicy chickpeas & walnut sauce",
+      "titleEt": "Grilled aubergines with spicy chickpeas & walnut sauce",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "chickpeas",
+          "quantity": 400
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 200
+        },
+        {
+          "productId": "yogurt",
+          "quantity": 200
+        }
+      ],
+      "aliases": [
+        "grilled aubergines with spicy chickpeas & walnut sauce",
+        "grilled",
+        "aubergines",
+        "spicy",
+        "chickpeas",
+        "walnut",
+        "sauce"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/grilled-aubergines-spicy-chickpeas-walnut-sauce"
+    },
+    {
+      "id": "mealdb-53074-grilled-eggplant-with-coconut-milk",
+      "title": "Grilled eggplant with coconut milk",
+      "titleEt": "Grilled eggplant with coconut milk",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 6
+        },
+        {
+          "productId": "milk",
+          "quantity": 1
+        }
+      ],
+      "aliases": [
+        "grilled eggplant with coconut milk",
+        "grilled",
+        "eggplant",
+        "coconut",
+        "milk"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://simplybakings.com/grilled-eggplant-with-coconut-milk/"
+    },
+    {
+      "id": "mealdb-53340-hodge-podge",
+      "title": "Hodge Podge",
+      "titleEt": "Hodge Podge",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "potato",
+          "quantity": 450
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 600
+        },
+        {
+          "productId": "beans",
+          "quantity": 150
+        },
+        {
+          "productId": "milk",
+          "quantity": 720
+        },
+        {
+          "productId": "butter",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "hodge podge",
+        "hodge",
+        "podge"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://canadianfoodfocus.org/recipes/classic-canadian-dish-hodge-podge/"
+    },
+    {
+      "id": "mealdb-53352-jamaican-instant-pot-rice-and-beans",
+      "title": "Jamaican Instant Pot Rice and Beans",
+      "titleEt": "Jamaican Instant Pot Rice and Beans",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "rice",
+          "quantity": 300
+        },
+        {
+          "productId": "milk",
+          "quantity": 720
+        },
+        {
+          "productId": "beans",
+          "quantity": 450
+        }
+      ],
+      "aliases": [
+        "jamaican instant pot rice and beans",
+        "jamaican",
+        "instant",
+        "rice",
+        "beans"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.myforkinglife.com/jamaican-instant-pot-rice-and-beans/#recipe"
+    },
+    {
+      "id": "mealdb-53357-jamaican-rice-and-peas",
+      "title": "Jamaican Rice and Peas",
+      "titleEt": "Jamaican Rice and Peas",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "rice",
+          "quantity": 300
+        },
+        {
+          "productId": "milk",
+          "quantity": 380
+        },
+        {
+          "productId": "beans",
+          "quantity": 450
+        }
+      ],
+      "aliases": [
+        "jamaican rice and peas",
+        "jamaican",
+        "rice",
+        "peas"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.myforkinglife.com/jamaican-rice-and-peas/#recipe"
+    },
+    {
+      "id": "mealdb-52971-kafteji",
+      "title": "Kafteji",
+      "titleEt": "Kafteji",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "potato",
+          "quantity": 5
+        },
+        {
+          "productId": "eggs",
+          "quantity": 24
+        }
+      ],
+      "aliases": [
+        "kafteji"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "http://allrecipes.co.uk/recipe/12294/kafteji--tunisian-fried-vegetables-.aspx"
+    },
+    {
+      "id": "mealdb-53445-kaspressknodel-cheese-dumplings",
+      "title": "Kaspressknödel - Cheese Dumplings",
+      "titleEt": "Kaspressknödel - Cheese Dumplings",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "bread",
+          "quantity": 250
+        },
+        {
+          "productId": "cheese",
+          "quantity": 250
+        },
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "potato",
+          "quantity": 300
+        },
+        {
+          "productId": "flour",
+          "quantity": 100
+        },
+        {
+          "productId": "milk",
+          "quantity": 250
+        },
+        {
+          "productId": "butter",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "kaspressknödel - cheese dumplings",
+        "kaspresskn",
+        "cheese",
+        "dumplings"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.austria.info/en-gb/recipes/cheese-dumplings/"
+    },
+    {
+      "id": "mealdb-52868-kidney-bean-curry",
+      "title": "Kidney Bean Curry",
+      "titleEt": "Kidney Bean Curry",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "tomatoes",
+          "quantity": 400
+        },
+        {
+          "productId": "beans",
+          "quantity": 400
+        },
+        {
+          "productId": "rice",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "kidney bean curry",
+        "kidney",
+        "bean",
+        "curry"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/kidney-bean-curry"
+    },
+    {
+      "id": "mealdb-53027-koshari",
+      "title": "Koshari",
+      "titleEt": "Koshari",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "rice",
+          "quantity": 150
+        },
+        {
+          "productId": "spaghetti",
+          "quantity": 300
+        },
+        {
+          "productId": "chickpeas",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "koshari"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.themediterraneandish.com/egyptian-koshari-recipe/"
+    },
+    {
+      "id": "mealdb-53407-lakror-me-kungull-summer-squash-pie",
+      "title": "Lakror me Kungull Summer Squash Pie",
+      "titleEt": "Lakror me Kungull Summer Squash Pie",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "flour",
+          "quantity": 300
+        }
+      ],
+      "aliases": [
+        "lakror me kungull summer squash pie",
+        "lakror",
+        "kungull",
+        "summer",
+        "squash"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.myalbanianfood.com/recipe/summer-squash-pie/"
+    },
+    {
+      "id": "mealdb-53467-liegeoise-salad",
+      "title": "Liegeoise Salad",
+      "titleEt": "Liegeoise Salad",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "potato",
+          "quantity": 350
+        },
+        {
+          "productId": "beans",
+          "quantity": 200
+        },
+        {
+          "productId": "eggs",
+          "quantity": 2
+        }
+      ],
+      "aliases": [
+        "liegeoise salad",
+        "liegeoise",
+        "salad"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://junedarville.com/salade-liegeoise.html"
+    },
+    {
+      "id": "mealdb-52865-matar-paneer",
+      "title": "Matar Paneer",
+      "titleEt": "Matar Paneer",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "tomatoes",
+          "quantity": 4
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 150
+        },
+        {
+          "productId": "bread",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "matar paneer",
+        "matar",
+        "paneer"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/matar-paneer"
+    },
+    {
+      "id": "mealdb-53417-pa-amb-tomaquet-bread-with-tomato",
+      "title": "Pa Amb Tomaquet (Bread with Tomato)",
+      "titleEt": "Pa Amb Tomaquet (Bread with Tomato)",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "bread",
+          "quantity": 200
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 300
+        }
+      ],
+      "aliases": [
+        "pa amb tomaquet (bread with tomato)",
+        "tomaquet",
+        "bread",
+        "tomato"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.gimmesomeoven.com/tomato-rubbed-bread-pa-amb-tomaquet-pan-con-tomate/#recipe"
+    },
+    {
+      "id": "mealdb-53573-papaya-salad",
+      "title": "Papaya salad",
+      "titleEt": "Papaya salad",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "mixed-veg",
+          "quantity": 100
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "papaya salad",
+        "papaya",
+        "salad"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://dominicagourmet.com/green-papaya-salad-with-fried-snapper/"
+    },
+    {
+      "id": "mealdb-53172-patatas-bravas",
+      "title": "Patatas bravas",
+      "titleEt": "Patatas bravas",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "tomatoes",
+          "quantity": 235
+        },
+        {
+          "productId": "potato",
+          "quantity": 900
+        }
+      ],
+      "aliases": [
+        "patatas bravas",
+        "patatas",
+        "bravas"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/patatas-bravas-0"
+    },
+    {
+      "id": "mealdb-53160-pisto-con-huevos",
+      "title": "Pisto con huevos",
+      "titleEt": "Pisto con huevos",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "mixed-veg",
+          "quantity": 200
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 4
+        },
+        {
+          "productId": "eggs",
+          "quantity": 4
+        }
+      ],
+      "aliases": [
+        "pisto con huevos",
+        "pisto",
+        "huevos"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/pisto-con-huevos"
+    },
+    {
+      "id": "mealdb-52921-provencal-omelette-cake",
+      "title": "Provençal Omelette Cake",
+      "titleEt": "Provençal Omelette Cake",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 10
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 200
+        },
+        {
+          "productId": "cheese",
+          "quantity": 400
+        },
+        {
+          "productId": "milk",
+          "quantity": 6
+        }
+      ],
+      "aliases": [
+        "provençal omelette cake",
+        "proven",
+        "omelette",
+        "cake"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/6428/provenal-omelette-cake"
+    },
+    {
+      "id": "mealdb-52908-ratatouille",
+      "title": "Ratatouille",
+      "titleEt": "Ratatouille",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "mixed-veg",
+          "quantity": 400
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 4
+        }
+      ],
+      "aliases": [
+        "ratatouille"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/2903/ratatouille"
+    },
+    {
+      "id": "mealdb-52811-ribollita",
+      "title": "Ribollita",
+      "titleEt": "Ribollita",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "mixed-veg",
+          "quantity": 200
+        },
+        {
+          "productId": "beans",
+          "quantity": 300
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 100
+        },
+        {
+          "productId": "bread",
+          "quantity": 400
+        },
+        {
+          "productId": "cheese",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "ribollita"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://cooking.nytimes.com/recipes/1016052-ribollita"
+    },
+    {
+      "id": "mealdb-53506-rice-and-beans",
+      "title": "Rice and Beans",
+      "titleEt": "Rice and Beans",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "beans",
+          "quantity": 1
+        },
+        {
+          "productId": "milk",
+          "quantity": 1
+        }
+      ],
+      "aliases": [
+        "rice and beans",
+        "rice",
+        "beans"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.ourcayman.ky/en-us/about/more-about-cayman/recipes"
+    },
+    {
+      "id": "mealdb-53273-roast-aubergine-with-goat-s-cheese-toasted-flatb",
+      "title": "Roast aubergine with goat's cheese & toasted flatbread",
+      "titleEt": "Roast aubergine with goat's cheese & toasted flatbread",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "tomatoes",
+          "quantity": 1200
+        },
+        {
+          "productId": "bread",
+          "quantity": 100
+        },
+        {
+          "productId": "oats",
+          "quantity": 50
+        }
+      ],
+      "aliases": [
+        "roast aubergine with goat's cheese & toasted flatbread",
+        "roast",
+        "aubergine",
+        "goat",
+        "cheese",
+        "toasted",
+        "flatbread"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/roast-aubergine-goats-cheese-toasted-flatbread"
+    },
+    {
+      "id": "mealdb-53296-sauerkraut-pierogi",
+      "title": "Sauerkraut pierogi",
+      "titleEt": "Sauerkraut pierogi",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "mixed-veg",
+          "quantity": 150
+        },
+        {
+          "productId": "eggs",
+          "quantity": 1
+        },
+        {
+          "productId": "flour",
+          "quantity": 450
+        },
+        {
+          "productId": "butter",
+          "quantity": 45
+        }
+      ],
+      "aliases": [
+        "sauerkraut pierogi",
+        "sauerkraut",
+        "pierogi"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/pierogi"
+    },
+    {
+      "id": "mealdb-53314-sauerkraut-pierogii",
+      "title": "Sauerkraut pierogii",
+      "titleEt": "Sauerkraut pierogii",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "mixed-veg",
+          "quantity": 150
+        },
+        {
+          "productId": "eggs",
+          "quantity": 1
+        },
+        {
+          "productId": "flour",
+          "quantity": 450
+        },
+        {
+          "productId": "butter",
+          "quantity": 45
+        }
+      ],
+      "aliases": [
+        "sauerkraut pierogii",
+        "sauerkraut",
+        "pierogii"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/pierogi"
+    },
+    {
+      "id": "mealdb-52963-shakshuka",
+      "title": "Shakshuka",
+      "titleEt": "Shakshuka",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "tomatoes",
+          "quantity": 800
+        },
+        {
+          "productId": "eggs",
+          "quantity": 4
+        }
+      ],
+      "aliases": [
+        "shakshuka"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/7573/spicy-tomato-baked-eggs"
+    },
+    {
+      "id": "mealdb-52872-spanish-tortilla",
+      "title": "Spanish Tortilla",
+      "titleEt": "Spanish Tortilla",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "butter",
+          "quantity": 25
+        },
+        {
+          "productId": "potato",
+          "quantity": 400
+        },
+        {
+          "productId": "eggs",
+          "quantity": 8
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 400
+        }
+      ],
+      "aliases": [
+        "spanish tortilla",
+        "spanish",
+        "tortilla"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/spanish-tortilla"
+    },
+    {
+      "id": "mealdb-53142-spiced-tortilla",
+      "title": "Spiced tortilla",
+      "titleEt": "Spiced tortilla",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "tomatoes",
+          "quantity": 300
+        },
+        {
+          "productId": "potato",
+          "quantity": 500
+        },
+        {
+          "productId": "eggs",
+          "quantity": 8
+        }
+      ],
+      "aliases": [
+        "spiced tortilla",
+        "spiced",
+        "tortilla"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/spiced-tortilla"
+    },
+    {
+      "id": "mealdb-52771-spicy-arrabiata-penne",
+      "title": "Spicy Arrabiata Penne",
+      "titleEt": "Spicy Arrabiata Penne",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 450
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 100
+        },
+        {
+          "productId": "eggs",
+          "quantity": 1
+        }
+      ],
+      "aliases": [
+        "spicy arrabiata penne",
+        "spicy",
+        "arrabiata",
+        "penne"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.themealdb.com/images/media/meals/ustsqw1468250014.jpg"
+    },
+    {
+      "id": "mealdb-52849-spinach-ricotta-cannelloni",
+      "title": "Spinach & Ricotta Cannelloni",
+      "titleEt": "Spinach & Ricotta Cannelloni",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "tomatoes",
+          "quantity": 3
+        },
+        {
+          "productId": "milk",
+          "quantity": 45
+        },
+        {
+          "productId": "cheese",
+          "quantity": 385
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 1000
+        },
+        {
+          "productId": "beans",
+          "quantity": 400
+        }
+      ],
+      "aliases": [
+        "spinach & ricotta cannelloni",
+        "spinach",
+        "ricotta",
+        "cannelloni"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/531632/spinach-and-ricotta-cannelloni"
+    },
+    {
+      "id": "mealdb-52866-squash-linguine",
+      "title": "Squash linguine",
+      "titleEt": "Squash linguine",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "butter",
+          "quantity": 350
+        },
+        {
+          "productId": "spaghetti",
+          "quantity": 350
+        }
+      ],
+      "aliases": [
+        "squash linguine",
+        "squash",
+        "linguine"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/creamy-squash-linguine"
+    },
+    {
+      "id": "mealdb-52817-stovetop-eggplant-with-harissa-chickpeas-and-cum",
+      "title": "Stovetop Eggplant With Harissa, Chickpeas, and Cumin Yogurt",
+      "titleEt": "Stovetop Eggplant With Harissa, Chickpeas, and Cumin Yogurt",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 6
+        },
+        {
+          "productId": "chickpeas",
+          "quantity": 100
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 300
+        },
+        {
+          "productId": "yogurt",
+          "quantity": 240
+        }
+      ],
+      "aliases": [
+        "stovetop eggplant with harissa, chickpeas, and cumin yogurt",
+        "stovetop",
+        "eggplant",
+        "harissa",
+        "chickpeas",
+        "cumin",
+        "yogurt"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "http://www.seriouseats.com/2014/09/one-pot-wonders-stovetop-eggplant-harissa-chickpeas-cumin.html"
+    },
+    {
+      "id": "mealdb-53067-stuffed-bell-peppers-with-quinoa-and-black-beans",
+      "title": "Stuffed Bell Peppers with Quinoa and Black Beans",
+      "titleEt": "Stuffed Bell Peppers with Quinoa and Black Beans",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "beans",
+          "quantity": 100
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 100
+        },
+        {
+          "productId": "cheese",
+          "quantity": 150
+        }
+      ],
+      "aliases": [
+        "stuffed bell peppers with quinoa and black beans",
+        "stuffed",
+        "bell",
+        "peppers",
+        "quinoa",
+        "black",
+        "beans"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.themealdb.com/images/media/meals/b66myb1683207208.jpg"
+    },
+    {
+      "id": "mealdb-52911-summer-pistou",
+      "title": "Summer Pistou",
+      "titleEt": "Summer Pistou",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "mixed-veg",
+          "quantity": 201
+        },
+        {
+          "productId": "beans",
+          "quantity": 600
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 300
+        },
+        {
+          "productId": "cheese",
+          "quantity": 40
+        }
+      ],
+      "aliases": [
+        "summer pistou",
+        "summer",
+        "pistou"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://www.bbcgoodfood.com/recipes/summer-pistou"
+    },
+    {
+      "id": "mealdb-53026-tamiya",
+      "title": "Tamiya",
+      "titleEt": "Tamiya",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "beans",
+          "quantity": 450
+        },
+        {
+          "productId": "flour",
+          "quantity": 100
+        }
+      ],
+      "aliases": [
+        "tamiya"
+      ],
+      "source": "themealdb",
+      "sourceUrl": "https://oukosher.org/recipes/tamiya-egyptian-dried-fava-bean-fritters/"
+    }
+  ],
+  "demoWeek": [
+    {
+      "day": "Monday",
+      "meals": {
+        "breakfast": "berry-oats",
+        "lunch": "chickpea-pasta",
+        "dinner": "chicken-tomato-pasta"
+      }
+    },
+    {
+      "day": "Tuesday",
+      "meals": {
+        "breakfast": "egg-oats",
+        "lunch": "egg-pasta",
+        "dinner": "tomato-eggs"
+      }
+    },
+    {
+      "day": "Wednesday",
+      "meals": {
+        "breakfast": "berry-oats",
+        "lunch": "chickpea-stew",
+        "dinner": "chicken-veg-pasta"
+      }
+    },
+    {
+      "day": "Thursday",
+      "meals": {
+        "breakfast": "berry-oats",
+        "lunch": "egg-pasta",
+        "dinner": "chickpea-pasta"
+      }
+    },
+    {
+      "day": "Friday",
+      "meals": {
+        "breakfast": "egg-oats",
+        "lunch": "chickpea-pasta",
+        "dinner": "chicken-tomato-pasta"
+      }
+    },
+    {
+      "day": "Saturday",
+      "meals": {
+        "breakfast": "berry-oats",
+        "lunch": "chickpea-stew",
+        "dinner": "tomato-eggs"
+      }
+    },
+    {
+      "day": "Sunday",
+      "meals": {
+        "breakfast": "berry-oats",
+        "lunch": "egg-pasta",
+        "dinner": "chickpea-stew"
+      }
+    }
+  ]
+}

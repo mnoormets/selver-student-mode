@@ -1,3 +1,10 @@
+/**
+ * Legacy mock catalog for the generic planner / chat helpers.
+ *
+ * Hackathon demo week, pantry maths, and sourced prices live in
+ * `src/features/student-mode/data/` (products.ts + recipes.ts + demoWeek.ts)
+ * and are calculated via `computeBasketCents`.
+ */
 export type Product = {
   id: string;
   name: string;
