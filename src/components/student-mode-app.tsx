@@ -71,10 +71,10 @@ const DELIVERY_OPTIONS = [
 ];
 
 const STYLES: { id: Prefs["style"]; label: string; hint: string }[] = [
-  { id: "odav", label: "Maksimum odav", hint: "Kirde + kampaaniad" },
-  { id: "kiire", label: "Kiire köök", hint: "≤ 20 min" },
-  { id: "taimne", label: "Taimsem", hint: "oad, tofu, kiker" },
-  { id: "liha", label: "Liha sees", hint: "kana & hakk" },
+  { id: "odav", label: "Kõige odavam", hint: "Kirde + kampaaniad" },
+  { id: "kiire", label: "Kiirelt valmis", hint: "≤ 20 min" },
+  { id: "taimne", label: "Taimetoit", hint: "oad, tofu, kiker" },
+  { id: "liha", label: "Sisaldab liha", hint: "kana & hakk" },
 ];
 
 function euros(n: number) {
