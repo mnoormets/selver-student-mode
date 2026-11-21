@@ -67,7 +67,7 @@ const DELIVERY_OPTIONS = [
   "Kojutoomine täna",
   "Kojutoomine homme",
   "Express 2 h",
-  "Tulen ise Selverisse",
+  "Tulen ise Selverisse järgi",
 ];
 
 const STYLES: { id: Prefs["style"]; label: string; hint: string }[] = [
