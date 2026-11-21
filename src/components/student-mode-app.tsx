@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -119,8 +118,7 @@ function euros(n: number) {
 export function StudentModeApp() {
   const [stage, setStage] = useState<Stage>("home");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [modeOn, setModeOn] = useState(false);
-  const [budget, setBudget] = useState(35);
+  const [budget, setBudget] = useState(10);
   const [days, setDays] = useState(5);
   const [style, setStyle] = useState<Prefs["style"]>("odav");
   const [delivery, setDelivery] = useState(DELIVERY_OPTIONS[0]!);
@@ -144,12 +142,10 @@ export function StudentModeApp() {
 
   function openStudentMode() {
     setMenuOpen(false);
-    setModeOn(true);
     setStage("hero");
   }
 
   function activate() {
-    setModeOn(true);
     setStage("setup");
   }
 
@@ -233,7 +229,7 @@ export function StudentModeApp() {
           <div
             className={cn(
               "relative flex flex-col overflow-hidden",
-              statusLight ? "bg-black" : "bg-[#f4f6fb]",
+              statusLight ? "bg-black" : "bg-white",
             )}
             style={{
               width: IPHONE14.w,
@@ -256,7 +252,7 @@ export function StudentModeApp() {
             <div
               className={cn(
                 "relative z-30 flex shrink-0 items-end justify-between px-6 pb-1.5",
-                statusLight ? "bg-black text-white" : "bg-selver-navy text-white",
+                "bg-black text-white",
               )}
               style={{ height: IPHONE14.status }}
             >
@@ -272,7 +268,7 @@ export function StudentModeApp() {
             </div>
 
         {inStudentMode ? (
-          <header className="sticky top-0 z-40 border-b border-border/60 bg-white/95 backdrop-blur-md">
+          <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white">
             <div className="flex items-center gap-2 px-3 py-2.5">
               <button
                 type="button"
@@ -281,38 +277,28 @@ export function StudentModeApp() {
                   else if (stage === "setup") setStage("hero");
                   else goHome();
                 }}
-                className="inline-flex size-9 items-center justify-center rounded-full text-selver-navy hover:bg-mist"
+                className="inline-flex size-9 items-center justify-center rounded-full text-black hover:bg-neutral-100"
                 aria-label="Tagasi"
               >
                 <ChevronLeft className="size-5" />
               </button>
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-selver-navy/55">
-                  Partnerkaart · Selver
+                <p
+                  className="font-display text-[11px] font-bold lowercase tracking-tight"
+                  style={{ color: PK_ORANGE }}
+                >
+                  partner
                 </p>
-                <p className="truncate font-display text-lg font-bold leading-tight text-selver-navy">
-                  Tudengirežiim
+                <p className="truncate font-display text-lg font-bold leading-tight text-black">
+                  Student Mode
                 </p>
               </div>
-              <Image
-                src="/selver-logo.png"
-                alt="Selver"
-                width={36}
-                height={42}
-                className="h-9 w-auto object-contain"
-                priority
-              />
-            </div>
-            <div className="flex items-center gap-2 border-t border-border/40 bg-mist/70 px-4 py-1.5">
-              <Badge className="bg-selver-yellow text-selver-navy hover:bg-selver-yellow">
-                Äpi moodul
-              </Badge>
-              {modeOn && (
-                <Badge variant="secondary" className="gap-1">
-                  <GraduationCap className="size-3" />
-                  ISIC · Partnerkaart
-                </Badge>
-              )}
+              <span
+                className="inline-flex size-9 items-center justify-center rounded-full text-white"
+                style={{ backgroundColor: PK_ORANGE }}
+              >
+                <GraduationCap className="size-4" />
+              </span>
             </div>
           </header>
         ) : null}
@@ -521,100 +507,93 @@ export function StudentModeApp() {
           )}
 
           {stage === "hero" && (
-            <section className="space-y-5 animate-enter">
-              <div className="overflow-hidden rounded-[1.5rem] bg-selver-navy p-5 text-white">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-selver-yellow">
-                      Uus Partnerkaardi moodul
-                    </p>
-                    <h1 className="mt-2 font-display text-3xl font-bold leading-tight">
-                      Tudengirežiim
-                    </h1>
-                  </div>
-                  <Image
-                    src="/selver-logo.png"
-                    alt=""
-                    width={56}
-                    height={64}
-                    className="h-14 w-auto object-contain opacity-95"
-                  />
-                </div>
-                <p className="mt-3 text-sm leading-relaxed text-white/80">
-                  Eraldiseisev osa Partnerkaardi äpist: AI paneb nädala menüü ja
-                  Selveri korvi kokku sinu eelarve järgi.
+            <section className="space-y-4 animate-enter font-display">
+              <div className="overflow-hidden rounded-[14px] bg-black p-5 text-white">
+                <p
+                  className="text-[11px] font-bold uppercase tracking-[0.14em]"
+                  style={{ color: PK_ORANGE }}
+                >
+                  Partnerkaart
+                </p>
+                <h1 className="mt-2 text-3xl font-bold leading-tight tracking-tight">
+                  Student Mode
+                </h1>
+                <p className="mt-3 text-sm leading-relaxed text-white/75">
+                  Odavaim toidukorv sinu eelarve, tempo ja lemmikute järgi —
+                  otse Partnerkaardi äpis.
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-2">
-                  <div className="rounded-2xl bg-white/10 px-3 py-2.5">
-                    <p className="text-[10px] uppercase tracking-wider text-selver-yellow">
-                      Nädal
+                  <div className="rounded-[10px] bg-white/10 px-3 py-2.5">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/55">
+                      Eelarve
                     </p>
-                    <p className="font-display text-xl font-bold">35 €</p>
+                    <p className="text-xl font-bold">10 €</p>
                   </div>
-                  <div className="rounded-2xl bg-selver-yellow px-3 py-2.5 text-selver-navy">
-                    <p className="text-[10px] uppercase tracking-wider opacity-70">
-                      Boonus
+                  <div
+                    className="rounded-[10px] px-3 py-2.5 text-black"
+                    style={{ backgroundColor: PK_ORANGE }}
+                  >
+                    <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
+                      Fookus
                     </p>
-                    <p className="font-display text-xl font-bold">+ punktid</p>
+                    <p className="text-xl font-bold">Odav · kiire</p>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-3 rounded-[1.5rem] border border-border/70 bg-white p-4 shadow-sm">
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  Ütle eelarve — saad menüü, kampaaniakorvi ja jääkide-abilise.
-                  Ostunimekiri läheb edasi Partnerkaardi äppi.
+              <div className="space-y-3 rounded-[14px] border border-neutral-200 bg-white p-4">
+                <p className="text-sm leading-relaxed text-neutral-600">
+                  Sea eelarve ja eelistused — saad nädalaplaani ja ostunimekirja.
+                  Või küsi chatist, mida saab kodus olevast teha.
                 </p>
                 <button
                   type="button"
                   onClick={activate}
-                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-selver-red px-7 text-base font-medium text-white transition hover:bg-[#c50510]"
+                  className="inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[15px] font-bold uppercase tracking-[0.04em] text-white"
+                  style={{ backgroundColor: PK_ORANGE }}
                 >
-                  Ava tudengirežiim
+                  Alusta
                   <ArrowRight className="size-4" />
                 </button>
-                <p className="text-center text-xs text-muted-foreground">
-                  Häkatoni prototüüp · Partnerkaart × Selver
-                </p>
               </div>
             </section>
           )}
 
           {stage === "setup" && (
-            <section className="space-y-5 animate-enter">
+            <section className="space-y-5 animate-enter font-display">
               <div className="space-y-1">
-                <h2 className="font-display text-2xl font-bold tracking-tight text-selver-navy">
+                <h2 className="text-2xl font-bold tracking-tight text-black">
                   Seadista oma nädal
                 </h2>
-                <p className="text-sm text-muted-foreground">
-                  Eelarve, päevad ja stiil — menüü valmib sekundiga.
+                <p className="text-sm text-neutral-600">
+                  Eelarve, tempo ja eelistused — plaan valmib sekundiga.
                 </p>
               </div>
 
-              <div className="space-y-6 rounded-[1.5rem] border border-border/70 bg-white p-4 shadow-sm sm:p-5">
+              <div className="space-y-6 rounded-[14px] border border-neutral-200 bg-white p-4">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-3">
-                    <label className="flex items-center gap-2 text-sm font-medium">
-                      <Wallet className="size-4 text-leaf" />
+                    <label className="flex items-center gap-2 text-sm font-bold text-black">
+                      <Wallet className="size-4" style={{ color: PK_ORANGE }} />
                       Nädala eelarve
                     </label>
                     <div className="flex items-center gap-2">
                       <button
                         type="button"
                         aria-label="Vähenda eelarvet"
-                        onClick={() => setBudget((b) => Math.max(15, b - 1))}
-                        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
+                        onClick={() => setBudget((b) => Math.max(10, b - 1))}
+                        className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-black active:scale-95"
                       >
                         <Minus className="size-4" />
                       </button>
-                      <span className="min-w-[4.5rem] text-center font-display text-3xl font-bold tabular-nums text-grove">
+                      <span className="min-w-[4.5rem] text-center text-3xl font-bold tabular-nums text-black">
                         {budget} €
                       </span>
                       <button
                         type="button"
                         aria-label="Suurenda eelarvet"
                         onClick={() => setBudget((b) => Math.min(60, b + 1))}
-                        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
+                        className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-black active:scale-95"
                       >
                         <Plus className="size-4" />
                       </button>
@@ -622,25 +601,30 @@ export function StudentModeApp() {
                   </div>
                   <Slider
                     value={[budget]}
-                    min={15}
+                    min={10}
                     max={60}
                     step={1}
                     onValueChange={(v) =>
-                      setBudget(Array.isArray(v) ? (v[0] ?? 35) : v)
+                      setBudget(Array.isArray(v) ? (v[0] ?? 10) : v)
                     }
                   />
                   <div className="flex flex-wrap gap-2">
-                    {[20, 35, 50].map((preset) => (
+                    {[10, 20, 35].map((preset) => (
                       <button
                         key={preset}
                         type="button"
                         onClick={() => setBudget(preset)}
                         className={cn(
-                          "rounded-full border px-3 py-1 text-xs font-semibold transition",
+                          "rounded-full border px-3 py-1 text-xs font-bold transition",
                           budget === preset
-                            ? "border-selver-red bg-selver-red text-white"
-                            : "border-border bg-white text-selver-navy hover:border-selver-red",
+                            ? "border-transparent text-white"
+                            : "border-neutral-200 bg-white text-black",
                         )}
+                        style={
+                          budget === preset
+                            ? { backgroundColor: PK_ORANGE }
+                            : undefined
+                        }
                       >
                         {preset} €
                       </button>
@@ -650,8 +634,8 @@ export function StudentModeApp() {
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-3">
-                    <label className="flex items-center gap-2 text-sm font-medium">
-                      <Timer className="size-4 text-leaf" />
+                    <label className="flex items-center gap-2 text-sm font-bold text-black">
+                      <Timer className="size-4" style={{ color: PK_ORANGE }} />
                       Päevi planeerida
                     </label>
                     <div className="flex items-center gap-2">
@@ -659,18 +643,18 @@ export function StudentModeApp() {
                         type="button"
                         aria-label="Vähenda päevi"
                         onClick={() => setDays((d) => Math.max(3, d - 1))}
-                        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
+                        className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-black active:scale-95"
                       >
                         <Minus className="size-4" />
                       </button>
-                      <span className="min-w-[2.5rem] text-center font-display text-3xl font-bold tabular-nums text-grove">
+                      <span className="min-w-[2.5rem] text-center text-3xl font-bold tabular-nums text-black">
                         {days}
                       </span>
                       <button
                         type="button"
                         aria-label="Suurenda päevi"
                         onClick={() => setDays((d) => Math.min(7, d + 1))}
-                        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
+                        className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-black active:scale-95"
                       >
                         <Plus className="size-4" />
                       </button>
@@ -687,26 +671,24 @@ export function StudentModeApp() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <div className="grid grid-cols-2 gap-2">
                   {STYLES.map((s) => (
                     <button
                       key={s.id}
                       type="button"
                       onClick={() => setStyle(s.id)}
                       className={cn(
-                        "rounded-2xl border px-3 py-3 text-left transition",
+                        "rounded-[12px] border px-3 py-3 text-left transition",
                         style === s.id
-                          ? "border-selver-navy bg-selver-navy text-white"
-                          : "border-border bg-white/80 hover:border-leaf/40",
+                          ? "border-black bg-black text-white"
+                          : "border-neutral-200 bg-white text-black",
                       )}
                     >
-                      <p className="text-sm font-semibold">{s.label}</p>
+                      <p className="text-sm font-bold">{s.label}</p>
                       <p
                         className={cn(
                           "mt-0.5 text-xs",
-                          style === s.id
-                            ? "text-leaf-foreground/75"
-                            : "text-muted-foreground",
+                          style === s.id ? "text-white/70" : "text-neutral-500",
                         )}
                       >
                         {s.hint}
@@ -716,8 +698,8 @@ export function StudentModeApp() {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm font-medium">Tarne üle Eesti</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm font-bold text-black">Tarne üle Eesti</p>
+                  <p className="text-xs text-neutral-500">
                     e-Selveri kojutoomine — kiire ja üleriigiline
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -727,11 +709,16 @@ export function StudentModeApp() {
                         type="button"
                         onClick={() => setDelivery(option)}
                         className={cn(
-                          "rounded-full border px-3 py-1.5 text-sm transition",
+                          "rounded-full border px-3 py-1.5 text-sm font-bold transition",
                           delivery === option
-                            ? "border-citrus bg-citrus text-accent-foreground"
-                            : "border-border bg-white/70 text-foreground hover:border-leaf/40",
+                            ? "border-transparent text-white"
+                            : "border-neutral-200 bg-white text-black",
                         )}
+                        style={
+                          delivery === option
+                            ? { backgroundColor: PK_ORANGE }
+                            : undefined
+                        }
                       >
                         {option}
                       </button>
@@ -744,7 +731,8 @@ export function StudentModeApp() {
                 type="button"
                 onClick={generate}
                 disabled={pending}
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-selver-red px-8 text-base font-medium text-white transition hover:bg-[#c50510] disabled:opacity-50"
+                className="inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[15px] font-bold uppercase tracking-[0.04em] text-white disabled:opacity-50"
+                style={{ backgroundColor: PK_ORANGE }}
               >
                 <Sparkles className="size-4" />
                 {pending ? "Planeerin…" : "Loo menüü ja korv"}
@@ -753,26 +741,39 @@ export function StudentModeApp() {
           )}
 
           {stage === "plan" && plan && (
-            <section className="space-y-5 animate-enter">
+            <section className="space-y-5 animate-enter font-display">
               <div className="space-y-3">
                 <div>
-                  <h2 className="font-display text-2xl font-bold tracking-tight text-selver-navy">
+                  <div className="mb-2 flex flex-wrap gap-1.5">
+                    <span
+                      className="rounded-full px-2.5 py-0.5 text-[11px] font-bold text-white"
+                      style={{ backgroundColor: PK_ORANGE }}
+                    >
+                      {budget} €
+                    </span>
+                    <span className="rounded-full bg-black px-2.5 py-0.5 text-[11px] font-bold text-white">
+                      odav · kiire
+                    </span>
+                    <span className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-[11px] font-bold text-black">
+                      liha · pasta
+                    </span>
+                  </div>
+                  <h2 className="text-2xl font-bold tracking-tight text-black">
                     Sinu nädal on valmis
                   </h2>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {plan.summary}
-                  </p>
+                  <p className="mt-1 text-sm text-neutral-600">{plan.summary}</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Button
                     variant="outline"
-                    className="rounded-full"
+                    className="rounded-full border-neutral-200 font-bold text-black"
                     onClick={() => setStage("setup")}
                   >
                     Muuda seadeid
                   </Button>
                   <Button
-                    className="rounded-full bg-selver-red text-white hover:bg-[#c50510]"
+                    className="rounded-full font-bold text-white hover:opacity-90"
+                    style={{ backgroundColor: PK_ORANGE }}
                     onClick={generate}
                   >
                     Genereeri uuesti
@@ -798,7 +799,7 @@ export function StudentModeApp() {
                 />
               </div>
 
-              <div className="flex gap-2 rounded-full border border-border/70 bg-white/60 p-1 backdrop-blur">
+              <div className="flex gap-2 rounded-full border border-neutral-200 bg-neutral-50 p-1">
                 {(
                   [
                     ["menu", "Menüü"],
@@ -811,10 +812,10 @@ export function StudentModeApp() {
                     type="button"
                     onClick={() => setTab(id)}
                     className={cn(
-                      "flex-1 rounded-full px-3 py-2 text-sm font-medium transition",
+                      "flex-1 rounded-full px-3 py-2 text-sm font-bold transition",
                       tab === id
-                        ? "bg-selver-navy text-white shadow-sm"
-                        : "text-muted-foreground hover:text-foreground",
+                        ? "bg-black text-white"
+                        : "text-neutral-500 hover:text-black",
                     )}
                   >
                     {label}
@@ -854,7 +855,7 @@ export function StudentModeApp() {
                         }}
                         className={cn(
                           "flex flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[10px] font-medium",
-                          active ? "text-selver-red" : "text-selver-navy/45",
+                          active ? "text-[#F97D00]" : "text-neutral-400",
                           item.id !== "more" &&
                             item.id !== "home" &&
                             "pointer-events-none",
@@ -898,12 +899,12 @@ function Stat({
   hint: string;
 }) {
   return (
-    <div className="rounded-[1.5rem] border border-border/70 bg-white/75 px-5 py-4 backdrop-blur">
-      <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
+    <div className="rounded-[14px] border border-neutral-200 bg-white px-5 py-4">
+      <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-neutral-500">
         {label}
       </p>
-      <p className="mt-1 font-display text-3xl font-bold text-grove">{value}</p>
-      <p className="mt-1 text-sm text-muted-foreground">{hint}</p>
+      <p className="mt-1 font-display text-3xl font-bold text-black">{value}</p>
+      <p className="mt-1 text-sm text-neutral-500">{hint}</p>
     </div>
   );
 }
@@ -927,19 +928,24 @@ function MenuView({ plan }: { plan: PlanResult }) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.05 }}
-          className="rounded-[1.5rem] border border-border/70 bg-white/75 p-4 backdrop-blur sm:p-5"
+          className="rounded-[14px] border border-neutral-200 bg-white p-4"
         >
           <div className="mb-3 flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-citrus font-display text-sm font-bold text-accent-foreground">
+            <span
+              className="flex h-8 w-8 items-center justify-center rounded-full font-display text-sm font-bold text-white"
+              style={{ backgroundColor: PK_ORANGE }}
+            >
               {dayLabel(day)}
             </span>
-            <p className="font-display text-lg font-bold">Päev {day}</p>
+            <p className="font-display text-lg font-bold text-black">
+              Päev {day}
+            </p>
           </div>
           <div className="grid gap-2">
             {meals.map((meal) => (
               <div
                 key={`${meal.day}-${meal.slot}`}
-                className="rounded-2xl bg-mist/80 px-3 py-3"
+                className="rounded-[12px] bg-neutral-50 px-3 py-3"
               >
                 <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
                   {meal.slot}
@@ -969,13 +975,13 @@ function MenuView({ plan }: { plan: PlanResult }) {
 
 function BasketView({ plan }: { plan: PlanResult }) {
   return (
-    <div className="overflow-hidden rounded-[1.5rem] border border-border/70 bg-white/80 backdrop-blur">
-      <div className="flex items-center justify-between border-b border-border/60 px-4 py-3 sm:px-5">
+    <div className="overflow-hidden rounded-[14px] border border-neutral-200 bg-white">
+      <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3 sm:px-5">
         <div className="flex items-center gap-2">
-          <ShoppingBasket className="size-4 text-leaf" />
-          <p className="font-display text-lg font-bold">Ostukorv</p>
+          <ShoppingBasket className="size-4" style={{ color: PK_ORANGE }} />
+          <p className="font-display text-lg font-bold text-black">Ostukorv</p>
         </div>
-        <p className="font-display text-xl font-bold text-grove">
+        <p className="font-display text-xl font-bold text-black">
           {euros(plan.total)}
         </p>
       </div>
@@ -1000,24 +1006,29 @@ function BasketView({ plan }: { plan: PlanResult }) {
                   </Badge>
                 )}
                 {line.onPromo && (
-                  <Badge className="h-5 bg-citrus text-[10px] text-accent-foreground hover:bg-citrus">
+                  <Badge
+                    className="h-5 text-[10px] text-white hover:opacity-90"
+                    style={{ backgroundColor: PK_ORANGE }}
+                  >
                     Kampaania
                   </Badge>
                 )}
               </div>
             </div>
             <div className="text-right">
-              <p className="font-semibold">{euros(line.lineTotal)}</p>
+              <p className="font-semibold text-black">{euros(line.lineTotal)}</p>
               {line.saved > 0 && (
-                <p className="text-xs text-leaf">−{euros(line.saved)}</p>
+                <p className="text-xs font-bold" style={{ color: PK_ORANGE }}>
+                  −{euros(line.saved)}
+                </p>
               )}
             </div>
           </motion.li>
         ))}
       </ul>
-      <div className="border-t border-border/60 bg-mist/70 px-4 py-4 sm:px-5">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Check className="size-4 text-leaf" />
+      <div className="border-t border-neutral-200 bg-neutral-50 px-4 py-4 sm:px-5">
+        <div className="flex items-center gap-2 text-sm text-neutral-600">
+          <Check className="size-4" style={{ color: PK_ORANGE }} />
           Sama sibul ja porgand jagunevad mitme retsepti peale — vähem raiskamist.
         </div>
       </div>
@@ -1044,34 +1055,37 @@ function ChatView({
   ];
 
   return (
-    <div className="flex min-h-[420px] flex-col overflow-hidden rounded-[1.5rem] border border-border/70 bg-white/80 backdrop-blur">
-      <div className="flex items-center gap-2 border-b border-border/60 px-4 py-3">
-        <MessageCircle className="size-4 text-leaf" />
-        <p className="font-display text-lg font-bold">Tudengiabi</p>
+    <div className="flex min-h-[420px] flex-col overflow-hidden rounded-[14px] border border-neutral-200 bg-white">
+      <div className="flex items-center gap-2 border-b border-neutral-200 px-4 py-3">
+        <MessageCircle className="size-4" style={{ color: PK_ORANGE }} />
+        <p className="font-display text-lg font-bold text-black">Tudengiabi</p>
       </div>
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
         {chat.map((m) => (
           <div
             key={m.id}
             className={cn(
-              "max-w-[90%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
+              "max-w-[90%] rounded-[12px] px-3.5 py-2.5 text-sm leading-relaxed",
               m.role === "assistant"
-                ? "bg-mist text-foreground"
-                : "ml-auto bg-selver-red text-white",
+                ? "bg-neutral-100 text-black"
+                : "ml-auto text-white",
             )}
+            style={
+              m.role === "user" ? { backgroundColor: PK_ORANGE } : undefined
+            }
           >
             {m.text}
           </div>
         ))}
       </div>
-      <div className="space-y-3 border-t border-border/60 px-4 py-3">
+      <div className="space-y-3 border-t border-neutral-200 px-4 py-3">
         <div className="flex flex-wrap gap-2">
           {chips.map((c) => (
             <button
               key={c}
               type="button"
               onClick={() => setDraft(c)}
-              className="rounded-full border border-border bg-white px-3 py-1 text-xs text-muted-foreground hover:border-leaf/40 hover:text-foreground"
+              className="rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-bold text-neutral-600 hover:border-[#F97D00] hover:text-black"
             >
               {c}
             </button>
@@ -1091,7 +1105,8 @@ function ChatView({
             }}
           />
           <Button
-            className="h-auto rounded-2xl bg-selver-red px-4 text-white hover:bg-[#c50510]"
+            className="h-auto rounded-[12px] px-4 font-bold text-white hover:opacity-90"
+            style={{ backgroundColor: PK_ORANGE }}
             onClick={onSend}
           >
             Saada
