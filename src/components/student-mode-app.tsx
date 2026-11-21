@@ -90,7 +90,7 @@ const MAIN_MENU: {
   { id: "list", label: "Ostunimekiri", icon: ListChecks },
   { id: "selfserve", label: "Partnerkaardi iseteenindus", icon: Star },
   { id: "stores", label: "Kaupluste kontaktid", icon: MapPin },
-  { id: "offers", label: "Pakkumised", icon: Percent, notify: "5" },
+  { id: "offers", label: "Pakkumised", icon: Percent, notify: "3" },
   { id: "student", label: "Student Mode", icon: GraduationCap, action: "student-mode" },
   { id: "feedback", label: "Tagasiside", icon: MessageSquare },
 ];
@@ -414,9 +414,14 @@ export function StudentModeApp() {
                 <div className="mb-5 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <User className="size-[22px] text-white" strokeWidth={1.6} />
-                    <p className="text-[17px] font-bold tracking-tight">
-                      Mari Mets
-                    </p>
+                    <div>
+                      <p className="text-[17px] font-bold tracking-tight">
+                        Demo Kasutaja
+                      </p>
+                      <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/55">
+                        Näidisandmed
+                      </p>
+                    </div>
                   </div>
                   <button
                     type="button"
@@ -483,10 +488,13 @@ export function StudentModeApp() {
                       </span>
                     </div>
                   </div>
-                  <div className="relative flex items-end justify-between font-mono text-[12px] font-medium tracking-wider text-black">
-                    <span>4242 0000 1111 2222</span>
-                    <span>12/2030</span>
+                  <div className="relative flex items-end justify-between gap-3 font-mono text-[12px] font-medium tracking-wider text-black">
+                    <span>0000 1111 2222 3333</span>
+                    <span className="shrink-0">01/2031</span>
                   </div>
+                  <p className="relative mt-2 text-[10px] font-bold uppercase tracking-[0.08em] text-black/40">
+                    Näidiskaart · ei ole päris Partnerkaart
+                  </p>
                 </div>
               </div>
 
