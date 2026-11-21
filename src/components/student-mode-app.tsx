@@ -36,8 +36,15 @@ import {
 /** Measured from Partnerkaart app screenshot CTA — locked default. */
 const PK_ORANGE = "#F97D00";
 
-/** Figma iPhone 16 screen (pt) — exact, then scaled to fit viewport. */
-const IPHONE16 = { w: 393, h: 852, radius: 55, islandW: 126, islandH: 37, status: 59 } as const;
+/** iPhone 14 screen (pt) — exact, then scaled to fit viewport. */
+const IPHONE14 = {
+  w: 390,
+  h: 844,
+  radius: 47.33,
+  status: 47,
+  notchW: 164,
+  notchH: 32,
+} as const;
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
@@ -187,12 +194,12 @@ export function StudentModeApp() {
 
   const statusLight = stage === "home";
   const bezel = 12;
-  const frameW = IPHONE16.w + bezel * 2;
-  const frameH = IPHONE16.h + bezel * 2;
+  const frameW = IPHONE14.w + bezel * 2;
+  const frameH = IPHONE14.h + bezel * 2;
 
   return (
     <div className="relative flex flex-1 flex-col items-center justify-center overflow-hidden bg-neutral-950 px-3 py-4">
-      {/* Exact iPhone 16 canvas (393×852), scaled to viewport — Figma default */}
+      {/* Exact iPhone 14 canvas (390×844), scaled to viewport */}
       <div
         className="relative shrink-0"
         style={{
@@ -221,7 +228,7 @@ export function StudentModeApp() {
 
         <div
           className="relative h-full w-full border border-[#2c2c2e] bg-[#1c1c1e] shadow-[0_40px_100px_-24px_rgba(0,0,0,0.85)] ring-1 ring-white/10"
-          style={{ borderRadius: IPHONE16.radius + bezel, padding: bezel }}
+          style={{ borderRadius: IPHONE14.radius + bezel, padding: bezel }}
         >
           <div
             className={cn(
@@ -229,25 +236,29 @@ export function StudentModeApp() {
               statusLight ? "bg-black" : "bg-[#f4f6fb]",
             )}
             style={{
-              width: IPHONE16.w,
-              height: IPHONE16.h,
-              borderRadius: IPHONE16.radius,
+              width: IPHONE14.w,
+              height: IPHONE14.h,
+              borderRadius: IPHONE14.radius,
             }}
           >
-            {/* Dynamic Island — Figma idle 126×37 */}
+            {/* iPhone 14 notch */}
             <div
-              className="pointer-events-none absolute left-1/2 top-[11px] z-50 -translate-x-1/2 rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
-              style={{ width: IPHONE16.islandW, height: IPHONE16.islandH }}
+              className="pointer-events-none absolute left-1/2 top-0 z-50 -translate-x-1/2 bg-black"
+              style={{
+                width: IPHONE14.notchW,
+                height: IPHONE14.notchH,
+                borderRadius: "0 0 18px 18px",
+              }}
               aria-hidden
             />
 
-            {/* Status bar — safe area 59pt */}
+            {/* Status bar — safe area 47pt */}
             <div
               className={cn(
-                "relative z-30 flex shrink-0 items-end justify-between px-7 pb-2.5",
+                "relative z-30 flex shrink-0 items-end justify-between px-6 pb-1.5",
                 statusLight ? "bg-black text-white" : "bg-selver-navy text-white",
               )}
-              style={{ height: IPHONE16.status }}
+              style={{ height: IPHONE14.status }}
             >
               <span className="w-[64px] text-[15px] font-semibold tracking-tight">
                 9:41
