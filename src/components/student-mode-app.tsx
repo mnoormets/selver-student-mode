@@ -274,7 +274,7 @@ export function StudentModeApp() {
                       <button
                         type="button"
                         aria-label="Vähenda eelarvet"
-                        onClick={() => setBudget((b) => Math.max(15, b - 5))}
+                        onClick={() => setBudget((b) => Math.max(15, b - 1))}
                         className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
                       >
                         <Minus className="size-4" />
@@ -285,7 +285,7 @@ export function StudentModeApp() {
                       <button
                         type="button"
                         aria-label="Suurenda eelarvet"
-                        onClick={() => setBudget((b) => Math.min(60, b + 5))}
+                        onClick={() => setBudget((b) => Math.min(60, b + 1))}
                         className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
                       >
                         <Plus className="size-4" />
