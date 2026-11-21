@@ -227,23 +227,23 @@ export function StudentModeApp() {
               aspectRatio: "393 / 852",
             }}
           >
-            {/* Status bar + Dynamic Island (safe area ~59pt) */}
+            {/* Dynamic Island — idle ~126×37, Figma iPhone 16 */}
+            <div
+              className="pointer-events-none absolute left-1/2 top-[11px] z-50 h-[37px] w-[126px] -translate-x-1/2 rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
+              aria-hidden
+            />
+
+            {/* Status bar (safe area ~59pt) */}
             <div
               className={cn(
-                "relative z-30 flex h-[59px] shrink-0 items-end px-7 pb-2",
+                "relative z-30 flex h-[59px] shrink-0 items-end justify-between px-7 pb-2.5",
                 statusLight ? "bg-[#1a1a1a] text-white" : "bg-selver-navy text-white",
               )}
             >
-              <span className="w-[72px] text-[15px] font-semibold tracking-tight">
+              <span className="w-[64px] text-[15px] font-semibold tracking-tight">
                 9:41
               </span>
-              <div className="flex flex-1 justify-center">
-                <div
-                  className="h-[37px] w-[126px] rounded-full bg-black shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
-                  aria-hidden
-                />
-              </div>
-              <div className="flex w-[72px] items-center justify-end gap-1.5 text-[12px] font-medium">
+              <div className="flex w-[64px] items-center justify-end gap-1.5 text-[12px] font-medium">
                 <span className="opacity-90">5G</span>
                 <span className="inline-flex h-[11px] w-[24px] items-center rounded-[3px] border border-current/80 p-[1px]">
                   <span className="h-full w-[70%] rounded-[1px] bg-current" />
