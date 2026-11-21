@@ -13,6 +13,8 @@ import {
   GraduationCap,
   Check,
   ExternalLink,
+  Minus,
+  Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -263,14 +265,32 @@ export function StudentModeApp() {
 
               <div className="space-y-6 rounded-[1.75rem] border border-border/70 bg-white/70 p-5 shadow-sm backdrop-blur sm:p-7">
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-3">
                     <label className="flex items-center gap-2 text-sm font-medium">
                       <Wallet className="size-4 text-leaf" />
                       Nädala eelarve
                     </label>
-                    <span className="font-display text-2xl font-bold text-grove">
-                      {budget} €
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        aria-label="Vähenda eelarvet"
+                        onClick={() => setBudget((b) => Math.max(15, b - 5))}
+                        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
+                      >
+                        <Minus className="size-4" />
+                      </button>
+                      <span className="min-w-[4.5rem] text-center font-display text-3xl font-bold tabular-nums text-grove">
+                        {budget} €
+                      </span>
+                      <button
+                        type="button"
+                        aria-label="Suurenda eelarvet"
+                        onClick={() => setBudget((b) => Math.min(60, b + 5))}
+                        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
+                      >
+                        <Plus className="size-4" />
+                      </button>
+                    </div>
                   </div>
                   <Slider
                     value={[budget]}
@@ -281,6 +301,23 @@ export function StudentModeApp() {
                       setBudget(Array.isArray(v) ? (v[0] ?? 35) : v)
                     }
                   />
+                  <div className="flex flex-wrap gap-2">
+                    {[20, 35, 50].map((preset) => (
+                      <button
+                        key={preset}
+                        type="button"
+                        onClick={() => setBudget(preset)}
+                        className={cn(
+                          "rounded-full border px-3 py-1 text-xs font-semibold transition",
+                          budget === preset
+                            ? "border-selver-red bg-selver-red text-white"
+                            : "border-border bg-white text-selver-navy hover:border-selver-red",
+                        )}
+                      >
+                        {preset} €
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="space-y-3">
