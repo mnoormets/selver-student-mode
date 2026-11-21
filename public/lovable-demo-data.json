@@ -88,6 +88,17 @@
       "unit": "g",
       "priceCents": 539,
       "sourceUrl": "https://soodsadhinnad.ee/en/p/t64rn3/eestimaine-broileririnnafilee-sisetukk-tallegg-400-g?kategooria=linnuliha"
+    },
+    {
+      "id": "minced-meat",
+      "name": "Kodune hakkliha, MAKS & MOORITS",
+      "packQuantity": 500,
+      "unit": "g",
+      "priceCents": 349,
+      "sourceUrl": "https://www.selver.ee/kodune-hakkliha-maks-moorits-500-g",
+      "selverSku": "T000027309",
+      "eSelverUrl": "https://www.selver.ee/kodune-hakkliha-maks-moorits-500-g",
+      "checkedAt": "2026-11-21"
     }
   ],
   "recipes": [
@@ -286,6 +297,30 @@
         {
           "productId": "mixed-veg",
           "quantity": 80
+        }
+      ]
+    },
+    {
+      "id": "hakkliha-pannkoogid",
+      "title": "Minced meat pancakes",
+      "totalMinutes": 25,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "minced-meat",
+          "quantity": 300
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 100
         }
       ]
     }

@@ -1,4 +1,8 @@
 import {
+  answerPantryCookQuestion,
+  isPantryCookQuestion,
+} from "@/features/student-mode/pantryCook";
+import {
   answerSpaghettiEggsQuickMeal,
   SPAGHETTI_EGGS_PROMPT,
 } from "@/features/student-mode/quickMeal";
@@ -25,6 +29,17 @@ function isSpaghettiEggsPrompt(q: string): boolean {
   return hasPasta && hasEggs && (hasGrams || q.includes("kaks") || q.includes("2"));
 }
 
+/** Week-plan pantry beat only — not “I want to cook X”. */
+function isWeekEggPantryPrompt(q: string): boolean {
+  if (isPantryCookQuestion(q) || isSpaghettiEggsPrompt(q)) return false;
+  if (q.includes("pannkook") || q.includes("hakkliha") || q.includes("teha")) {
+    return false;
+  }
+  return (
+    (q.includes("kodus") || q.includes("mul on")) && q.includes("muna")
+  );
+}
+
 export function replyToStudent(
   question: string,
   plan: PlanResult | null,
@@ -32,7 +47,7 @@ export function replyToStudent(
   const q = question.toLowerCase().trim();
 
   if (!q) {
-    return "Küsi nt „mul on 5 eurot“ või „mis teha kana jääkidest?“";
+    return "Küsi nt „mul on kodus taigen ja mune, tahan hakkliha pannkooke — mida osta?“";
   }
 
   if (isSpaghettiEggsPrompt(q)) {
@@ -42,13 +57,13 @@ export function replyToStudent(
     }).summaryEt;
   }
 
-  if (
-    (q.includes("kodus") || q.includes("mul on")) &&
-    q.includes("muna") &&
-    !q.includes("spagett") &&
-    !q.includes("spaget")
-  ) {
-    return "Vajuta „Mul on kodus 10 muna“ või kirjuta täpselt nii — siis arvutan korvi uuesti (2 karpi → 1 karp).";
+  if (isPantryCookQuestion(q)) {
+    const answer = answerPantryCookQuestion(question);
+    if (answer) return answer;
+  }
+
+  if (isWeekEggPantryPrompt(q)) {
+    return "Vajuta „Mul on kodus 10 muna“ või kirjuta täpselt nii — siis arvutan nädalakorvi uuesti (2 karpi → 1 karp).";
   }
 
   if (q.includes("5 euro") || q.includes("5€") || q.includes("viis euro")) {
@@ -84,19 +99,19 @@ export function replyToStudent(
 
   if (q.includes("eelarve") || q.includes("kallis") || q.includes("odav")) {
     if (plan) {
-      return `Sinu praegune korv on ${money(plan.total)}. Kampaaniatelt säästad ~${money(plan.saved)}. Kui pead allapoole minema, vaheta juust/brokoli Kirde konservisegude vastu.`;
+      return `Sinu praegune korv on ${money(plan.total)}. Kui pead allapoole minema, vaheta kallimad read soodsama pakendi vastu andmestikus.`;
     }
     return "Seatakse eelarve ja genereeri menüü — siis oskan öelda, kust kärpida.";
   }
 
   if (q.includes("hommik")) {
-    return "Hommikuks: banaanipuder, juustuvoileib või omlett. Kaerahelbed + piim + banaan tuleb alla 1 € portsjoni kohta.";
+    return "Hommikuks: soe marjapuder või muna-köögiviljapuder. Kaerahelbed + piim + marjad tulevad soodsalt.";
   }
 
   if (plan) {
     const dinner = plan.meals.find((m) => m.slot === "õhtu");
-    return `Sinu menüüs on nt ${dinner?.recipe.name ?? "õhtusöök"}. Küsi konkreetsemalt: eelarve, kiirus, taimne või jäägid — aitan kohe.`;
+    return `Sinu menüüs on nt ${dinner?.recipe.name ?? "õhtusöök"}. Küsi konkreetsemalt, nt „mul on kodus taigen ja mune, tahan hakkliha pannkooke — mida osta?“`;
   }
 
-  return "Proovi: „mul on 5 eurot“, „kiire enne loengut“, „taimne õhtusöök“ või „kana jäägid“.";
+  return "Proovi: „mul on kodus taigen ja mune, tahan hakkliha pannkooke — mida osta?“, „mul on 100 g spagette ja kaks muna“ või „mul on kodus 10 muna“.";
 }

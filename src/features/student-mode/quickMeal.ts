@@ -136,6 +136,7 @@ export function recipeEtTitle(id: string): string {
     "chicken-tomato-pasta": "Kana-tomati spagetid",
     "chicken-veg-pasta": "Kana-köögivilja spagetid",
     "tomato-eggs": "Tomati-munapanniroog",
+    "hakkliha-pannkoogid": "Hakkliha pannkoogid",
   };
   return titles[id] ?? id;
 }

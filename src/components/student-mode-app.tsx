@@ -220,16 +220,21 @@ export function StudentModeApp() {
     };
 
     const lower = text.toLowerCase();
-    const isQuickSpaghetti =
-      (lower.includes("spagett") || lower.includes("spaget") || lower.includes("pasta")) &&
-      lower.includes("muna");
+    const isCookIntent =
+      lower.includes("teha") ||
+      lower.includes("pannkook") ||
+      lower.includes("hakkliha") ||
+      lower.includes("osta") ||
+      lower.includes("poest") ||
+      ((lower.includes("spagett") || lower.includes("spaget") || lower.includes("pasta")) &&
+        lower.includes("muna"));
     const eggMatch = lower.match(/(\d+)\s*muna/);
-    const wantsPantry =
-      !isQuickSpaghetti &&
+    const wantsWeekEggPantry =
+      !isCookIntent &&
       (lower.includes("kodus") || lower.includes("mul on")) &&
       lower.includes("muna");
 
-    if (wantsPantry && basePlan) {
+    if (wantsWeekEggPantry && basePlan) {
       const eggs = eggMatch ? Number(eggMatch[1]) : 10;
       setDraft("");
       applyEggsAtHome(eggs);
@@ -1180,9 +1185,8 @@ function ChatView({
 }) {
   const chips = [
     "Mul on kodus 10 muna",
+    "Mul on kodus taigen ja mune, tahan hakkliha pannkooke — mida osta?",
     "Mul on 100 g spagette ja kaks muna. Mida saan kiiresti teha?",
-    "Kiire enne loengut",
-    "Foto (tulekul)",
   ];
 
   return (

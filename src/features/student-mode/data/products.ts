@@ -104,6 +104,17 @@ export const selverProducts: readonly SelverProduct[] = [
     sourceUrl:
       "https://soodsadhinnad.ee/en/p/t64rn3/eestimaine-broileririnnafilee-sisetukk-tallegg-400-g?kategooria=linnuliha",
   },
+  {
+    id: "minced-meat",
+    name: "Kodune hakkliha, MAKS & MOORITS",
+    packQuantity: 500,
+    unit: "g",
+    priceCents: 349,
+    sourceUrl: "https://www.selver.ee/kodune-hakkliha-maks-moorits-500-g",
+    selverSku: "T000027309",
+    eSelverUrl: "https://www.selver.ee/kodune-hakkliha-maks-moorits-500-g",
+    checkedAt: "2026-11-21",
+  },
 ];
 
 export function productById(id: string): SelverProduct {

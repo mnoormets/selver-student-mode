@@ -101,4 +101,17 @@ export const recipes: readonly Recipe[] = [
       { productId: "mixed-veg", quantity: 80 },
     ],
   },
+  {
+    id: "hakkliha-pannkoogid",
+    title: "Minced meat pancakes",
+    totalMinutes: 25,
+    mealSlots: ["lunch", "dinner"],
+    vegetarian: false,
+    // Batter/dough is assumed from pantry when the student says they have taigen.
+    ingredients: [
+      { productId: "eggs", quantity: 2 },
+      { productId: "minced-meat", quantity: 300 },
+      { productId: "mixed-veg", quantity: 100 },
+    ],
+  },
 ];

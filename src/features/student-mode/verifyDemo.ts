@@ -7,6 +7,7 @@ import {
   LEGACY_DEMO_TOTAL_CENTS,
 } from "../../lib/demo-plan";
 import { computeBasketCents, eurosFromCents } from "./computeBasket";
+import { answerPantryCookQuestion } from "./pantryCook";
 import { answerSpaghettiEggsQuickMeal } from "./quickMeal";
 import { validateDemoCatalog } from "./validateCatalog";
 
@@ -93,6 +94,30 @@ export function verifyDemoMath(): string[] {
   logs.push(quick.summaryEt);
 
   assert(computeBasketCents([]).totalCents === 0, "empty basket should be 0");
+
+  const hakkliha = answerPantryCookQuestion(
+    "Mul on kodus taignast ja mune, tahaksin teha hakkliha pannkooke, mida peaksin poest ostma",
+  );
+  assert(hakkliha, "expected hakkliha pannkoogid answer");
+  assert(hakkliha.includes("Hakkliha pannkoogid"), "expected dish title");
+  assert(
+    hakkliha.includes("Kodune hakkliha"),
+    "expected minced meat buy line",
+  );
+  assert(
+    hakkliha.includes("taigen") || hakkliha.includes("tainas"),
+    "expected dough noted as already at home",
+  );
+  assert(
+    hakkliha.includes("Munad M10") && hakkliha.includes("olemas"),
+    "eggs at home should be covered, not bought",
+  );
+  assert(
+    !hakkliha.includes("1× Munad"),
+    "should not buy an egg pack when eggs are at home",
+  );
+  assert(!hakkliha.includes("Kana-tomati"), "must not fall back to week-menu blurb");
+  logs.push(hakkliha);
 
   return logs;
 }
