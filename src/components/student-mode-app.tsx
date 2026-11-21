@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -1491,6 +1491,16 @@ function ChatView({
   sending?: boolean;
 }) {
   const chipList = chips ?? CHAT_CHIPS;
+  // Hide starter chips after the first exchange so long answers stay readable.
+  const showChips = !chat.some((m) => m.role === "user");
+  const scrollerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }, [chat, sending]);
+
   return (
     <div
       className={cn(
@@ -1506,7 +1516,10 @@ function ChatView({
           <p className="font-display text-lg font-bold text-black">Vestlus</p>
         </div>
       )}
-      <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+      <div
+        ref={scrollerRef}
+        className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4"
+      >
         {chat.map((m) => (
           <div
             key={m.id}
@@ -1530,24 +1543,26 @@ function ChatView({
         )}
       </div>
       <div className="space-y-3 border-t border-neutral-200 px-4 py-3">
-        <div className="flex flex-wrap gap-2">
-          {chipList.map((c) => (
-            <button
-              key={c}
-              type="button"
-              onClick={() => {
-                if (c.includes("10 muna") && onPantryDemo) {
-                  onPantryDemo();
-                  return;
-                }
-                setDraft(c);
-              }}
-              className="rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-bold text-neutral-600 hover:border-[#F97D00] hover:text-black"
-            >
-              {c.length > 36 ? `${c.slice(0, 34)}…` : c}
-            </button>
-          ))}
-        </div>
+        {showChips && (
+          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {chipList.map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => {
+                  if (c.includes("10 muna") && onPantryDemo) {
+                    onPantryDemo();
+                    return;
+                  }
+                  setDraft(c);
+                }}
+                className="shrink-0 rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-bold text-neutral-600 hover:border-[#F97D00] hover:text-black"
+              >
+                {c.length > 36 ? `${c.slice(0, 34)}…` : c}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="flex gap-2">
           <Textarea
             value={draft}
