@@ -4,6 +4,7 @@ import {
   cookChatCatalogPrompt,
   type CookPantry,
 } from "@/features/student-mode/cookChat";
+import { enrichCookChatWithLiveSelver } from "@/features/student-mode/selverLiveSearch";
 
 export const runtime = "nodejs";
 
@@ -38,7 +39,8 @@ function isCookChatBody(value: unknown): value is Body {
 /**
  * Cook-chat turn. Prefer live OpenAI when OPENAI_API_KEY is set; always fall
  * back to deterministic catalog maths (clearly marked as näidisvastus).
- * The API key never leaves the server.
+ * When köögiviljasegu (or another missing line) is needed, enrich with a
+ * live Selver Klevu search (martparve/selver-mcp style) + catalog fallback.
  */
 export async function POST(request: Request) {
   let body: unknown;
@@ -61,20 +63,21 @@ export async function POST(request: Request) {
     try {
       const ai = await callOpenAi(apiKey, message, pantryIn, forceRecipeId);
       if (ai) {
-        // Re-run pack maths so shopping list always matches catalog packs.
         const grounded = answerCookChatTurn(message, pantryIn, {
           demo: false,
           forceRecipeId: ai.recipeId ?? forceRecipeId,
         });
+        const enriched = await enrichCookChatWithLiveSelver(grounded);
         return NextResponse.json({
-          reply: grounded.readyToCook
-            ? grounded.reply
-            : `${ai.preamble ? `${ai.preamble} ` : ""}${grounded.reply}`,
-          pantry: grounded.pantry,
-          recipeId: grounded.recipeId,
+          reply: enriched.readyToCook
+            ? enriched.reply
+            : `${ai.preamble ? `${ai.preamble} ` : ""}${enriched.reply}`,
+          pantry: enriched.pantry,
+          recipeId: enriched.recipeId,
           demo: false,
-          readyToCook: grounded.readyToCook,
-          shoppingEmpty: grounded.shoppingEmpty,
+          readyToCook: enriched.readyToCook,
+          shoppingEmpty: enriched.shoppingEmpty,
+          liveHits: enriched.liveHits ?? [],
         });
       }
     } catch {
@@ -86,7 +89,8 @@ export async function POST(request: Request) {
     demo: true,
     forceRecipeId,
   });
-  return NextResponse.json(demo);
+  const enriched = await enrichCookChatWithLiveSelver(demo);
+  return NextResponse.json(enriched);
 }
 
 async function callOpenAi(

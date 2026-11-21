@@ -728,9 +728,9 @@ export function StudentModeApp() {
           {stage === "cook-chat" && (
             <section className="flex min-h-[520px] flex-col space-y-3 animate-enter font-display">
               <div className="rounded-[14px] border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
-                <span className="font-bold">Näidisrežiim</span> — vastused
-                demo + TheMealDB retseptidest (kaardistatud Selveri
-                demokataloogile). Spageti + muna näide töötab alati.
+                <span className="font-bold">Näidisrežiim</span> — retseptid
+                demost; puudu olev toode otsitakse live Selverist (Klevu /
+                selver-mcp stiil), vajadusel kataloogi fallback.
               </div>
               <ChatView
                 chat={cookChat}

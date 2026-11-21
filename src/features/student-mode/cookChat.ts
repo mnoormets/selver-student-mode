@@ -16,6 +16,8 @@ export type CookChatTurnResult = {
   demo: boolean;
   readyToCook: boolean;
   shoppingEmpty: boolean;
+  /** Product ids still missing after pantry (for live Selver enrich). */
+  missingProductIds?: string[];
 };
 
 const WORD_NUMBERS: Record<string, number> = {
@@ -439,6 +441,7 @@ export function answerCookChatTurn(
     demo,
     readyToCook,
     shoppingEmpty,
+    missingProductIds: basket.lines.map((l) => l.productId),
   };
 }
 
