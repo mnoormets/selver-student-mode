@@ -2,13 +2,14 @@
 
 Häkatoni prototüüp: **Tudengirežiim** kui eraldiseisev moodul Partnerkaardi äpis. Ütle nädala eelarve — saad menüü, kampaaniakorvi ja jääkide-abilise, mis sobib edasi Partnerkaardi ostunimekirja.
 
-## Mida proovida
+## Mida proovida (2 min demo)
 
-1. Partnerkaardi **peamenüüs** (valge list) vali **Student Mode**
-2. Jõuad Tudengirežiimini
-3. Sea eelarve, päevad, stiil ja tarne; vaata menüüd / ostukorvi / abi
+1. Partnerkaardi peamenüüs ava **Student Mode**
+2. **35 € · kiire · pasta** → näidisnädal + **34,24 €** korv
+3. Vajuta **Mul on kodus 10 muna** → munad 2→1 karp, korv **32,35 €**
+4. „Jätka e-Selveris“ (tuleviku CTA)
 
-Demo töötab ilma API-võtmeta (reeglipõhine planeerija + mock-kataloog).
+Demo töötab ilma API-võtmeta (fikseeritud häkatoni näidisplaan).
 
 ## Käivitamine
 

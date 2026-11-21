@@ -51,11 +51,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { replyToStudent, type ChatMessage } from "@/lib/assistant";
 import {
-  buildPlan,
-  dayLabel,
-  type PlanResult,
-  type Prefs,
-} from "@/lib/planner";
+  applyPantryStock,
+  buildHackathonDemoPlan,
+  countEggsNeeded,
+} from "@/lib/demo-plan";
+import { dayLabel, type PlanResult, type Prefs } from "@/lib/planner";
 
 const BOTTOM_TABS = [
   { id: "home", label: "Avaleht", icon: Home },
@@ -118,18 +118,20 @@ function euros(n: number) {
 export function StudentModeApp() {
   const [stage, setStage] = useState<Stage>("home");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [budget, setBudget] = useState(10);
-  const [days, setDays] = useState(5);
-  const [style, setStyle] = useState<Prefs["style"]>("odav");
+  const [budget, setBudget] = useState(35);
+  const [days, setDays] = useState(7);
+  const [style, setStyle] = useState<Prefs["style"]>("kiire");
   const [delivery, setDelivery] = useState(DELIVERY_OPTIONS[0]!);
   const [plan, setPlan] = useState<PlanResult | null>(null);
+  const [basePlan, setBasePlan] = useState<PlanResult | null>(null);
+  const [pantryApplied, setPantryApplied] = useState(false);
   const [pending, startTransition] = useTransition();
   const [tab, setTab] = useState<"menu" | "basket" | "chat">("menu");
   const [chat, setChat] = useState<ChatMessage[]>([
     {
       id: "welcome",
       role: "assistant",
-      text: "Tere! Olen Selveri tudengiabi. Küsi eelarve, kiiruse või jääkide kohta.",
+      text: "Tere! Ütle nt „Mul on kodus 10 muna“ — arvutan ostukorvi uuesti.",
     },
   ]);
   const [draft, setDraft] = useState("");
@@ -139,6 +141,8 @@ export function StudentModeApp() {
     () => ({ budget, days, style, delivery }),
     [budget, days, style, delivery],
   );
+  const eggLine = plan?.basket.find((l) => l.productId === "munad");
+  const eggsNeeded = plan ? countEggsNeeded(plan.meals) : 0;
 
   function openStudentMode() {
     setMenuOpen(false);
@@ -156,14 +160,47 @@ export function StudentModeApp() {
 
   function generate() {
     startTransition(() => {
-      const next = buildPlan(prefs);
+      // C+ hackathon demo: fixed 35 € pasta/kiire näidisplaan @ 34.24 €
+      const next = buildHackathonDemoPlan();
+      setBudget(35);
+      setDays(7);
+      setStyle("kiire");
+      setBasePlan(next);
       setPlan(next);
+      setPantryApplied(false);
       setStage("plan");
       setTab("menu");
-      setChat((prev) => [
-        ...prev,
+      setChat([
+        {
+          id: "welcome",
+          role: "assistant",
+          text: "Näidisplaan on valmis. Proovi: „Mul on kodus 10 muna“.",
+        },
         {
           id: `plan-${Date.now()}`,
+          role: "assistant",
+          text: next.summary,
+        },
+      ]);
+    });
+  }
+
+  function applyEggsAtHome(eggs = 10) {
+    if (!basePlan) return;
+    startTransition(() => {
+      const next = applyPantryStock(basePlan, { eggs });
+      setPlan(next);
+      setPantryApplied(true);
+      setTab("basket");
+      setChat((c) => [
+        ...c,
+        {
+          id: `u-pantry-${Date.now()}`,
+          role: "user",
+          text: `Mul on kodus ${eggs} muna`,
+        },
+        {
+          id: `a-pantry-${Date.now()}`,
           role: "assistant",
           text: next.summary,
         },
@@ -179,6 +216,20 @@ export function StudentModeApp() {
       role: "user",
       text,
     };
+
+    const lower = text.toLowerCase();
+    const eggMatch = lower.match(/(\d+)\s*muna/);
+    const wantsPantry =
+      (lower.includes("kodus") || lower.includes("mul on")) &&
+      lower.includes("muna");
+
+    if (wantsPantry && basePlan) {
+      const eggs = eggMatch ? Number(eggMatch[1]) : 10;
+      setDraft("");
+      applyEggsAtHome(eggs);
+      return;
+    }
+
     const answer: ChatMessage = {
       id: `a-${Date.now()}`,
       role: "assistant",
@@ -519,15 +570,14 @@ export function StudentModeApp() {
                   Student Mode
                 </h1>
                 <p className="mt-3 text-sm leading-relaxed text-white/75">
-                  Odavaim toidukorv sinu eelarve, tempo ja lemmikute järgi —
-                  otse Partnerkaardi äpis.
+                  Kiired toidud sinu eelarve piires — otse Partnerkaardi äpis.
                 </p>
                 <div className="mt-4 grid grid-cols-2 gap-2">
                   <div className="rounded-[10px] bg-white/10 px-3 py-2.5">
                     <p className="text-[10px] font-bold uppercase tracking-wider text-white/55">
                       Eelarve
                     </p>
-                    <p className="text-xl font-bold">10 €</p>
+                    <p className="text-xl font-bold">35 €</p>
                   </div>
                   <div
                     className="rounded-[10px] px-3 py-2.5 text-black"
@@ -536,15 +586,15 @@ export function StudentModeApp() {
                     <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
                       Fookus
                     </p>
-                    <p className="text-xl font-bold">Odav · kiire</p>
+                    <p className="text-xl font-bold">Kiire · pasta</p>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-3 rounded-[14px] border border-neutral-200 bg-white p-4">
                 <p className="text-sm leading-relaxed text-neutral-600">
-                  Sea eelarve ja eelistused — saad nädalaplaani ja ostunimekirja.
-                  Või küsi chatist, mida saab kodus olevast teha.
+                  35 €, kiirelt ja soodsalt, pasta meeldib — saad näidisnädala ja
+                  ostukorvi. Siis ütle, mis kodus juba on.
                 </p>
                 <button
                   type="button"
@@ -581,7 +631,7 @@ export function StudentModeApp() {
                       <button
                         type="button"
                         aria-label="Vähenda eelarvet"
-                        onClick={() => setBudget((b) => Math.max(10, b - 1))}
+                        onClick={() => setBudget((b) => Math.max(15, b - 1))}
                         className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-black active:scale-95"
                       >
                         <Minus className="size-4" />
@@ -601,15 +651,15 @@ export function StudentModeApp() {
                   </div>
                   <Slider
                     value={[budget]}
-                    min={10}
+                    min={15}
                     max={60}
                     step={1}
                     onValueChange={(v) =>
-                      setBudget(Array.isArray(v) ? (v[0] ?? 10) : v)
+                      setBudget(Array.isArray(v) ? (v[0] ?? 35) : v)
                     }
                   />
                   <div className="flex flex-wrap gap-2">
-                    {[10, 20, 35].map((preset) => (
+                    {[20, 35, 50].map((preset) => (
                       <button
                         key={preset}
                         type="button"
@@ -749,13 +799,16 @@ export function StudentModeApp() {
                       className="rounded-full px-2.5 py-0.5 text-[11px] font-bold text-white"
                       style={{ backgroundColor: PK_ORANGE }}
                     >
-                      {budget} €
+                      35 €
                     </span>
                     <span className="rounded-full bg-black px-2.5 py-0.5 text-[11px] font-bold text-white">
-                      odav · kiire
+                      kiire · soodne
                     </span>
                     <span className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-[11px] font-bold text-black">
-                      liha · pasta
+                      pasta
+                    </span>
+                    <span className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-[11px] font-bold text-neutral-500">
+                      näidisplaan
                     </span>
                   </div>
                   <h2 className="text-2xl font-bold tracking-tight text-black">
@@ -771,14 +824,43 @@ export function StudentModeApp() {
                   >
                     Muuda seadeid
                   </Button>
-                  <Button
-                    className="rounded-full font-bold text-white hover:opacity-90"
-                    style={{ backgroundColor: PK_ORANGE }}
-                    onClick={generate}
-                  >
-                    Genereeri uuesti
-                  </Button>
+                  {!pantryApplied ? (
+                    <Button
+                      className="rounded-full font-bold text-white hover:opacity-90"
+                      style={{ backgroundColor: PK_ORANGE }}
+                      onClick={() => applyEggsAtHome(10)}
+                    >
+                      Mul on kodus 10 muna
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      className="rounded-full border-neutral-200 font-bold text-black"
+                      onClick={() => {
+                        if (basePlan) {
+                          setPlan(basePlan);
+                          setPantryApplied(false);
+                        }
+                      }}
+                    >
+                      Lähtesta korv
+                    </Button>
+                  )}
                 </div>
+                {pantryApplied && (
+                  <div
+                    className="rounded-[12px] border px-3 py-2.5 text-sm font-bold"
+                    style={{
+                      borderColor: PK_ORANGE,
+                      backgroundColor: "#fff0e3",
+                      color: "#000",
+                    }}
+                  >
+                    Korv {euros(basePlan?.total ?? 34.24)} → {euros(plan.total)}.
+                    Munad: {eggsNeeded} tk nädalaks · ostad {eggLine?.qty ?? 1}{" "}
+                    karbi (varem 2).
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 gap-2">
@@ -824,15 +906,33 @@ export function StudentModeApp() {
               </div>
 
               {tab === "menu" && <MenuView plan={plan} />}
-              {tab === "basket" && <BasketView plan={plan} />}
+              {tab === "basket" && (
+                <BasketView plan={plan} highlightEggs={pantryApplied} />
+              )}
               {tab === "chat" && (
                 <ChatView
                   chat={chat}
                   draft={draft}
                   setDraft={setDraft}
                   onSend={sendChat}
+                  onPantryDemo={() => applyEggsAtHome(10)}
                 />
               )}
+
+              <div className="rounded-[14px] border border-neutral-200 bg-neutral-50 p-4">
+                <p className="text-sm font-bold text-black">Järgmine samm</p>
+                <p className="mt-1 text-sm text-neutral-600">
+                  Tulevikus võiks selle nimekirjaga jätkata e-Selveris.
+                </p>
+                <button
+                  type="button"
+                  className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full text-sm font-bold uppercase tracking-[0.04em] text-white"
+                  style={{ backgroundColor: PK_ORANGE }}
+                >
+                  Jätka e-Selveris
+                  <ArrowRight className="size-4" />
+                </button>
+              </div>
             </section>
           )}
         </main>
@@ -973,7 +1073,13 @@ function MenuView({ plan }: { plan: PlanResult }) {
   );
 }
 
-function BasketView({ plan }: { plan: PlanResult }) {
+function BasketView({
+  plan,
+  highlightEggs,
+}: {
+  plan: PlanResult;
+  highlightEggs?: boolean;
+}) {
   return (
     <div className="overflow-hidden rounded-[14px] border border-neutral-200 bg-white">
       <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3 sm:px-5">
@@ -985,14 +1091,19 @@ function BasketView({ plan }: { plan: PlanResult }) {
           {euros(plan.total)}
         </p>
       </div>
-      <ul className="divide-y divide-border/50">
+      <ul className="divide-y divide-neutral-200">
         {plan.basket.map((line, i) => (
           <motion.li
             key={line.productId}
             initial={{ opacity: 0, x: -8 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.03 }}
-            className="flex items-start justify-between gap-3 px-4 py-3 sm:px-5"
+            className={cn(
+              "flex items-start justify-between gap-3 px-4 py-3 sm:px-5",
+              highlightEggs &&
+                line.productId === "munad" &&
+                "bg-[#fff0e3]",
+            )}
           >
             <div>
               <p className="font-medium leading-snug">{line.name}</p>
@@ -1041,17 +1152,19 @@ function ChatView({
   draft,
   setDraft,
   onSend,
+  onPantryDemo,
 }: {
   chat: ChatMessage[];
   draft: string;
   setDraft: (v: string) => void;
   onSend: () => void;
+  onPantryDemo?: () => void;
 }) {
   const chips = [
-    "Mul on 5 eurot",
+    "Mul on kodus 10 muna",
     "Kiire enne loengut",
     "Taimne õhtusöök",
-    "Kana jäägid",
+    "Foto (tulekul)",
   ];
 
   return (
@@ -1084,8 +1197,18 @@ function ChatView({
             <button
               key={c}
               type="button"
-              onClick={() => setDraft(c)}
-              className="rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-bold text-neutral-600 hover:border-[#F97D00] hover:text-black"
+              onClick={() => {
+                if (c.includes("10 muna") && onPantryDemo) {
+                  onPantryDemo();
+                  return;
+                }
+                if (c.includes("Foto")) return;
+                setDraft(c);
+              }}
+              className={cn(
+                "rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-bold text-neutral-600 hover:border-[#F97D00] hover:text-black",
+                c.includes("Foto") && "opacity-50",
+              )}
             >
               {c}
             </button>
