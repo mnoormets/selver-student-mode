@@ -4,9 +4,9 @@ Häkatoni prototüüp: **Tudengirežiim** kui eraldiseisev moodul Partnerkaardi 
 
 ## Mida proovida
 
-1. Ava moodul Partnerkaardi äpi raamistikus
-2. Sea eelarve, päevad, stiil ja tarne
-3. Vaata menüüd / ostukorvi / abi
+1. Partnerkaardi avalehel ava menüü (☰) — listis on **Student Mode**
+2. Kliki **Student Mode** → jõuad Tudengirežiimini
+3. Sea eelarve, päevad, stiil ja tarne; vaata menüüd / ostukorvi / abi
 
 Demo töötab ilma API-võtmeta (reeglipõhine planeerija + mock-kataloog).
 
