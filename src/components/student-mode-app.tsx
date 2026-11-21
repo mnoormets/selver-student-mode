@@ -29,9 +29,12 @@ import {
   X,
   MapPin,
   Star,
-  Monitor,
+  MessageSquare,
   type LucideIcon,
 } from "lucide-react";
+
+/** Partnerkaart brand orange (app chrome). */
+const PK_ORANGE = "#FF6A00";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
@@ -74,16 +77,15 @@ const MAIN_MENU: {
   id: string;
   label: string;
   icon: LucideIcon;
-  badge?: string;
   notify?: string;
   action?: "student-mode";
 }[] = [
-  { id: "list", label: "Ostunimekiri", icon: ListChecks, badge: "UUS" },
+  { id: "list", label: "Ostunimekiri", icon: ListChecks },
   { id: "selfserve", label: "Partnerkaardi iseteenindus", icon: Star },
   { id: "stores", label: "Kaupluste kontaktid", icon: MapPin },
-  { id: "offers", label: "Pakkumised", icon: Percent, notify: "1" },
+  { id: "offers", label: "Pakkumised", icon: Percent, notify: "5" },
   { id: "student", label: "Student Mode", icon: GraduationCap, action: "student-mode" },
-  { id: "eshop", label: "Külasta e-poode", icon: Monitor },
+  { id: "feedback", label: "Tagasiside", icon: MessageSquare },
 ];
 
 type Stage = "home" | "hero" | "setup" | "plan";
@@ -185,9 +187,9 @@ export function StudentModeApp() {
   const statusLight = stage === "home";
 
   return (
-    <div className="relative flex flex-1 flex-col items-center justify-center bg-[#0b1220] px-3 py-5 sm:px-6 sm:py-8">
-      <div className="mb-3 flex w-full max-w-[430px] items-center justify-between px-1 text-[11px] text-white/55">
-        <span>iPhone 16 · Partnerkaart</span>
+    <div className="relative flex flex-1 flex-col items-center justify-center bg-neutral-950 px-3 py-5 sm:px-6 sm:py-8">
+      <div className="mb-3 flex w-full max-w-[430px] items-center justify-between px-1 text-[11px] text-white/40">
+        <span>Partnerkaart</span>
         <a
           href={PARTNERKAART_URL}
           target="_blank"
@@ -237,7 +239,7 @@ export function StudentModeApp() {
             <div
               className={cn(
                 "relative z-30 flex h-[59px] shrink-0 items-end justify-between px-7 pb-2.5",
-                statusLight ? "bg-[#1a1a1a] text-white" : "bg-selver-navy text-white",
+                statusLight ? "bg-black text-white" : "bg-selver-navy text-white",
               )}
             >
               <span className="w-[64px] text-[15px] font-semibold tracking-tight">
@@ -330,10 +332,11 @@ export function StudentModeApp() {
                       aria-disabled
                     >
                       <Icon
-                        className="size-[22px] shrink-0 text-[#f15a22]"
+                        className="size-[22px] shrink-0"
+                        style={{ color: PK_ORANGE }}
                         strokeWidth={1.7}
                       />
-                      <span className="text-[15px] font-medium leading-snug text-white">
+                      <span className="font-display text-[15px] font-bold leading-snug text-white">
                         {item.label}
                       </span>
                     </div>
@@ -346,112 +349,138 @@ export function StudentModeApp() {
 
         <main
           className={cn(
-            "flex flex-1 flex-col overflow-y-auto pb-24",
-            stage === "home" ? "bg-[#1a1a1a] px-0 pt-0" : "px-4 pt-4",
+            "flex min-h-0 flex-1 flex-col overflow-y-auto",
+            stage === "home" ? "bg-black px-0 pb-0 pt-0" : "px-4 pb-28 pt-4",
           )}
         >
           {stage === "home" && (
-            <section className="animate-enter">
-              <div className="px-4 pb-5 pt-3 text-white">
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="inline-flex size-9 items-center justify-center rounded-full border border-white/25">
-                      <User className="size-4 text-white/80" />
-                    </span>
-                    <p className="text-[15px] font-semibold">Hea Partner</p>
+            <section className="flex min-h-full flex-col animate-enter font-display">
+              <div className="bg-black px-5 pb-4 pt-1 text-white">
+                <div className="mb-5 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <User className="size-[22px] text-white" strokeWidth={1.6} />
+                    <p className="text-[17px] font-bold tracking-tight">
+                      Aaron Siimon
+                    </p>
                   </div>
                   <button
                     type="button"
                     onClick={() => setMenuOpen(true)}
-                    className="inline-flex size-10 items-center justify-center rounded-full bg-[#f15a22] text-white shadow-md"
+                    className="inline-flex size-[42px] items-center justify-center rounded-full text-white"
+                    style={{ backgroundColor: PK_ORANGE }}
                     aria-label="Ava kõrvalmenüü"
                   >
-                    <Menu className="size-5" strokeWidth={2.4} />
+                    <Menu className="size-5" strokeWidth={2.6} />
                   </button>
                 </div>
 
-                <div className="mb-4 flex items-end gap-6">
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/55">
-                      Boonuspunktid
-                    </p>
-                    <p className="font-display text-xl font-bold text-[#f15a22]">
-                      0,38 €
-                    </p>
+                <div className="mb-5 flex items-stretch gap-4">
+                  <div className="flex gap-3">
+                    <div
+                      className="w-[3px] self-stretch rounded-full"
+                      style={{ backgroundColor: PK_ORANGE }}
+                    />
+                    <div>
+                      <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-white">
+                        Boonuspunktid
+                      </p>
+                      <p className="mt-0.5 text-[28px] font-bold leading-none tracking-tight text-white">
+                        0,47 €
+                      </p>
+                    </div>
                   </div>
-                  <div className="h-8 w-px bg-[#f15a22]/30" />
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/55">
-                      Kuukaardi jääk
+                  <div
+                    className="w-px self-stretch"
+                    style={{ backgroundColor: PK_ORANGE }}
+                  />
+                  <div className="min-w-0 flex-1 pt-0.5">
+                    <p
+                      className="text-[13px] font-bold uppercase leading-tight tracking-wide underline decoration-2 underline-offset-2"
+                      style={{ color: PK_ORANGE }}
+                    >
+                      Soovid maksta hiljem?
                     </p>
-                    <p className="font-display text-xl font-bold">57,00 €</p>
+                    <span className="mt-1.5 inline-flex rounded-[4px] bg-[#e30613] px-1.5 py-[2px] text-[10px] font-bold uppercase tracking-wide text-white">
+                      Uus!
+                    </span>
                   </div>
                 </div>
 
-                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#f7f7f7] via-white to-[#ffe8de] p-4 shadow-lg">
-                  <div className="mb-3 flex items-center justify-between">
-                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#f15a22]">
-                      partner
-                    </p>
-                    <span className="text-[10px] font-semibold text-[#f15a22]/80">
-                      Selver
-                    </span>
-                  </div>
-                  <div className="flex justify-center py-2">
-                    <div className="inline-flex items-center gap-2 rounded-full border-2 border-[#f15a22] bg-white px-4 py-2.5 text-sm font-semibold text-[#1a1a1a]">
-                      <QrCode className="size-4 text-[#f15a22]" />
-                      Esita Partnerkaart
+                <div className="relative overflow-hidden rounded-[14px] bg-white px-4 pb-3.5 pt-3.5 shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
+                  <Star
+                    aria-hidden
+                    className="pointer-events-none absolute -right-6 -top-4 size-40 rotate-12 opacity-[0.12]"
+                    style={{ color: PK_ORANGE }}
+                    strokeWidth={1.2}
+                    fill="currentColor"
+                  />
+                  <p
+                    className="relative text-[18px] font-bold lowercase tracking-tight"
+                    style={{ color: PK_ORANGE }}
+                  >
+                    partner
+                  </p>
+                  <div className="relative my-5 flex justify-center">
+                    <div className="inline-flex items-center gap-2 rounded-[10px] border border-black/80 bg-white px-4 py-2.5 shadow-[0_0_0_3px_rgba(255,106,0,0.18)]">
+                      <QrCode className="size-4 text-black" strokeWidth={2} />
+                      <span className="text-[13px] font-bold uppercase tracking-[0.04em] text-black">
+                        Esita Partnerkaart
+                      </span>
                     </div>
+                  </div>
+                  <div className="relative flex items-end justify-between font-mono text-[12px] font-medium tracking-wider text-black">
+                    <span>9233 6600 4795 1885</span>
+                    <span>10/2028</span>
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-t-[1.75rem] bg-white px-2 pb-6 pt-2 shadow-[0_-8px_30px_rgba(0,0,0,0.25)]">
-                <ul>
-                  {MAIN_MENU.map((item) => {
+              <div className="flex flex-1 flex-col rounded-t-[22px] bg-white pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-10px_40px_rgba(0,0,0,0.45)]">
+                <div className="mb-1 flex justify-center py-1.5" aria-hidden>
+                  <div className="h-1 w-10 rounded-full bg-neutral-300" />
+                </div>
+                <ul className="flex-1">
+                  {MAIN_MENU.map((item, index) => {
                     const Icon = item.icon;
                     const rowClass =
-                      "flex w-full items-center gap-3 border-b border-black/8 px-4 py-3.5 text-left";
+                      "flex w-full items-center gap-3.5 px-5 py-[15px] text-left";
+                    const border =
+                      index < MAIN_MENU.length - 1
+                        ? "border-b border-neutral-200"
+                        : "";
                     if (item.action === "student-mode") {
                       return (
-                        <li key={item.id}>
+                        <li key={item.id} className={border}>
                           <button
                             type="button"
                             onClick={openStudentMode}
-                            className={cn(rowClass, "transition hover:bg-[#fff5f0]")}
+                            className={cn(rowClass, "active:bg-neutral-50")}
                           >
                             <Icon
-                              className="size-5 shrink-0 text-[#f15a22]"
-                              strokeWidth={1.8}
+                              className="size-[22px] shrink-0"
+                              style={{ color: PK_ORANGE }}
+                              strokeWidth={1.85}
                             />
-                            <span className="flex-1 text-[15px] font-semibold text-[#1a1a1a]">
+                            <span className="flex-1 text-[17px] font-bold tracking-tight text-black">
                               {item.label}
                             </span>
-                            <span className="rounded-full bg-[#f15a22]/12 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#f15a22]">
-                              Uus
-                            </span>
-                            <ArrowRight className="size-4 text-[#f15a22]" />
                           </button>
                         </li>
                       );
                     }
                     return (
-                      <li key={item.id}>
+                      <li key={item.id} className={border}>
                         <div className={rowClass} aria-disabled>
                           <Icon
-                            className="size-5 shrink-0 text-[#f15a22]"
-                            strokeWidth={1.8}
+                            className="size-[22px] shrink-0"
+                            style={{ color: PK_ORANGE }}
+                            strokeWidth={1.85}
                           />
-                          <span className="flex-1 text-[15px] font-semibold text-[#1a1a1a]">
+                          <span className="flex-1 text-[17px] font-bold tracking-tight text-black">
                             {item.label}
                           </span>
-                          {item.badge && (
-                            <span className="rounded bg-[#e30613] px-1.5 py-0.5 text-[10px] font-bold uppercase text-white">
-                              {item.badge}
-                            </span>
-                          )}
                           {item.notify && (
-                            <span className="inline-flex size-5 items-center justify-center rounded-full bg-[#e30613] text-[10px] font-bold text-white">
+                            <span className="inline-flex size-[22px] items-center justify-center rounded-full bg-[#e30613] text-[11px] font-bold text-white">
                               {item.notify}
                             </span>
                           )}
@@ -460,9 +489,12 @@ export function StudentModeApp() {
                     );
                   })}
                 </ul>
-                <div className="px-4 pt-4">
-                  <div className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#f15a22] text-sm font-bold text-white">
-                    <ScanLine className="size-5" />
+                <div className="px-5 pb-2 pt-3">
+                  <div
+                    className="flex h-[52px] w-full items-center justify-center gap-2.5 rounded-full text-[15px] font-bold uppercase tracking-[0.06em] text-white"
+                    style={{ backgroundColor: PK_ORANGE }}
+                  >
+                    <ScanLine className="size-5" strokeWidth={2.2} />
                     Skaneeri ja osta
                   </div>
                 </div>
@@ -786,40 +818,51 @@ export function StudentModeApp() {
           )}
         </main>
 
-            <nav className="absolute inset-x-0 bottom-0 z-20 border-t border-border/70 bg-white/95 px-1 pb-5 pt-1 backdrop-blur-md">
-              <div className="grid grid-cols-5">
-                {BOTTOM_TABS.map((item) => {
-                  const Icon = item.icon;
-                  const active =
-                    (stage === "home" && item.id === "home") ||
-                    (inStudentMode && item.id === "more") ||
-                    (stage === "plan" && item.id === "list");
-                  const openMenu = item.id === "more" || item.id === "home";
-                  return (
-                    <button
-                      key={item.id}
-                      type="button"
-                      onClick={() => {
-                        if (item.id === "more") setMenuOpen(true);
-                        else if (item.id === "home") goHome();
-                      }}
-                      className={cn(
-                        "flex flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[10px] font-medium",
-                        active ? "text-selver-red" : "text-selver-navy/45",
-                        !openMenu && "pointer-events-none",
-                      )}
-                    >
-                      <Icon className="size-5" strokeWidth={active ? 2.4 : 1.8} />
-                      {item.label}
-                    </button>
-                  );
-                })}
+            {inStudentMode ? (
+              <nav className="absolute inset-x-0 bottom-0 z-20 border-t border-border/70 bg-white/95 px-1 pb-5 pt-1 backdrop-blur-md">
+                <div className="grid grid-cols-5">
+                  {BOTTOM_TABS.map((item) => {
+                    const Icon = item.icon;
+                    const active =
+                      item.id === "more" ||
+                      (stage === "plan" && item.id === "list");
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          if (item.id === "more") setMenuOpen(true);
+                          else if (item.id === "home") goHome();
+                        }}
+                        className={cn(
+                          "flex flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[10px] font-medium",
+                          active ? "text-selver-red" : "text-selver-navy/45",
+                          item.id !== "more" &&
+                            item.id !== "home" &&
+                            "pointer-events-none",
+                        )}
+                      >
+                        <Icon
+                          className="size-5"
+                          strokeWidth={active ? 2.4 : 1.8}
+                        />
+                        {item.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="flex justify-center pb-1 pt-1" aria-hidden>
+                  <div className="h-[5px] w-[134px] rounded-full bg-black/80" />
+                </div>
+              </nav>
+            ) : (
+              <div
+                className="pointer-events-none absolute inset-x-0 bottom-2 z-20 flex justify-center"
+                aria-hidden
+              >
+                <div className="h-[5px] w-[134px] rounded-full bg-black/85" />
               </div>
-              {/* iPhone home indicator */}
-              <div className="flex justify-center pb-1 pt-1" aria-hidden>
-                <div className="h-[5px] w-[134px] rounded-full bg-black/80" />
-              </div>
-            </nav>
+            )}
           </div>
         </div>
       </div>
