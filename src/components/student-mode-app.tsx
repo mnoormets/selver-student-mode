@@ -321,14 +321,32 @@ export function StudentModeApp() {
                 </div>
 
                 <div className="space-y-3">
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between gap-3">
                     <label className="flex items-center gap-2 text-sm font-medium">
                       <Timer className="size-4 text-leaf" />
                       Päevi planeerida
                     </label>
-                    <span className="font-display text-2xl font-bold text-grove">
-                      {days}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        aria-label="Vähenda päevi"
+                        onClick={() => setDays((d) => Math.max(3, d - 1))}
+                        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
+                      >
+                        <Minus className="size-4" />
+                      </button>
+                      <span className="min-w-[2.5rem] text-center font-display text-3xl font-bold tabular-nums text-grove">
+                        {days}
+                      </span>
+                      <button
+                        type="button"
+                        aria-label="Suurenda päevi"
+                        onClick={() => setDays((d) => Math.min(7, d + 1))}
+                        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
+                      >
+                        <Plus className="size-4" />
+                      </button>
+                    </div>
                   </div>
                   <Slider
                     value={[days]}
