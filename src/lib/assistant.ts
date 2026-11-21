@@ -48,7 +48,7 @@ export function replyToStudent(
     !q.includes("spagett") &&
     !q.includes("spaget")
   ) {
-    return "Vajuta „Mul on kodus 10 muna“ või kirjuta täpselt nii — siis arvutan korvi uuesti (34,24 € → 32,35 €).";
+    return "Vajuta „Mul on kodus 10 muna“ või kirjuta täpselt nii — siis arvutan korvi uuesti (2 karpi → 1 karp).";
   }
 
   if (q.includes("5 euro") || q.includes("5€") || q.includes("viis euro")) {

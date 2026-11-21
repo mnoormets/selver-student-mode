@@ -77,7 +77,7 @@ function explainTotalDelta(computedCents: number, legacyCents: number): string {
 
 /**
  * Hackathon C+ demo week from sourced Selver products + demoWeek recipes.
- * Week needs 14 eggs → 2 packs without pantry; total computes to 34.24 €.
+ * Week needs 14 eggs → 2 packs without pantry; total from products.ts cents.
  */
 export function buildHackathonDemoPlan(): PlanResult {
   const meals: PlannedMeal[] = demoWeek.flatMap((day) => {
@@ -137,7 +137,7 @@ export type PantryStock = PantryStockCents & {
 
 /**
  * Apply pantry stock via the cents basket calculator.
- * Demo beat: 10 eggs at home → 1 pack instead of 2 (need 14) → 34.24 € → 32.35 €.
+ * Demo beat: 10 eggs at home → 1 pack instead of 2 (need 14 eggs).
  */
 export function applyPantryStock(
   plan: PlanResult,

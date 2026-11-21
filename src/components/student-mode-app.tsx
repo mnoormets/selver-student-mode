@@ -162,7 +162,7 @@ export function StudentModeApp() {
 
   function generate() {
     startTransition(() => {
-      // C+ hackathon demo: fixed 35 € pasta/kiire näidisplaan @ 34.24 €
+      // C+ hackathon demo: 35 € pasta/kiire näidisplaan from sourced pack prices
       const next = buildHackathonDemoPlan();
       setBudget(35);
       setDays(7);
@@ -873,7 +873,7 @@ export function StudentModeApp() {
                       color: "#000",
                     }}
                   >
-                    Korv {euros(basePlan?.total ?? 34.24)} → {euros(plan.total)}.
+                    Korv {euros(basePlan?.total ?? plan.total)} → {euros(plan.total)}.
                     Munad: {eggsNeeded} tk nädalaks · ostad {eggLine?.qty ?? 1}{" "}
                     karbi (varem 2).
                   </div>
