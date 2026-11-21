@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -90,12 +90,12 @@ const MAIN_MENU: {
   { id: "list", label: "Ostunimekiri", icon: ListChecks },
   { id: "selfserve", label: "Partnerkaardi iseteenindus", icon: Star },
   { id: "stores", label: "Kaupluste kontaktid", icon: MapPin },
-  { id: "offers", label: "Pakkumised", icon: Percent, notify: "5" },
+  { id: "offers", label: "Pakkumised", icon: Percent, notify: "3" },
   { id: "student", label: "Student Mode", icon: GraduationCap, action: "student-mode" },
   { id: "feedback", label: "Tagasiside", icon: MessageSquare },
 ];
 
-type Stage = "home" | "hero" | "setup" | "plan";
+type Stage = "home" | "hero" | "setup" | "plan" | "cook-chat";
 
 const DELIVERY_OPTIONS = [
   "Kojutoomine täna",
@@ -110,6 +110,12 @@ const STYLES: { id: Prefs["style"]; label: string; hint: string }[] = [
   { id: "taimne", label: "Taimetoit", hint: "oad, tofu, kiker" },
   { id: "liha", label: "Sisaldab liha", hint: "kana & hakk" },
 ];
+
+const CHAT_CHIPS = [
+  "Mul on kodus 10 muna",
+  "Mul on kodus taigen ja mune, tahan hakkliha pannkooke — mida osta?",
+  "Mul on 100 g spagette ja kaks muna. Mida saan kiiresti teha?",
+] as const;
 
 function euros(n: number) {
   return `${n.toFixed(2)} €`;
@@ -135,13 +141,27 @@ export function StudentModeApp() {
     },
   ]);
   const [draft, setDraft] = useState("");
+  const [chatSheetOpen, setChatSheetOpen] = useState(false);
+  const [cookChat, setCookChat] = useState<ChatMessage[]>([
+    {
+      id: "cook-welcome",
+      role: "assistant",
+      text: "Tere! Ütle, mis sul kodus on või mille järele isu on — pakun roa retseptivalikust ja näitan, mida juurde osta. Kui AI ühendust pole, saad selgelt märgitud näidisvastuse.",
+    },
+  ]);
+  const [cookDraft, setCookDraft] = useState("");
+  const [cookPantry, setCookPantry] = useState<Record<string, number>>({});
+  const [cookRecipeId, setCookRecipeId] = useState<string | null>(null);
+  const [cookPending, setCookPending] = useState(false);
 
   const inStudentMode = stage !== "home";
   const prefs: Prefs = useMemo(
     () => ({ budget, days, style, delivery }),
     [budget, days, style, delivery],
   );
-  const eggLine = plan?.basket.find((l) => l.productId === "munad");
+  const eggLine = plan?.basket.find(
+    (l) => l.productId === "eggs" || l.productId === "munad",
+  );
   const eggsNeeded = plan ? countEggsNeeded(plan.meals) : 0;
 
   function openStudentMode() {
@@ -153,18 +173,38 @@ export function StudentModeApp() {
     setStage("setup");
   }
 
+  function openCookChat() {
+    setChatSheetOpen(false);
+    setMenuOpen(false);
+    setStage("cook-chat");
+  }
+
   function goHome() {
     setStage("home");
     setMenuOpen(false);
+    setChatSheetOpen(false);
+  }
+
+  function resetCookChatSession() {
+    setCookChat([
+      {
+        id: "cook-welcome",
+        role: "assistant",
+        text: "Tere! Ütle, mis sul kodus on või mille järele isu on — pakun roa retseptivalikust ja näitan, mida juurde osta. Kui AI ühendust pole, saad selgelt märgitud näidisvastuse.",
+      },
+    ]);
+    setCookDraft("");
+    setCookPantry({});
+    setCookRecipeId(null);
   }
 
   function generate() {
     startTransition(() => {
-      // C+ hackathon demo: fixed 35 € pasta/kiire näidisplaan @ 34.24 €
-      const next = buildHackathonDemoPlan();
-      setBudget(35);
-      setDays(7);
-      setStyle("kiire");
+      const next = buildHackathonDemoPlan({
+        budgetEuros: budget,
+        days,
+        style,
+      });
       setBasePlan(next);
       setPlan(next);
       setPantryApplied(false);
@@ -174,7 +214,7 @@ export function StudentModeApp() {
         {
           id: "welcome",
           role: "assistant",
-          text: "Näidisplaan on valmis. Proovi: „Mul on kodus 10 muna“.",
+          text: `Näidisplaan on valmis (${budget} € eelarve). Proovi: „Mul on kodus 10 muna“.`,
         },
         {
           id: `plan-${Date.now()}`,
@@ -218,12 +258,21 @@ export function StudentModeApp() {
     };
 
     const lower = text.toLowerCase();
+    const isCookIntent =
+      lower.includes("teha") ||
+      lower.includes("pannkook") ||
+      lower.includes("hakkliha") ||
+      lower.includes("osta") ||
+      lower.includes("poest") ||
+      ((lower.includes("spagett") || lower.includes("spaget") || lower.includes("pasta")) &&
+        lower.includes("muna"));
     const eggMatch = lower.match(/(\d+)\s*muna/);
-    const wantsPantry =
+    const wantsWeekEggPantry =
+      !isCookIntent &&
       (lower.includes("kodus") || lower.includes("mul on")) &&
       lower.includes("muna");
 
-    if (wantsPantry && basePlan) {
+    if (wantsWeekEggPantry && basePlan) {
       const eggs = eggMatch ? Number(eggMatch[1]) : 10;
       setDraft("");
       applyEggsAtHome(eggs);
@@ -237,6 +286,59 @@ export function StudentModeApp() {
     };
     setChat((c) => [...c, userMsg, answer]);
     setDraft("");
+  }
+
+  async function sendCookChat() {
+    const text = cookDraft.trim();
+    if (!text || cookPending) return;
+    const userMsg: ChatMessage = {
+      id: `cu-${Date.now()}`,
+      role: "user",
+      text,
+    };
+    setCookChat((c) => [...c, userMsg]);
+    setCookDraft("");
+    setCookPending(true);
+    try {
+      const res = await fetch("/api/cook-chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: text,
+          pantry: cookPantry,
+          recipeId: cookRecipeId,
+        }),
+      });
+      const data = (await res.json()) as {
+        reply?: string;
+        pantry?: Record<string, number>;
+        recipeId?: string | null;
+      };
+      const reply =
+        data.reply ??
+        "Näidisvastus (AI ühenduseta): proovi uuesti või küsi spagettide ja munade kohta.";
+      setCookPantry(data.pantry ?? cookPantry);
+      if (data.recipeId) setCookRecipeId(data.recipeId);
+      setCookChat((c) => [
+        ...c,
+        {
+          id: `ca-${Date.now()}`,
+          role: "assistant",
+          text: reply,
+        },
+      ]);
+    } catch {
+      setCookChat((c) => [
+        ...c,
+        {
+          id: `ca-${Date.now()}`,
+          role: "assistant",
+          text: "Näidisvastus (AI ühenduseta): ühendus ebaõnnestus. Proovi „Mul on 100 g spagette ja kaks muna. Mida ma kiiresti teha saaks?“",
+        },
+      ]);
+    } finally {
+      setCookPending(false);
+    }
   }
 
   const statusLight = stage === "home";
@@ -326,6 +428,7 @@ export function StudentModeApp() {
                 onClick={() => {
                   if (stage === "plan") setStage("setup");
                   else if (stage === "setup") setStage("hero");
+                  else if (stage === "cook-chat") setStage("hero");
                   else goHome();
                 }}
                 className="inline-flex size-9 items-center justify-center rounded-full text-black hover:bg-neutral-100"
@@ -341,7 +444,7 @@ export function StudentModeApp() {
                   partner
                 </p>
                 <p className="truncate font-display text-lg font-bold leading-tight text-black">
-                  Student Mode
+                  {stage === "cook-chat" ? "Tudengiabi" : "Student Mode"}
                 </p>
               </div>
               <span
@@ -414,9 +517,14 @@ export function StudentModeApp() {
                 <div className="mb-5 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <User className="size-[22px] text-white" strokeWidth={1.6} />
-                    <p className="text-[17px] font-bold tracking-tight">
-                      Aaron Siimon
-                    </p>
+                    <div>
+                      <p className="text-[17px] font-bold tracking-tight">
+                        Demo Kasutaja
+                      </p>
+                      <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/55">
+                        Näidisandmed
+                      </p>
+                    </div>
                   </div>
                   <button
                     type="button"
@@ -440,7 +548,10 @@ export function StudentModeApp() {
                         Boonuspunktid
                       </p>
                       <p className="mt-0.5 text-[28px] font-bold leading-none tracking-tight text-white">
-                        0,47 €
+                        25,00 €
+                      </p>
+                      <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.08em] text-white/45">
+                        Näidis
                       </p>
                     </div>
                   </div>
@@ -483,10 +594,13 @@ export function StudentModeApp() {
                       </span>
                     </div>
                   </div>
-                  <div className="relative flex items-end justify-between font-mono text-[12px] font-medium tracking-wider text-black">
-                    <span>9233 6600 4795 1885</span>
-                    <span>10/2028</span>
+                  <div className="relative flex items-end justify-between gap-3 font-mono text-[12px] font-medium tracking-wider text-black">
+                    <span>0000 1111 2222 3333</span>
+                    <span className="shrink-0">01/2031</span>
                   </div>
+                  <p className="relative mt-2 text-[10px] font-bold uppercase tracking-[0.08em] text-black/40">
+                    Näidiskaart · ei ole päris Partnerkaart
+                  </p>
                 </div>
               </div>
 
@@ -577,7 +691,7 @@ export function StudentModeApp() {
                     <p className="text-[10px] font-bold uppercase tracking-wider text-white/55">
                       Eelarve
                     </p>
-                    <p className="text-xl font-bold">35 €</p>
+                    <p className="text-xl font-bold">20–60 €</p>
                   </div>
                   <div
                     className="rounded-[10px] px-3 py-2.5 text-black"
@@ -593,8 +707,8 @@ export function StudentModeApp() {
 
               <div className="space-y-3 rounded-[14px] border border-neutral-200 bg-white p-4">
                 <p className="text-sm leading-relaxed text-neutral-600">
-                  35 €, kiirelt ja soodsalt, pasta meeldib — saad näidisnädala ja
-                  ostukorvi. Siis ütle, mis kodus juba on.
+                  Vali nädala eelarve 20–60 € (odav tudengile), saa näidisplaan
+                  ja ostukorv selle piires. Siis ütle, mis kodus juba on.
                 </p>
                 <button
                   type="button"
@@ -606,6 +720,37 @@ export function StudentModeApp() {
                   <ArrowRight className="size-4" />
                 </button>
               </div>
+
+              <HeroCookCard onOpen={openCookChat} />
+            </section>
+          )}
+
+          {stage === "cook-chat" && (
+            <section className="flex min-h-[520px] flex-col space-y-3 animate-enter font-display">
+              <div className="rounded-[14px] border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
+                <span className="font-bold">Näidisrežiim</span> — vastused
+                demo + TheMealDB retseptidest (kaardistatud Selveri
+                demokataloogile). Spageti + muna näide töötab alati.
+              </div>
+              <ChatView
+                chat={cookChat}
+                draft={cookDraft}
+                setDraft={setCookDraft}
+                onSend={() => void sendCookChat()}
+                chips={[
+                  "Mul on 100 g spagette ja kaks muna. Mida ma kiiresti teha saaks?",
+                  "Mul on ka 130 g köögiviljasegu",
+                  "Mul on kodus taigen ja mune, tahan hakkliha pannkooke — mida osta?",
+                ]}
+                sending={cookPending}
+              />
+              <button
+                type="button"
+                onClick={resetCookChatSession}
+                className="text-xs font-bold text-neutral-500 underline-offset-2 hover:underline"
+              >
+                Nulli vestlus
+              </button>
             </section>
           )}
 
@@ -631,7 +776,7 @@ export function StudentModeApp() {
                       <button
                         type="button"
                         aria-label="Vähenda eelarvet"
-                        onClick={() => setBudget((b) => Math.max(15, b - 1))}
+                        onClick={() => setBudget((b) => Math.max(20, b - 1))}
                         className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-black active:scale-95"
                       >
                         <Minus className="size-4" />
@@ -651,7 +796,7 @@ export function StudentModeApp() {
                   </div>
                   <Slider
                     value={[budget]}
-                    min={15}
+                    min={20}
                     max={60}
                     step={1}
                     onValueChange={(v) =>
@@ -659,7 +804,7 @@ export function StudentModeApp() {
                     }
                   />
                   <div className="flex flex-wrap gap-2">
-                    {[20, 35, 50].map((preset) => (
+                    {[20, 35, 50, 60].map((preset) => (
                       <button
                         key={preset}
                         type="button"
@@ -787,6 +932,8 @@ export function StudentModeApp() {
                 <Sparkles className="size-4" />
                 {pending ? "Planeerin…" : "Loo menüü ja korv"}
               </button>
+
+              <HeroCookCard onOpen={openCookChat} />
             </section>
           )}
 
@@ -799,20 +946,27 @@ export function StudentModeApp() {
                       className="rounded-full px-2.5 py-0.5 text-[11px] font-bold text-white"
                       style={{ backgroundColor: PK_ORANGE }}
                     >
-                      35 €
+                      {budget} €
                     </span>
                     <span className="rounded-full bg-black px-2.5 py-0.5 text-[11px] font-bold text-white">
-                      kiire · soodne
+                      {style === "odav"
+                        ? "soodne"
+                        : style === "taimne"
+                          ? "taimne"
+                          : style === "liha"
+                            ? "liha"
+                            : "kiire"}
                     </span>
                     <span className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-[11px] font-bold text-black">
-                      pasta
+                      {plan.days} päeva
                     </span>
                     <span className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-[11px] font-bold text-neutral-500">
                       näidisplaan
                     </span>
                   </div>
                   <h2 className="text-2xl font-bold tracking-tight text-black">
-                    Sinu nädal on valmis
+                    Sinu {plan.days === 7 ? "nädal" : `${plan.days} päeva`} on
+                    valmis
                   </h2>
                   <p className="mt-1 text-sm text-neutral-600">{plan.summary}</p>
                 </div>
@@ -856,12 +1010,29 @@ export function StudentModeApp() {
                       color: "#000",
                     }}
                   >
-                    Korv {euros(basePlan?.total ?? 34.24)} → {euros(plan.total)}.
+                    Korv {euros(basePlan?.total ?? plan.total)} → {euros(plan.total)}.
                     Munad: {eggsNeeded} tk nädalaks · ostad {eggLine?.qty ?? 1}{" "}
                     karbi (varem 2).
                   </div>
                 )}
               </div>
+
+              <PlanAskCard
+                draft={draft}
+                setDraft={setDraft}
+                onSend={() => {
+                  sendChat();
+                  setTab("chat");
+                }}
+                onPantryDemo={() => {
+                  applyEggsAtHome(10);
+                  setTab("basket");
+                }}
+                onOpenChat={() => setTab("chat")}
+                lastAssistant={
+                  [...chat].reverse().find((m) => m.role === "assistant")?.text
+                }
+              />
 
               <div className="grid grid-cols-1 gap-2">
                 <Stat
@@ -886,7 +1057,7 @@ export function StudentModeApp() {
                   [
                     ["menu", "Menüü"],
                     ["basket", "Ostukorv"],
-                    ["chat", "Abi"],
+                    ["chat", "Vestlus"],
                   ] as const
                 ).map(([id, label]) => (
                   <button
@@ -936,6 +1107,32 @@ export function StudentModeApp() {
             </section>
           )}
         </main>
+
+            {inStudentMode && (
+              <>
+                {stage !== "cook-chat" &&
+                  !(stage === "plan" && tab === "chat") &&
+                  !chatSheetOpen && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (stage === "plan") {
+                          setTab("chat");
+                          setChatSheetOpen(false);
+                        } else {
+                          openCookChat();
+                        }
+                      }}
+                      className="absolute bottom-[78px] right-3 z-40 inline-flex items-center gap-2 rounded-full px-3.5 py-2.5 text-sm font-bold text-white shadow-[0_10px_28px_rgba(249,125,0,0.45)]"
+                      style={{ backgroundColor: PK_ORANGE }}
+                      aria-label="Ava tudengiabi"
+                    >
+                      <MessageCircle className="size-4" strokeWidth={2.4} />
+                      Abi
+                    </button>
+                  )}
+              </>
+            )}
 
             {inStudentMode ? (
               <nav className="absolute inset-x-0 bottom-0 z-20 border-t border-border/70 bg-white/95 px-1 pb-5 pt-1 backdrop-blur-md">
@@ -1101,7 +1298,7 @@ function BasketView({
             className={cn(
               "flex items-start justify-between gap-3 px-4 py-3 sm:px-5",
               highlightEggs &&
-                line.productId === "munad" &&
+                (line.productId === "eggs" || line.productId === "munad") &&
                 "bg-[#fff0e3]",
             )}
           >
@@ -1140,8 +1337,134 @@ function BasketView({
       <div className="border-t border-neutral-200 bg-neutral-50 px-4 py-4 sm:px-5">
         <div className="flex items-center gap-2 text-sm text-neutral-600">
           <Check className="size-4" style={{ color: PK_ORANGE }} />
-          Sama sibul ja porgand jagunevad mitme retsepti peale — vähem raiskamist.
+          Hinnad allikaviidetega andmestikust; kogused ühendatakse retsepti
+          toote ID-dega ja ümardatakse täispakkideks.
         </div>
+      </div>
+    </div>
+  );
+}
+
+function HeroCookCard({ onOpen }: { onOpen: () => void }) {
+  return (
+    <div className="space-y-3 rounded-[14px] border border-neutral-200 bg-white p-4">
+      <div className="flex items-start gap-3">
+        <span
+          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full text-white"
+          style={{ backgroundColor: PK_ORANGE }}
+        >
+          <MessageCircle className="size-5" strokeWidth={2.2} />
+        </span>
+        <div className="min-w-0 space-y-1">
+          <h2 className="font-display text-base font-bold leading-snug text-black">
+            Mida ma täna süüa teeks?
+          </h2>
+          <p className="text-sm leading-relaxed text-neutral-600">
+            Ütle, mis sul kodus on või mille järele isu on. Pakun roa ja näitan,
+            mida vajadusel juurde osta.
+          </p>
+        </div>
+      </div>
+      <button
+        type="button"
+        onClick={onOpen}
+        className="inline-flex h-[48px] w-full items-center justify-center gap-2 rounded-full border-2 text-[15px] font-bold text-black"
+        style={{ borderColor: PK_ORANGE }}
+      >
+        Ava vestlus
+        <ArrowRight className="size-4" style={{ color: PK_ORANGE }} />
+      </button>
+    </div>
+  );
+}
+
+function PlanAskCard({
+  draft,
+  setDraft,
+  onSend,
+  onPantryDemo,
+  onOpenChat,
+  lastAssistant,
+}: {
+  draft: string;
+  setDraft: (v: string) => void;
+  onSend: () => void;
+  onPantryDemo?: () => void;
+  onOpenChat: () => void;
+  lastAssistant?: string;
+}) {
+  return (
+    <div
+      className="rounded-[14px] border-2 bg-white p-4 shadow-[0_8px_24px_rgba(249,125,0,0.12)]"
+      style={{ borderColor: PK_ORANGE }}
+    >
+      <div className="mb-2 flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <MessageCircle className="size-5" style={{ color: PK_ORANGE }} />
+          <div>
+            <p className="font-display text-base font-bold text-black">
+              Küsi tudengiabilt
+            </p>
+            <p className="text-xs text-neutral-500">
+              Ütle, mis kodus on — arvutame, mida osta.
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={onOpenChat}
+          className="shrink-0 text-xs font-bold underline underline-offset-2"
+          style={{ color: PK_ORANGE }}
+        >
+          Ava vestlus
+        </button>
+      </div>
+
+      {lastAssistant && (
+        <p className="mb-3 line-clamp-3 rounded-[10px] bg-neutral-50 px-3 py-2 text-xs leading-relaxed text-neutral-700">
+          {lastAssistant}
+        </p>
+      )}
+
+      <div className="mb-3 flex flex-wrap gap-2">
+        {CHAT_CHIPS.map((c) => (
+          <button
+            key={c}
+            type="button"
+            onClick={() => {
+              if (c.includes("10 muna") && onPantryDemo) {
+                onPantryDemo();
+                return;
+              }
+              setDraft(c);
+            }}
+            className="rounded-full border border-neutral-200 bg-white px-3 py-1 text-left text-[11px] font-bold leading-snug text-neutral-700 hover:border-[#F97D00]"
+          >
+            {c.length > 42 ? `${c.slice(0, 40)}…` : c}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex gap-2">
+        <Textarea
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          placeholder="Nt: mul on kodus taigen ja mune…"
+          className="min-h-[44px] resize-none bg-white"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              onSend();
+            }
+          }}
+        />
+        <Button
+          className="h-auto rounded-[12px] px-4 font-bold text-white hover:opacity-90"
+          style={{ backgroundColor: PK_ORANGE }}
+          onClick={onSend}
+        >
+          Saada
+        </Button>
       </div>
     </div>
   );
@@ -1153,32 +1476,54 @@ function ChatView({
   setDraft,
   onSend,
   onPantryDemo,
+  compact = false,
+  chips,
+  sending = false,
 }: {
   chat: ChatMessage[];
   draft: string;
   setDraft: (v: string) => void;
   onSend: () => void;
   onPantryDemo?: () => void;
+  compact?: boolean;
+  chips?: readonly string[];
+  sending?: boolean;
 }) {
-  const chips = [
-    "Mul on kodus 10 muna",
-    "Kiire enne loengut",
-    "Taimne õhtusöök",
-    "Foto (tulekul)",
-  ];
+  const chipList = chips ?? CHAT_CHIPS;
+  // Hide starter chips after the first exchange so long answers stay readable.
+  const showChips = !chat.some((m) => m.role === "user");
+  const scrollerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    el.scrollTop = el.scrollHeight;
+  }, [chat, sending]);
 
   return (
-    <div className="flex min-h-[420px] flex-col overflow-hidden rounded-[14px] border border-neutral-200 bg-white">
-      <div className="flex items-center gap-2 border-b border-neutral-200 px-4 py-3">
-        <MessageCircle className="size-4" style={{ color: PK_ORANGE }} />
-        <p className="font-display text-lg font-bold text-black">Tudengiabi</p>
-      </div>
-      <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
+    <div
+      className={cn(
+        "flex flex-col overflow-hidden bg-white",
+        compact
+          ? "min-h-[280px] max-h-[420px] rounded-[12px] border border-neutral-200"
+          : "min-h-[420px] rounded-[14px] border border-neutral-200",
+      )}
+    >
+      {!compact && (
+        <div className="flex items-center gap-2 border-b border-neutral-200 px-4 py-3">
+          <MessageCircle className="size-4" style={{ color: PK_ORANGE }} />
+          <p className="font-display text-lg font-bold text-black">Vestlus</p>
+        </div>
+      )}
+      <div
+        ref={scrollerRef}
+        className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4"
+      >
         {chat.map((m) => (
           <div
             key={m.id}
             className={cn(
-              "max-w-[90%] rounded-[12px] px-3.5 py-2.5 text-sm leading-relaxed",
+              "max-w-[92%] rounded-[12px] px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-line",
               m.role === "assistant"
                 ? "bg-neutral-100 text-black"
                 : "ml-auto text-white",
@@ -1190,36 +1535,40 @@ function ChatView({
             {m.text}
           </div>
         ))}
+        {sending && (
+          <div className="max-w-[90%] rounded-[12px] bg-neutral-100 px-3.5 py-2.5 text-sm text-neutral-500">
+            Mõtlen…
+          </div>
+        )}
       </div>
       <div className="space-y-3 border-t border-neutral-200 px-4 py-3">
-        <div className="flex flex-wrap gap-2">
-          {chips.map((c) => (
-            <button
-              key={c}
-              type="button"
-              onClick={() => {
-                if (c.includes("10 muna") && onPantryDemo) {
-                  onPantryDemo();
-                  return;
-                }
-                if (c.includes("Foto")) return;
-                setDraft(c);
-              }}
-              className={cn(
-                "rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-bold text-neutral-600 hover:border-[#F97D00] hover:text-black",
-                c.includes("Foto") && "opacity-50",
-              )}
-            >
-              {c}
-            </button>
-          ))}
-        </div>
+        {showChips && (
+          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {chipList.map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => {
+                  if (c.includes("10 muna") && onPantryDemo) {
+                    onPantryDemo();
+                    return;
+                  }
+                  setDraft(c);
+                }}
+                className="shrink-0 rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-bold text-neutral-600 hover:border-[#F97D00] hover:text-black"
+              >
+                {c.length > 36 ? `${c.slice(0, 34)}…` : c}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="flex gap-2">
           <Textarea
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
             placeholder="Küsi midagi…"
             className="min-h-[44px] resize-none bg-white"
+            disabled={sending}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -1228,9 +1577,10 @@ function ChatView({
             }}
           />
           <Button
-            className="h-auto rounded-[12px] px-4 font-bold text-white hover:opacity-90"
+            className="h-auto rounded-[12px] px-4 font-bold text-white hover:opacity-90 disabled:opacity-50"
             style={{ backgroundColor: PK_ORANGE }}
             onClick={onSend}
+            disabled={sending}
           >
             Saada
           </Button>
