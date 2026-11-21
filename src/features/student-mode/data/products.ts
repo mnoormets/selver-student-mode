@@ -90,9 +90,13 @@ export const selverProducts: readonly SelverProduct[] = [
     name: "Ameerika köögiviljasegu, FIRST PRICE",
     packQuantity: 600,
     unit: "g",
+    // Cited pack 600 g / 2,39 €; e-Selver listing cross-checked for demo.
     priceCents: 239,
     sourceUrl:
       "https://soodsadhinnad.ee/en/p/qtzwkv/ameerika-koogiviljasegu-first-price-600-g?kategooria=kulm-koogiviljad",
+    eSelverUrl:
+      "https://www.selver.ee/ameerika-koogiviljasegu-first-price-600-g",
+    checkedAt: "2026-11-21",
   },
   {
     id: "chicken",

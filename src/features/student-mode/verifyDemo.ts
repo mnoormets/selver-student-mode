@@ -7,6 +7,7 @@ import {
   LEGACY_DEMO_TOTAL_CENTS,
 } from "../../lib/demo-plan";
 import { computeBasketCents, eurosFromCents } from "./computeBasket";
+import { answerCookChatTurn } from "./cookChat";
 import { answerPantryCookQuestion } from "./pantryCook";
 import { answerSpaghettiEggsQuickMeal } from "./quickMeal";
 import { validateDemoCatalog } from "./validateCatalog";
@@ -92,6 +93,35 @@ export function verifyDemoMath(): string[] {
     "eggs should be covered",
   );
   logs.push(quick.summaryEt);
+
+  const cook1 = answerCookChatTurn(
+    "Mul on 100 g spagette ja kaks muna. Mida ma kiiresti teha saaks?",
+    {},
+    { demo: true },
+  );
+  assert(cook1.recipeId === "egg-pasta", "cook-chat should pick egg-pasta");
+  assert(cook1.reply.includes("Muna-köögiviljaspagetid"), "should name dish");
+  assert(cook1.reply.includes("130"), "should mention 130 g missing veg");
+  assert(
+    cook1.reply.includes("600") && cook1.reply.includes("2.39"),
+    "shopping list should show one 600 g pack at catalog price",
+  );
+  assert(cook1.reply.includes("Näidisvastus"), "offline reply must be labeled");
+  assert(!cook1.readyToCook, "first turn still needs veg");
+
+  const cook2 = answerCookChatTurn(
+    "Mul on ka 130 g köögiviljasegu",
+    cook1.pantry,
+    { demo: true, forceRecipeId: cook1.recipeId },
+  );
+  assert(cook2.readyToCook, "with 130 g veg should be ready");
+  assert(cook2.shoppingEmpty, "shopping list should be empty");
+  assert(cook2.reply.includes("Saad kohe teha"), "should say ready to cook");
+  assert(
+    cook2.reply.includes("tühi") || cook2.reply.includes("osta ei pea"),
+    "empty shopping list copy",
+  );
+  logs.push("cook-chat spaghetti→veg follow-up ok");
 
   assert(computeBasketCents([]).totalCents === 0, "empty basket should be 0");
 

@@ -1,11 +1,9 @@
+import { answerCookChatTurn } from "@/features/student-mode/cookChat";
 import {
   answerPantryCookQuestion,
   isPantryCookQuestion,
 } from "@/features/student-mode/pantryCook";
-import {
-  answerSpaghettiEggsQuickMeal,
-  SPAGHETTI_EGGS_PROMPT,
-} from "@/features/student-mode/quickMeal";
+import { SPAGHETTI_EGGS_PROMPT } from "@/features/student-mode/quickMeal";
 import { PRODUCTS, RECIPES, unitPrice } from "./catalog";
 import type { PlanResult } from "./planner";
 
@@ -51,10 +49,8 @@ export function replyToStudent(
   }
 
   if (isSpaghettiEggsPrompt(q)) {
-    return answerSpaghettiEggsQuickMeal({
-      spaghettiGrams: 100,
-      eggs: 2,
-    }).summaryEt;
+    // Prefer shared cook-chat maths (same as /api/cook-chat demo path).
+    return answerCookChatTurn(question, {}, { demo: false }).reply;
   }
 
   if (isPantryCookQuestion(q)) {
