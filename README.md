@@ -22,7 +22,13 @@ Häkatoni prototüüp: **Tudengirežiim** kui eraldiseisev moodul Partnerkaardi 
 
 Ilma `OPENAI_API_KEY`-ta vastab `/api/cook-chat` selgelt märgitud **näidisvastusega**. Võti jääb ainult serverisse.
 
-Ainus demo tooteallikas: `src/features/student-mode/data/products.ts` (SKU, e-Selveri link, `checkedAt`). Retseptid viitavad toote ID-dele; korv on sentides. Lovable JSON: `npm run export:lovable` → `public/lovable-demo-data.json`.
+**Tootekataloog:** tuum `src/features/student-mode/data/products.ts` + valikuline import `data/imports/*.json`. Kogu Selveri sortimenti ametlikult demosse ei tule — selleks on vaja partnerifeedi või oma JSON/CSV dump’i:
+
+```bash
+npm run import:products -- ./minu-selver-dump.json
+```
+
+Vt `src/features/student-mode/data/imports/README.md`. Retseptid viitavad toote ID-dele; korv on sentides. Lovable JSON: `npm run export:lovable`.
 
 Kontroll: `npm run verify:demo` — 14 muna → 0/10/14 kodus annavad 2/1/0 karpi; spageti+muna cook-chat proovijuhtum.
 

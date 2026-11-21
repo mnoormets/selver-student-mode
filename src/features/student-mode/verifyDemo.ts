@@ -125,6 +125,22 @@ export function verifyDemoMath(): string[] {
   );
   logs.push("cook-chat spaghetti→veg follow-up ok");
 
+  const why = answerCookChatTurn(
+    "miks mul köögiviljasegu on vaja hakkliha pannkookide jaoks",
+    {},
+    { demo: true, forceRecipeId: "hakkliha-pannkoogid" },
+  );
+  assert(
+    why.reply.toLowerCase().includes("täidise") ||
+      why.reply.toLowerCase().includes("mahlasus"),
+    "why-question should explain veg in minced-meat pancakes",
+  );
+  assert(
+    !why.reply.includes("Palju köögiviljasegu sul on"),
+    "why-question must not ask for pantry grams",
+  );
+  logs.push("cook-chat why-veg explanation ok");
+
   assert(computeBasketCents([]).totalCents === 0, "empty basket should be 0");
 
   const plan20 = buildHackathonDemoPlan({ budgetEuros: 20, days: 7 });

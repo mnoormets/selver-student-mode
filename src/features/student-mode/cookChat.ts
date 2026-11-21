@@ -189,6 +189,70 @@ function formatBuyBullet(line: {
   return `• ${shortName(line.productId)} — ${line.packs} ${packWord} (${line.packQuantity} ${packUnit}) · ${formatEurosFromCents(line.unitPriceCents)}`;
 }
 
+function explainIngredientWhy(
+  q: string,
+  recipeId: string | null,
+): { text: string; recipeId: string | null } {
+  const aboutVeg =
+    q.includes("köögiviljas") ||
+    q.includes("koogiviljas") ||
+    q.includes("köögivilja");
+  const aboutEggs = /\bmun/.test(q);
+  const aboutMeat = q.includes("hakkliha") || q.includes("kana");
+
+  const id =
+    recipeId ??
+    (q.includes("pannkook") || q.includes("hakkliha")
+      ? "hakkliha-pannkoogid"
+      : null) ??
+    (q.includes("spagett") ? "egg-pasta" : null) ??
+    (q.includes("hautis") ? "chicken-stew" : null);
+
+  if (id === "hakkliha-pannkoogid" && aboutVeg) {
+    return {
+      recipeId: id,
+      text: [
+        "Hakkliha pannkookides on köögiviljasegu täidise jaoks — sibul/porgand/hernes annab mahlasust ja teeb portsjoni odavamaks.",
+        "Kui sul on juba köögivilju kodus, ütle mitu grammi — siis võtan ostunimekirjast maha.",
+        "Kui tahad ainult hakkliha + muna (ilma seguta), ütle „tee ilma köögiviljata“.",
+      ].join("\n"),
+    };
+  }
+
+  if (id === "egg-pasta" && aboutVeg) {
+    return {
+      recipeId: id,
+      text: "Muna-köögiviljaspagettides on segu just see „köögivilja“ osa — muidu jääks ainult muna + pasta. Kui sul on 130 g juba, ütle nii ja ostunimekiri tühjeneb.",
+    };
+  }
+
+  if (aboutVeg) {
+    return {
+      recipeId: id,
+      text: "Köögiviljasegu on demoretseptis odav ja kiire viis portsjon täita. Kui sa seda ei taha, ütle millist rooga eelistad — pakun teise retsepti.",
+    };
+  }
+
+  if (aboutEggs) {
+    return {
+      recipeId: id,
+      text: "Munad on valgu jaoks — odav ja kiire. Kui sul on mune kodus, ütle mitu tükki.",
+    };
+  }
+
+  if (aboutMeat) {
+    return {
+      recipeId: id,
+      text: "Liha / hakkliha on retsepti peamine valk. Kui sul on juba kodus, ütle mitu grammi — arvutan pakid ümber.",
+    };
+  }
+
+  return {
+    recipeId: id,
+    text: "Küsi julgelt „miks X vaja?“ konkreetse koostisosa kohta — selgitan lihtsalt. Või ütle, mis sul kodus on.",
+  };
+}
+
 /**
  * One cook-chat turn: update pantry, pick a catalog recipe, pack-math shopping list.
  * Replies use short student-friendly lines; full SKUs stay in the catalog.
@@ -216,8 +280,36 @@ export function answerCookChatTurn(
     };
   }
 
+  const recipeId =
+    detectExplicitRecipeId(q) ??
+    detectRecipeId(q, pantry) ??
+    opts.forceRecipeId ??
+    null;
+
+  // “Miks X vaja?” — explain, don't ask for pantry grams.
   if (
-    (q.includes("köögiviljas") || q.includes("koogiviljas")) &&
+    q.includes("miks") ||
+    q.includes("milleks") ||
+    q.includes("miks on vaja") ||
+    (q.includes("vaja") && q.includes("jaoks"))
+  ) {
+    const why = explainIngredientWhy(q, recipeId);
+    return {
+      reply: demoPrefix(demo, why.text),
+      pantry,
+      recipeId: why.recipeId,
+      demo,
+      readyToCook: false,
+      shoppingEmpty: true,
+    };
+  }
+
+  // Only ask for veg grams when the student claims to HAVE some, without amount.
+  const claimsVegAtHome =
+    (q.includes("mul on") || q.includes("kodus") || q.includes("alles")) &&
+    (q.includes("köögiviljas") || q.includes("koogiviljas"));
+  if (
+    claimsVegAtHome &&
     !/(\d+)\s*g\s*(?:ameerika\s+)?k[oö]ögiviljas/.test(q) &&
     pantry["mixed-veg"] == null
   ) {
@@ -227,23 +319,15 @@ export function answerCookChatTurn(
         "Palju köögiviljasegu sul on? Nt „Mul on 130 g köögiviljasegu“.",
       ),
       pantry,
-      recipeId:
-        detectExplicitRecipeId(q) ??
-        opts.forceRecipeId ??
-        detectRecipeId(q, pantry),
+      recipeId,
       demo,
       readyToCook: false,
       shoppingEmpty: true,
     };
   }
 
-  // Explicit dish request overrides a previous recipe sticky id.
-  const recipeId =
-    detectExplicitRecipeId(q) ??
-    detectRecipeId(q, pantry) ??
-    opts.forceRecipeId ??
-    "egg-pasta";
-  const recipe = recipes.find((r) => r.id === recipeId);
+  const resolvedId = recipeId ?? "egg-pasta";
+  const recipe = recipes.find((r) => r.id === resolvedId);
   if (!recipe) {
     return {
       reply: demoPrefix(demo, "Seda rooga ma veel ei tea — proovi teist nime."),

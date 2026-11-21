@@ -1,14 +1,18 @@
 import type { SelverProduct } from "../types";
+import extraDemo from "./imports/extra-demo.json";
+import extraFromDump from "./imports/extra-from-dump.json";
 
 /**
- * Sole product source for the Student Mode demo.
+ * Product catalog = demo core below + optional JSON imports
+ * (`data/imports/*.json`). There is no built-in “entire Selver” feed —
+ * see `data/imports/README.md` and `npm run import:products`.
+ *
  * - `sourceUrl` = original citation (kept even after e-Selver checks).
  * - `priceCents` is updated only when `checkedAt` + e-Selver page confirm the pack price.
- * - Products without a matching e-Selver pack keep the cited price and omit checkedAt.
  */
 export const priceSnapshotDate = "2026-11-21";
 
-export const selverProducts: readonly SelverProduct[] = [
+const coreProducts: readonly SelverProduct[] = [
   {
     id: "oats",
     name: "Täistera kiirkaerahelbed, TARTU MILL",
@@ -120,6 +124,29 @@ export const selverProducts: readonly SelverProduct[] = [
     checkedAt: "2026-11-21",
   },
 ];
+
+function mergeImported(
+  core: readonly SelverProduct[],
+  extras: readonly SelverProduct[],
+): readonly SelverProduct[] {
+  const byId = new Map<string, SelverProduct>();
+  for (const p of core) byId.set(p.id, p);
+  for (const p of extras) {
+    if (!p?.id || !p.name) continue;
+    byId.set(p.id, p);
+  }
+  return Array.from(byId.values());
+}
+
+const imported = [
+  ...(extraDemo as SelverProduct[]),
+  ...(extraFromDump as SelverProduct[]),
+];
+
+export const selverProducts: readonly SelverProduct[] = mergeImported(
+  coreProducts,
+  imported,
+);
 
 export function productById(id: string): SelverProduct {
   const product = selverProducts.find((p) => p.id === id);
