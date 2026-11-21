@@ -105,7 +105,6 @@ const DELIVERY_OPTIONS = [
 ];
 
 const STYLES: { id: Prefs["style"]; label: string; hint: string }[] = [
-  { id: "odav", label: "Kõige odavam", hint: "Kirde + kampaaniad" },
   { id: "kiire", label: "Kiirelt valmis", hint: "≤ 20 min" },
   { id: "taimne", label: "Taimetoit", hint: "oad, tofu, kiker" },
   { id: "liha", label: "Sisaldab liha", hint: "kana & hakk" },
@@ -309,6 +308,7 @@ export function StudentModeApp() {
           recipeId: cookRecipeId,
         }),
       });
+      if (!res.ok) throw new Error(`Cook chat request failed (${res.status})`);
       const data = (await res.json()) as {
         reply?: string;
         pantry?: Record<string, number>;
@@ -333,7 +333,7 @@ export function StudentModeApp() {
         {
           id: `ca-${Date.now()}`,
           role: "assistant",
-          text: "Näidisvastus (AI ühenduseta): ühendus ebaõnnestus. Proovi „Mul on 100 g spagette ja kaks muna. Mida ma kiiresti teha saaks?“",
+          text: "Vestlus ei saanud praegu vastata. Proovi hetke pärast uuesti.",
         },
       ]);
     } finally {

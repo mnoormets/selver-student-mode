@@ -7,11 +7,33 @@ import {
 
 export const runtime = "nodejs";
 
+const OPENAI_TIMEOUT_MS = 5_000;
+
 type Body = {
-  message?: string;
+  message: string;
   pantry?: CookPantry;
   recipeId?: string | null;
 };
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isCookChatBody(value: unknown): value is Body {
+  if (!isRecord(value)) return false;
+  const { message, pantry, recipeId } = value;
+
+  return (
+    typeof message === "string" &&
+    message.trim().length > 0 &&
+    (recipeId == null || typeof recipeId === "string") &&
+    (pantry === undefined ||
+      (isRecord(pantry) &&
+        Object.values(pantry).every(
+          (amount) => typeof amount === "number" && Number.isFinite(amount) && amount >= 0,
+        )))
+  );
+}
 
 /**
  * Cook-chat turn. Prefer live OpenAI when OPENAI_API_KEY is set; always fall
@@ -19,14 +41,18 @@ type Body = {
  * The API key never leaves the server.
  */
 export async function POST(request: Request) {
-  let body: Body;
+  let body: unknown;
   try {
-    body = (await request.json()) as Body;
+    body = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
-  const message = (body.message ?? "").trim();
+  if (!isCookChatBody(body)) {
+    return NextResponse.json({ error: "Invalid cook-chat input" }, { status: 400 });
+  }
+
+  const message = body.message.trim();
   const pantryIn = body.pantry ?? {};
   const forceRecipeId = body.recipeId ?? null;
 
@@ -77,6 +103,7 @@ Preferred recipeId if any: ${forceRecipeId ?? "null"}`;
 
   const res = await fetch("https://api.openai.com/v1/chat/completions", {
     method: "POST",
+    signal: AbortSignal.timeout(OPENAI_TIMEOUT_MS),
     headers: {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
