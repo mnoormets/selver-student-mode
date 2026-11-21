@@ -33,8 +33,11 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-/** Partnerkaart brand orange (app chrome). */
-const PK_ORANGE = "#FF6A00";
+/** Measured from Partnerkaart app screenshot CTA — locked default. */
+const PK_ORANGE = "#F97D00";
+
+/** Figma iPhone 16 screen (pt) — exact, then scaled to fit viewport. */
+const IPHONE16 = { w: 393, h: 852, radius: 55, islandW: 126, islandH: 37, status: 59 } as const;
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
@@ -47,8 +50,6 @@ import {
   type PlanResult,
   type Prefs,
 } from "@/lib/planner";
-
-const PARTNERKAART_URL = "https://www.partnerkaart.ee/et/app/";
 
 const BOTTOM_TABS = [
   { id: "home", label: "Avaleht", icon: Home },
@@ -185,24 +186,22 @@ export function StudentModeApp() {
   }
 
   const statusLight = stage === "home";
+  const bezel = 12;
+  const frameW = IPHONE16.w + bezel * 2;
+  const frameH = IPHONE16.h + bezel * 2;
 
   return (
-    <div className="relative flex flex-1 flex-col items-center justify-center bg-neutral-950 px-3 py-5 sm:px-6 sm:py-8">
-      <div className="mb-3 flex w-full max-w-[430px] items-center justify-between px-1 text-[11px] text-white/40">
-        <span>Partnerkaart</span>
-        <a
-          href={PARTNERKAART_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline-offset-2 hover:text-white hover:underline"
-        >
-          partnerkaart.ee
-        </a>
-      </div>
-
-      {/* Figma-style iPhone 16 frame: 393×852 screen, ~55pt corners, Dynamic Island */}
-      <div className="relative w-full max-w-[430px]">
-        {/* Hardware side buttons */}
+    <div className="relative flex flex-1 flex-col items-center justify-center overflow-hidden bg-neutral-950 px-3 py-4">
+      {/* Exact iPhone 16 canvas (393×852), scaled to viewport — Figma default */}
+      <div
+        className="relative shrink-0"
+        style={{
+          width: frameW,
+          height: frameH,
+          transform: `scale(min(1, (100vw - 24px) / ${frameW}, (100dvh - 32px) / ${frameH}))`,
+          transformOrigin: "center center",
+        }}
+      >
         <div
           aria-hidden
           className="absolute -left-[3px] top-[120px] h-8 w-[3px] rounded-l-sm bg-[#3a3a3c]"
@@ -220,27 +219,35 @@ export function StudentModeApp() {
           className="absolute -right-[3px] top-[190px] h-20 w-[3px] rounded-r-sm bg-[#3a3a3c]"
         />
 
-        <div className="relative rounded-[3.4rem] border border-[#2c2c2e] bg-[#1c1c1e] p-[11px] shadow-[0_40px_100px_-24px_rgba(0,0,0,0.85)] ring-1 ring-white/10">
+        <div
+          className="relative h-full w-full border border-[#2c2c2e] bg-[#1c1c1e] shadow-[0_40px_100px_-24px_rgba(0,0,0,0.85)] ring-1 ring-white/10"
+          style={{ borderRadius: IPHONE16.radius + bezel, padding: bezel }}
+        >
           <div
-            className="relative mx-auto flex w-full max-w-[393px] flex-col overflow-hidden rounded-[2.85rem] bg-[#f4f6fb]"
+            className={cn(
+              "relative flex flex-col overflow-hidden",
+              statusLight ? "bg-black" : "bg-[#f4f6fb]",
+            )}
             style={{
-              width: "min(393px, 100%)",
-              height: "min(852px, calc(100dvh - 7rem))",
-              aspectRatio: "393 / 852",
+              width: IPHONE16.w,
+              height: IPHONE16.h,
+              borderRadius: IPHONE16.radius,
             }}
           >
-            {/* Dynamic Island — idle ~126×37, Figma iPhone 16 */}
+            {/* Dynamic Island — Figma idle 126×37 */}
             <div
-              className="pointer-events-none absolute left-1/2 top-[11px] z-50 h-[37px] w-[126px] -translate-x-1/2 rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
+              className="pointer-events-none absolute left-1/2 top-[11px] z-50 -translate-x-1/2 rounded-full bg-black shadow-[0_0_0_1px_rgba(255,255,255,0.14)]"
+              style={{ width: IPHONE16.islandW, height: IPHONE16.islandH }}
               aria-hidden
             />
 
-            {/* Status bar (safe area ~59pt) */}
+            {/* Status bar — safe area 59pt */}
             <div
               className={cn(
-                "relative z-30 flex h-[59px] shrink-0 items-end justify-between px-7 pb-2.5",
+                "relative z-30 flex shrink-0 items-end justify-between px-7 pb-2.5",
                 statusLight ? "bg-black text-white" : "bg-selver-navy text-white",
               )}
+              style={{ height: IPHONE16.status }}
             >
               <span className="w-[64px] text-[15px] font-semibold tracking-tight">
                 9:41
