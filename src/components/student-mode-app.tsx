@@ -141,6 +141,7 @@ export function StudentModeApp() {
     },
   ]);
   const [draft, setDraft] = useState("");
+  const [chatSheetOpen, setChatSheetOpen] = useState(false);
 
   const inStudentMode = stage !== "home";
   const prefs: Prefs = useMemo(
@@ -164,6 +165,7 @@ export function StudentModeApp() {
   function goHome() {
     setStage("home");
     setMenuOpen(false);
+    setChatSheetOpen(false);
   }
 
   function generate() {
@@ -634,6 +636,8 @@ export function StudentModeApp() {
                   <ArrowRight className="size-4" />
                 </button>
               </div>
+
+              <HeroChatTeaser onOpen={() => setChatSheetOpen(true)} />
             </section>
           )}
 
@@ -815,6 +819,8 @@ export function StudentModeApp() {
                 <Sparkles className="size-4" />
                 {pending ? "Planeerin…" : "Loo menüü ja korv"}
               </button>
+
+              <HeroChatTeaser onOpen={() => setChatSheetOpen(true)} />
             </section>
           )}
 
@@ -988,6 +994,66 @@ export function StudentModeApp() {
             </section>
           )}
         </main>
+
+            {inStudentMode && (
+              <>
+                {!(stage === "plan" && tab === "chat") && !chatSheetOpen && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (stage === "plan") {
+                        setTab("chat");
+                        setChatSheetOpen(false);
+                      } else {
+                        setChatSheetOpen(true);
+                      }
+                    }}
+                    className="absolute bottom-[78px] right-3 z-40 inline-flex items-center gap-2 rounded-full px-3.5 py-2.5 text-sm font-bold text-white shadow-[0_10px_28px_rgba(249,125,0,0.45)]"
+                    style={{ backgroundColor: PK_ORANGE }}
+                    aria-label="Ava tudengiabi"
+                  >
+                    <MessageCircle className="size-4" strokeWidth={2.4} />
+                    Abi
+                  </button>
+                )}
+
+                {chatSheetOpen && stage !== "plan" && (
+                  <div className="absolute inset-x-0 bottom-0 z-50 flex max-h-[78%] flex-col rounded-t-[18px] border border-neutral-200 bg-white shadow-[0_-16px_40px_rgba(0,0,0,0.18)]">
+                    <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <MessageCircle
+                          className="size-4"
+                          style={{ color: PK_ORANGE }}
+                        />
+                        <p className="font-display text-base font-bold text-black">
+                          Tudengiabi
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setChatSheetOpen(false)}
+                        className="inline-flex size-8 items-center justify-center rounded-full text-neutral-500 hover:bg-neutral-100"
+                        aria-label="Sulge vestlus"
+                      >
+                        <X className="size-4" />
+                      </button>
+                    </div>
+                    <div className="min-h-0 flex-1 overflow-hidden px-3 pb-3 pt-2">
+                      <ChatView
+                        chat={chat}
+                        draft={draft}
+                        setDraft={setDraft}
+                        onSend={sendChat}
+                        compact
+                      />
+                    </div>
+                    <div className="flex justify-center pb-3" aria-hidden>
+                      <div className="h-[5px] w-[134px] rounded-full bg-black/80" />
+                    </div>
+                  </div>
+                )}
+              </>
+            )}
 
             {inStudentMode ? (
               <nav className="absolute inset-x-0 bottom-0 z-20 border-t border-border/70 bg-white/95 px-1 pb-5 pt-1 backdrop-blur-md">
@@ -1200,6 +1266,32 @@ function BasketView({
   );
 }
 
+function HeroChatTeaser({ onOpen }: { onOpen: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onOpen}
+      className="flex w-full items-center gap-3 rounded-[14px] border border-neutral-200 bg-neutral-50 px-3.5 py-3 text-left active:scale-[0.99]"
+    >
+      <span
+        className="inline-flex size-10 shrink-0 items-center justify-center rounded-full text-white"
+        style={{ backgroundColor: PK_ORANGE }}
+      >
+        <MessageCircle className="size-5" strokeWidth={2.2} />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block font-display text-sm font-bold text-black">
+          Küsi tudengiabilt
+        </span>
+        <span className="block text-xs text-neutral-500">
+          Nt „mul on kodus mune — mida osta?“
+        </span>
+      </span>
+      <ArrowRight className="size-4 shrink-0 text-neutral-400" />
+    </button>
+  );
+}
+
 function PlanAskCard({
   draft,
   setDraft,
@@ -1298,19 +1390,30 @@ function ChatView({
   setDraft,
   onSend,
   onPantryDemo,
+  compact = false,
 }: {
   chat: ChatMessage[];
   draft: string;
   setDraft: (v: string) => void;
   onSend: () => void;
   onPantryDemo?: () => void;
+  compact?: boolean;
 }) {
   return (
-    <div className="flex min-h-[420px] flex-col overflow-hidden rounded-[14px] border border-neutral-200 bg-white">
-      <div className="flex items-center gap-2 border-b border-neutral-200 px-4 py-3">
-        <MessageCircle className="size-4" style={{ color: PK_ORANGE }} />
-        <p className="font-display text-lg font-bold text-black">Vestlus</p>
-      </div>
+    <div
+      className={cn(
+        "flex flex-col overflow-hidden bg-white",
+        compact
+          ? "min-h-[280px] max-h-[420px] rounded-[12px] border border-neutral-200"
+          : "min-h-[420px] rounded-[14px] border border-neutral-200",
+      )}
+    >
+      {!compact && (
+        <div className="flex items-center gap-2 border-b border-neutral-200 px-4 py-3">
+          <MessageCircle className="size-4" style={{ color: PK_ORANGE }} />
+          <p className="font-display text-lg font-bold text-black">Vestlus</p>
+        </div>
+      )}
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
         {chat.map((m) => (
           <div
