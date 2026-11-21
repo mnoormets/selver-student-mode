@@ -728,10 +728,8 @@ export function StudentModeApp() {
           {stage === "cook-chat" && (
             <section className="flex min-h-[520px] flex-col space-y-3 animate-enter font-display">
               <div className="rounded-[14px] border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
-                <span className="font-bold">Näidisrežiim:</span> ilma{" "}
-                <code className="rounded bg-white/80 px-1">OPENAI_API_KEY</code>
-                -ta vastab server märgitud näidisvastusega. Spageti+muna demo
-                töötab alati.
+                <span className="font-bold">Näidisrežiim</span> — vastused
+                põhinevad demo retseptidel. Spageti + muna näide töötab alati.
               </div>
               <ChatView
                 chat={cookChat}
@@ -1524,7 +1522,7 @@ function ChatView({
           <div
             key={m.id}
             className={cn(
-              "max-w-[90%] rounded-[12px] px-3.5 py-2.5 text-sm leading-relaxed",
+              "max-w-[92%] rounded-[12px] px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-line",
               m.role === "assistant"
                 ? "bg-neutral-100 text-black"
                 : "ml-auto text-white",

@@ -114,4 +114,16 @@ export const recipes: readonly Recipe[] = [
       { productId: "mixed-veg", quantity: 100 },
     ],
   },
+  {
+    id: "chicken-stew",
+    title: "Chicken and vegetable stew",
+    totalMinutes: 22,
+    mealSlots: ["lunch", "dinner"],
+    vegetarian: false,
+    ingredients: [
+      { productId: "chicken", quantity: 150 },
+      { productId: "tomatoes", quantity: 140 },
+      { productId: "mixed-veg", quantity: 150 },
+    ],
+  },
 ];

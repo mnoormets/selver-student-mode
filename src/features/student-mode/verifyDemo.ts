@@ -101,10 +101,12 @@ export function verifyDemoMath(): string[] {
   );
   assert(cook1.recipeId === "egg-pasta", "cook-chat should pick egg-pasta");
   assert(cook1.reply.includes("Muna-köögiviljaspagetid"), "should name dish");
-  assert(cook1.reply.includes("130"), "should mention 130 g missing veg");
+  assert(cook1.reply.includes("Osta poest"), "should have clear buy section");
   assert(
-    cook1.reply.includes("600") && cook1.reply.includes("2.39"),
-    "shopping list should show one 600 g pack at catalog price",
+    cook1.reply.includes("Köögiviljasegu") &&
+      cook1.reply.includes("600") &&
+      cook1.reply.includes("2.39"),
+    "shopping list should show one 600 g veg pack at catalog price",
   );
   assert(cook1.reply.includes("Näidisvastus"), "offline reply must be labeled");
   assert(!cook1.readyToCook, "first turn still needs veg");
@@ -118,7 +120,7 @@ export function verifyDemoMath(): string[] {
   assert(cook2.shoppingEmpty, "shopping list should be empty");
   assert(cook2.reply.includes("Saad kohe teha"), "should say ready to cook");
   assert(
-    cook2.reply.includes("tühi") || cook2.reply.includes("osta ei pea"),
+    cook2.reply.includes("osta ei pea"),
     "empty shopping list copy",
   );
   logs.push("cook-chat spaghetti→veg follow-up ok");
