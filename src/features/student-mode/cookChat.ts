@@ -49,6 +49,14 @@ const SHORT_NAMES: Record<string, string> = {
   "mixed-veg": "Köögiviljasegu",
   chicken: "Kanofilee",
   "minced-meat": "Hakkliha",
+  rice: "Riis",
+  flour: "Jahu",
+  butter: "Või",
+  yogurt: "Jogurt",
+  beans: "Oad",
+  cheese: "Juust",
+  bread: "Leib",
+  potato: "Kartul",
 };
 
 function shortName(productId: string): string {
@@ -109,6 +117,41 @@ export function mergePantryFromUtterance(
   return next;
 }
 
+const GENERIC_ALIASES = new Set([
+  "pasta",
+  "spagett",
+  "kana",
+  "chicken",
+  "hommik",
+  "hakkliha",
+  "beef",
+  "rice",
+]);
+
+/** Score imported + core recipes against free-text (for mass MealDB set). */
+export function findRecipeIdByQuery(q: string): string | null {
+  const text = q.toLowerCase();
+  let best: { id: string; score: number } | null = null;
+  for (const recipe of recipes) {
+    // Prefer specific imported/core titles; skip ultra-generic alias-only hits.
+    let score = 0;
+    const title = (recipe.titleEt ?? recipe.title).toLowerCase();
+    if (title.length >= 6 && text.includes(title)) score += 12;
+    for (const a of recipe.aliases ?? []) {
+      const alias = a.toLowerCase();
+      if (alias.length < 5 || !text.includes(alias)) continue;
+      score += GENERIC_ALIASES.has(alias) ? 1 : 4;
+    }
+    for (const w of title.split(/[^a-z0-9äöüõ]+/i)) {
+      if (w.length >= 5 && text.includes(w) && !GENERIC_ALIASES.has(w)) {
+        score += 2;
+      }
+    }
+    if (!best || score > best.score) best = { id: recipe.id, score };
+  }
+  return best && best.score >= 6 ? best.id : null;
+}
+
 /** Explicit dish intent — wins over leftover pantry inference. */
 function detectExplicitRecipeId(q: string): string | null {
   if (
@@ -148,20 +191,10 @@ function detectRecipeId(q: string, pantry: CookPantry): string | null {
 
   // Leftover spaghetti + eggs → egg & vegetable spaghetti
   if ((pantry.spaghetti ?? 0) > 0 && (pantry.eggs ?? 0) > 0) {
-    if (
-      q.includes("teha") ||
-      q.includes("süüa") ||
-      q.includes("soovita") ||
-      q.includes("mida") ||
-      q.includes("kiire") ||
-      q.includes("osta") ||
-      q.includes("poest")
-    ) {
-      return "egg-pasta";
-    }
     return "egg-pasta";
   }
-  return null;
+
+  return findRecipeIdByQuery(q);
 }
 
 function unitLabel(unit: string): string {

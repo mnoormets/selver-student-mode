@@ -27,9 +27,11 @@ Ilma `OPENAI_API_KEY`-ta vastab `/api/cook-chat` selgelt märgitud **näidisvast
 ```bash
 npm run import:products -- ./minu-selver-dump.json
 npm run import:recipes -- ./minu-retseptid.json
+# või massiliselt avalikust TheMealDB-st (kaardistus Selveri demokataloogile):
+npm run fetch:recipes
 ```
 
-Vt `src/features/student-mode/data/imports/README.md`. Retseptid viitavad toote ID-dele (asjakohased koostisosad); korv on sentides. Lovable JSON: `npm run export:lovable`.
+Vt `src/features/student-mode/data/imports/README.md`. Retseptid viitavad toote ID-dele; chatbot otsib pealkirja/aliaste järgi. Lovable JSON: `npm run export:lovable`.
 
 Kontroll: `npm run verify:demo` — 14 muna → 0/10/14 kodus annavad 2/1/0 karpi; spageti+muna cook-chat proovijuhtum.
 

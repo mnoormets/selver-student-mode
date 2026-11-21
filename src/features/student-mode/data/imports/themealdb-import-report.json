@@ -1,0 +1,967 @@
+{
+  "kept": 107,
+  "skipped": [
+    {
+      "id": "52839",
+      "name": "Chilli prawn linguine",
+      "reason": "low map coverage 3/7",
+      "unmapped": [
+        "King Prawns",
+        "Lettuce",
+        "Fromage Frais",
+        "Lime"
+      ]
+    },
+    {
+      "id": "52844",
+      "name": "Lasagne",
+      "reason": "low map coverage 4/10",
+      "unmapped": [
+        "Bacon",
+        "Lasagne Sheets",
+        "Creme Fraiche"
+      ]
+    },
+    {
+      "id": "53085",
+      "name": "15-minute chicken & halloumi burgers",
+      "reason": "low map coverage 3/8",
+      "unmapped": [
+        "Hotsauce",
+        "Buns",
+        "Mayonnaise",
+        "Sour Cream",
+        "Lettuce"
+      ]
+    },
+    {
+      "id": "53050",
+      "name": "Ayam Percik",
+      "reason": "low map coverage 2/6",
+      "unmapped": [
+        "Challots",
+        "Turmeric",
+        "Fennel",
+        "Tamarind Paste"
+      ]
+    },
+    {
+      "id": "53466",
+      "name": "Belgian Waterzooi Chicken",
+      "reason": "low map coverage 4/9",
+      "unmapped": [
+        "Rosemary",
+        "Cream"
+      ]
+    },
+    {
+      "id": "53453",
+      "name": "Bengali Chicken Curry with Potatoes",
+      "reason": "low map coverage 3/7",
+      "unmapped": [
+        "Curry Powder",
+        "Garam Masala",
+        "Ground Turmeric",
+        "Cilantro"
+      ]
+    },
+    {
+      "id": "52934",
+      "name": "Chicken Basquaise",
+      "reason": "low map coverage 4/9",
+      "unmapped": [
+        "Chorizo",
+        "Dry White Wine",
+        "Lemons",
+        "Black Olives"
+      ]
+    },
+    {
+      "id": "52795",
+      "name": "Chicken Handi",
+      "reason": "low map coverage 3/7",
+      "unmapped": [
+        "Turmeric powder",
+        "Cream",
+        "fenugreek",
+        "Garam masala"
+      ]
+    },
+    {
+      "id": "53565",
+      "name": "Chicken Lollipop",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Cornstarch"
+      ]
+    },
+    {
+      "id": "53358",
+      "name": "Chicken Mandi",
+      "reason": "low map coverage 2/6",
+      "unmapped": [
+        "Turmeric Powder",
+        "Cardamom",
+        "Cloves",
+        "Cinnamon"
+      ]
+    },
+    {
+      "id": "53011",
+      "name": "Chicken Quinoa Greek Salad",
+      "reason": "low map coverage 2/7",
+      "unmapped": [
+        "Quinoa",
+        "Black Olives",
+        "Feta",
+        "Mint",
+        "Lemon"
+      ]
+    },
+    {
+      "id": "53549",
+      "name": "Chicken Salad With Mushrooms and Bacon",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Mayonnaise",
+        "Creme Fraiche",
+        "Bacon",
+        "Mushrooms"
+      ]
+    },
+    {
+      "id": "53261",
+      "name": "Chicken wings with cumin, lemon & garlic",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Lemon"
+      ]
+    },
+    {
+      "id": "53186",
+      "name": "Chicken with saffron, raisins & pine nuts",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Saffron",
+        "Dry sherry",
+        "Raisins",
+        "Pine Nuts"
+      ]
+    },
+    {
+      "id": "53365",
+      "name": "Chinese Orange Chicken",
+      "reason": "low map coverage 4/10",
+      "unmapped": [
+        "Orange",
+        "Orange Juice",
+        "Cornstarch",
+        "Cornstarch",
+        "Scallions",
+        "Sesame Seed"
+      ]
+    },
+    {
+      "id": "52832",
+      "name": "Coq au vin",
+      "reason": "low map coverage 4/11",
+      "unmapped": [
+        "Bacon",
+        "Brandy",
+        "Red Wine",
+        "Rosemary",
+        "chestnut mushroom"
+      ]
+    },
+    {
+      "id": "53530",
+      "name": "Creamy Mustard Chicken",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Heavy Cream"
+      ]
+    },
+    {
+      "id": "53557",
+      "name": "Extra crispy chicken wings",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Turmeric",
+        "Cassava"
+      ]
+    },
+    {
+      "id": "52951",
+      "name": "General Tsos Chicken",
+      "reason": "low map coverage 3/8",
+      "unmapped": [
+        "Starch",
+        "Baking Powder",
+        "Duck Sauce",
+        "Gochujang",
+        "Starch"
+      ]
+    },
+    {
+      "id": "53345",
+      "name": "Jamaican Curry Chicken Recipe",
+      "reason": "low map coverage 2/5",
+      "unmapped": [
+        "Curry Powder",
+        "All-purpose Seasoning",
+        "Scotch Bonnet"
+      ]
+    },
+    {
+      "id": "53220",
+      "name": "kabse",
+      "reason": "low map coverage 3/7",
+      "unmapped": [
+        "Mushrooms",
+        "Sweetcorn",
+        "Raisins",
+        "Turmeric"
+      ]
+    },
+    {
+      "id": "53497",
+      "name": "Nom Banh Chok – Cambodian Noodle Soup",
+      "reason": "low map coverage 2/6",
+      "unmapped": [
+        "Fish Sauce",
+        "Bean Sprouts",
+        "Mint",
+        "Lime"
+      ]
+    },
+    {
+      "id": "53501",
+      "name": "Num Pang – Cambodian Baguette Sandwich",
+      "reason": "low map coverage 2/8",
+      "unmapped": [
+        "Baguette",
+        "Daikon Radish",
+        "Mayonnaise",
+        "Sriracha",
+        "Cilantro Leaves",
+        "Cucumber"
+      ]
+    },
+    {
+      "id": "53192",
+      "name": "Panang chicken curry (kaeng panang gai)",
+      "reason": "low map coverage 4/13",
+      "unmapped": [
+        "Panang Curry Paste",
+        "Fish Sauce",
+        "makrut lime leaves",
+        "Shrimp Paste",
+        "Galangal",
+        "Lemongrass",
+        "Lime",
+        "Ground Nutmeg",
+        "Peanuts"
+      ]
+    },
+    {
+      "id": "53162",
+      "name": "Pollo en pepitoria",
+      "reason": "low map coverage 4/11",
+      "unmapped": [
+        "Saffron",
+        "Almonds",
+        "Dry sherry",
+        "Cinnamon Stick",
+        "Cloves",
+        "Almonds"
+      ]
+    },
+    {
+      "id": "53280",
+      "name": "Poulet Roti a l'Algerienne (Algerian Roast Chicken)",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": []
+    },
+    {
+      "id": "53268",
+      "name": "Roasted chicken with creamy walnut sauce",
+      "reason": "low map coverage 2/5",
+      "unmapped": [
+        "Walnuts",
+        "Single Cream",
+        "Lemon"
+      ]
+    },
+    {
+      "id": "53020",
+      "name": "Rosol (Polish Chicken Soup)",
+      "reason": "low map coverage 2/7",
+      "unmapped": [
+        "Cloves",
+        "Dill"
+      ]
+    },
+    {
+      "id": "53498",
+      "name": "Samlar Kari – Khmer Red Curry",
+      "reason": "low map coverage 2/6",
+      "unmapped": [
+        "Red Curry Paste",
+        "Fish Sauce",
+        "Bamboo Shoot",
+        "Lime"
+      ]
+    },
+    {
+      "id": "53503",
+      "name": "Samlar Machu Kreung – Cambodian Sour Stew",
+      "reason": "low map coverage 3/8",
+      "unmapped": [
+        "Tamarind Paste",
+        "Fish Sauce",
+        "Pineapple Chunks",
+        "Lemongrass",
+        "Kaffir Lime Leaves"
+      ]
+    },
+    {
+      "id": "53264",
+      "name": "Smoky chicken skewers",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Fennel Seeds",
+        "Smoky Aïoli"
+      ]
+    },
+    {
+      "id": "53164",
+      "name": "Spanish Chicken",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Lemon"
+      ]
+    },
+    {
+      "id": "53105",
+      "name": "Spiced smoky barbecued chicken",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Lemon",
+        "Curry Powder",
+        "Rosemary",
+        "Rosemary"
+      ]
+    },
+    {
+      "id": "53201",
+      "name": "Stir-fried chicken with chillies & basil",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Fish Sauce"
+      ]
+    },
+    {
+      "id": "53376",
+      "name": "Sweet and Sour Chicken",
+      "reason": "low map coverage 2/5",
+      "unmapped": [
+        "Cornstarch",
+        "Pineapple Chunks",
+        "Pineapple Juice"
+      ]
+    },
+    {
+      "id": "53287",
+      "name": "Tajine de Poulet aux Carottes et Patates Douces (Chicken and Sweet Potato Tagine)",
+      "reason": "low map coverage 3/8",
+      "unmapped": [
+        "Cilantro",
+        "Turmeric",
+        "Raisins",
+        "Prunes"
+      ]
+    },
+    {
+      "id": "52806",
+      "name": "Tandoori chicken",
+      "reason": "low map coverage 2/5",
+      "unmapped": [
+        "lemons",
+        "garam masala",
+        "turmeric"
+      ]
+    },
+    {
+      "id": "53206",
+      "name": "Thai chicken cakes with sweet chilli sauce",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Lime"
+      ]
+    },
+    {
+      "id": "53212",
+      "name": "Thai drumsticks",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Orange",
+        "Orange",
+        "Thai Red Curry Paste"
+      ]
+    },
+    {
+      "id": "53214",
+      "name": "Thai green chicken soup",
+      "reason": "low map coverage 3/8",
+      "unmapped": [
+        "Thai Green Curry Paste",
+        "Lime Leaves",
+        "Fish Sauce",
+        "Bamboo Shoot",
+        "Lime"
+      ]
+    },
+    {
+      "id": "53207",
+      "name": "Tom kha gai",
+      "reason": "low map coverage 3/9",
+      "unmapped": [
+        "Galangal Paste",
+        "Lemongrass Stalks",
+        "Lime Leaves",
+        "Oyster Mushrooms",
+        "Fish Sauce",
+        "Lime"
+      ]
+    },
+    {
+      "id": "53232",
+      "name": "Vietnamese chicken salad",
+      "reason": "low map coverage 3/9",
+      "unmapped": [
+        "Cucumber",
+        "Radish",
+        "Mint",
+        "Peanuts",
+        "Lime",
+        "Fish Sauce"
+      ]
+    },
+    {
+      "id": "52965",
+      "name": "Breakfast Potatoes",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Bacon",
+        "Maple Syrup"
+      ]
+    },
+    {
+      "id": "52895",
+      "name": "English Breakfast",
+      "reason": "low map coverage 3/7",
+      "unmapped": [
+        "Sausages",
+        "Bacon",
+        "Mushrooms",
+        "Black Pudding"
+      ]
+    },
+    {
+      "id": "53413",
+      "name": "Flija Layered Pancake / Crepe",
+      "reason": "low map coverage 3/7",
+      "unmapped": [
+        "Clotted Cream",
+        "Sour Cream"
+      ]
+    },
+    {
+      "id": "52957",
+      "name": "Fruit and Cream Cheese Breakfast Pastries",
+      "reason": "low map coverage 3/7",
+      "unmapped": [
+        "Vanilla Extract",
+        "Puff Pastry"
+      ]
+    },
+    {
+      "id": "53450",
+      "name": "Grits",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Grits"
+      ]
+    },
+    {
+      "id": "53363",
+      "name": "Jamaican Cornmeal Porridge",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Fine Yellow Cornmeal",
+        "Vanilla Extract",
+        "Ground Cinnamon",
+        "Ground Nutmeg"
+      ]
+    },
+    {
+      "id": "52962",
+      "name": "Salmon Eggs Eggs Benedict",
+      "reason": "low map coverage 2/5",
+      "unmapped": [
+        "English Muffins",
+        "Smoked Salmon"
+      ]
+    },
+    {
+      "id": "52964",
+      "name": "Smoked Haddock Kedgeree",
+      "reason": "low map coverage 3/8",
+      "unmapped": [
+        "Cardamom",
+        "Turmeric",
+        "Cinnamon Stick",
+        "Smoked Haddock",
+        "Lemon"
+      ]
+    },
+    {
+      "id": "53415",
+      "name": "Torrijas",
+      "reason": "low map coverage 2/7",
+      "unmapped": [
+        "Orange",
+        "Lemon",
+        "Cinnamon Stick",
+        "Dry sherry",
+        "Baguette"
+      ]
+    },
+    {
+      "id": "53114",
+      "name": "Ugali – Kenyan cornmeal",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "White Cornmeal"
+      ]
+    },
+    {
+      "id": "53288",
+      "name": "Algerian Flafla (Bell Pepper Salad)",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": []
+    },
+    {
+      "id": "53278",
+      "name": "Aubergine & hummus grills",
+      "reason": "low map coverage 2/6",
+      "unmapped": [
+        "Aubergine",
+        "Hummus",
+        "Walnuts",
+        "Lemon"
+      ]
+    },
+    {
+      "id": "53267",
+      "name": "Aubergine couscous salad",
+      "reason": "low map coverage 2/6",
+      "unmapped": [
+        "Aubergine",
+        "Couscous",
+        "Mint",
+        "Lemon"
+      ]
+    },
+    {
+      "id": "53107",
+      "name": "Avocado dip with new potatoes",
+      "reason": "low map coverage 2/6",
+      "unmapped": [
+        "Avocado",
+        "Lime",
+        "Lemon",
+        "Tortillas"
+      ]
+    },
+    {
+      "id": "52807",
+      "name": "Baingan Bharta",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Aubergine"
+      ]
+    },
+    {
+      "id": "53307",
+      "name": "Beetroot & red cabbage sauerkraut",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Beetroot",
+        "Caraway Seed"
+      ]
+    },
+    {
+      "id": "53313",
+      "name": "Beetroot latkes",
+      "reason": "low map coverage 4/9",
+      "unmapped": [
+        "Mint",
+        "Rocket",
+        "Beetroot",
+        "Caraway Seed",
+        "Lemon"
+      ]
+    },
+    {
+      "id": "53077",
+      "name": "Cabbage Soup (Shchi)",
+      "reason": "low map coverage 3/7",
+      "unmapped": [
+        "Sour Cream",
+        "Dill"
+      ]
+    },
+    {
+      "id": "52870",
+      "name": "Chickpea Fajitas",
+      "reason": "low map coverage 2/7",
+      "unmapped": [
+        "Avocado",
+        "Lime",
+        "Lime",
+        "Sour Cream",
+        "Corn Tortillas"
+      ]
+    },
+    {
+      "id": "53490",
+      "name": "Cottage Cheese And Feta Stuffed Peppers",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Feta",
+        "Chives"
+      ]
+    },
+    {
+      "id": "53480",
+      "name": "Creamy Aji green sauce",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Jalapeno",
+        "Lime",
+        "Mayonnaise"
+      ]
+    },
+    {
+      "id": "53532",
+      "name": "Creamy Corn Soup Recipe",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Corn On The Cob",
+        "Cilantro",
+        "Scallions",
+        "Heavy Cream"
+      ]
+    },
+    {
+      "id": "53309",
+      "name": "Cucumber & fennel salad",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Cucumber",
+        "Fennel Bulb",
+        "Sour Cream",
+        "Lemon",
+        "Dill"
+      ]
+    },
+    {
+      "id": "52785",
+      "name": "Dal fry",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Toor dal",
+        "Turmeric",
+        "Ghee",
+        "Cilantro",
+        "Garam Masala"
+      ]
+    },
+    {
+      "id": "52955",
+      "name": "Egg Drop Soup",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Mushrooms",
+        "Cornstarch"
+      ]
+    },
+    {
+      "id": "53073",
+      "name": "Eggplant Adobo",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Ground Pork"
+      ]
+    },
+    {
+      "id": "53254",
+      "name": "Ezme",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Pomegranate Molasses",
+        "Pul Biber",
+        "Sumac",
+        "Dried Mint"
+      ]
+    },
+    {
+      "id": "53091",
+      "name": "Falafel Pita Sandwich with Tahini Sauce",
+      "reason": "low map coverage 2/7",
+      "unmapped": [
+        "Falafel",
+        "Tahini",
+        "Lettuce",
+        "Cucumber",
+        "Dill Pickles"
+      ]
+    },
+    {
+      "id": "53025",
+      "name": "Ful Medames",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Lemons"
+      ]
+    },
+    {
+      "id": "53274",
+      "name": "Griddled aubergines with sesame dressing",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Aubergine",
+        "Tahini Paste",
+        "Lemon",
+        "Mint"
+      ]
+    },
+    {
+      "id": "53478",
+      "name": "Grilled corn with garlic mayo & grated cheese",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Corn On The Cob",
+        "Mayonnaise",
+        "Lime"
+      ]
+    },
+    {
+      "id": "53398",
+      "name": "Kadu Borani",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Squash",
+        "Turmeric"
+      ]
+    },
+    {
+      "id": "52973",
+      "name": "Leblebi Soup",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Lime"
+      ]
+    },
+    {
+      "id": "53336",
+      "name": "Molasses Baked Beans",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Bacon",
+        "Molasses"
+      ]
+    },
+    {
+      "id": "53047",
+      "name": "Moroccan Carrot Soup",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Garam Masala"
+      ]
+    },
+    {
+      "id": "52864",
+      "name": "Mushroom & Chestnut Rotolo",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Mushrooms",
+        "Chestnuts",
+        "Challots",
+        "Rosemary",
+        "Wild Mushrooms",
+        "White Wine",
+        "Lasagne Sheets",
+        "Sage"
+      ]
+    },
+    {
+      "id": "53117",
+      "name": "Nordic smørrebrød with asparagus and horseradish cream",
+      "reason": "low map coverage 3/8",
+      "unmapped": [
+        "Creme Fraiche",
+        "Horseradish",
+        "White Asparagus",
+        "Asparagus",
+        "Dill"
+      ]
+    },
+    {
+      "id": "53297",
+      "name": "Pomegranate salad",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Baby Lettuce Leaves",
+        "Pomegranate",
+        "Feta"
+      ]
+    },
+    {
+      "id": "53081",
+      "name": "Potato Salad (Olivier Salad)",
+      "reason": "low map coverage 3/7",
+      "unmapped": [
+        "Sausages",
+        "Dill",
+        "Mayonnaise"
+      ]
+    },
+    {
+      "id": "52816",
+      "name": "Roasted Eggplant With Tahini, Pine Nuts, and Lentils",
+      "reason": "low map coverage 2/6",
+      "unmapped": [
+        "Brown Lentils",
+        "Rosemary",
+        "Pine nuts"
+      ]
+    },
+    {
+      "id": "53491",
+      "name": "Shopska Salad",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Cucumber",
+        "Feta"
+      ]
+    },
+    {
+      "id": "53374",
+      "name": "Sichuan Eggplant",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Cornstarch",
+        "Scallions",
+        "Cilantro"
+      ]
+    },
+    {
+      "id": "53371",
+      "name": "Sichuan Style Stir-Fried Chinese Long Beans",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": []
+    },
+    {
+      "id": "53369",
+      "name": "Silken Tofu with Sesame Soy Sauce",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Silken Tofu",
+        "Chinese Sesame Sauce",
+        "Scallions",
+        "Sesame Seed"
+      ]
+    },
+    {
+      "id": "52784",
+      "name": "Smoky Lentil Chili with Squash",
+      "reason": "low map coverage 2/8",
+      "unmapped": [
+        "Cinnamon",
+        "Cocoa",
+        "Brown Lentils",
+        "Squash",
+        "Cashews"
+      ]
+    },
+    {
+      "id": "52797",
+      "name": "Spicy North African Potato Salad",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Lemon",
+        "Rocket",
+        "Feta",
+        "Mint",
+        "Pine nuts"
+      ]
+    },
+    {
+      "id": "53113",
+      "name": "Sukuma Wiki",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Kale",
+        "Double Cream"
+      ]
+    },
+    {
+      "id": "53275",
+      "name": "Sweet potato salad",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Chives"
+      ]
+    },
+    {
+      "id": "52869",
+      "name": "Tahini Lentils",
+      "reason": "low map coverage 2/6",
+      "unmapped": [
+        "Tahini",
+        "Lemon",
+        "Kale",
+        "Lentils"
+      ]
+    },
+    {
+      "id": "53312",
+      "name": "Tangy cabbage slaw",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Mayonnaise",
+        "Lemon"
+      ]
+    },
+    {
+      "id": "53246",
+      "name": "Tangy carrot, cabbage & onion salad",
+      "reason": "fewer than 2 mapped products",
+      "unmapped": [
+        "Mint",
+        "Roasted Peanut",
+        "Lime"
+      ]
+    }
+  ],
+  "byCategory": {
+    "Pasta": 10,
+    "Chicken": 41,
+    "Breakfast": 9,
+    "Vegetarian": 47
+  },
+  "written": 107,
+  "fetched": 200
+}

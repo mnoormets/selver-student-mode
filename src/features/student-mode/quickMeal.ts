@@ -139,5 +139,9 @@ export function recipeEtTitle(id: string): string {
     "hakkliha-pannkoogid": "Hakkliha pannkoogid",
     "chicken-stew": "Kanalihahautis",
   };
-  return titles[id] ?? id;
+  if (titles[id]) return titles[id];
+  const fromCatalog = recipes.find((r) => r.id === id);
+  if (fromCatalog?.titleEt) return fromCatalog.titleEt;
+  if (fromCatalog?.title) return fromCatalog.title;
+  return id;
 }

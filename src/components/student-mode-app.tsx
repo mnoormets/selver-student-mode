@@ -729,7 +729,8 @@ export function StudentModeApp() {
             <section className="flex min-h-[520px] flex-col space-y-3 animate-enter font-display">
               <div className="rounded-[14px] border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
                 <span className="font-bold">Näidisrežiim</span> — vastused
-                põhinevad demo retseptidel. Spageti + muna näide töötab alati.
+                demo + TheMealDB retseptidest (kaardistatud Selveri
+                demokataloogile). Spageti + muna näide töötab alati.
               </div>
               <ChatView
                 chat={cookChat}

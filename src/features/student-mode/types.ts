@@ -27,10 +27,17 @@ export interface SelverProduct {
 export interface Recipe {
   id: string;
   title: string;
+  /** Optional Estonian display title for chat UI. */
+  titleEt?: string;
   totalMinutes: number;
   mealSlots: readonly MealSlot[];
   vegetarian: boolean;
   ingredients: readonly { productId: string; quantity: number }[];
+  /** Chat match needles (lowercase phrases). */
+  aliases?: readonly string[];
+  /** Provenance for imported recipes. */
+  source?: string;
+  sourceUrl?: string;
 }
 
 export interface StudentProfile {

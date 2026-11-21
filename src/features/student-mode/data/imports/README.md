@@ -41,6 +41,12 @@ npm run import:products -- ./my-selver-dump.json
 
 # retseptid → imports/extra-recipes.json (productId peab katalogis olema)
 npm run import:recipes -- ./my-recipes.json
+
+# massiliselt netist (TheMealDB, avalik) → extra-recipes.json + chatbot aliases
+npm run fetch:recipes
+npm run fetch:recipes -- --limit=80
 ```
+
+`fetch:recipes` võtab TheMealDB retseptid, jätab kõrvale soola/õli jms, kaardistab koostisosad meie Selveri demokataloogile (`ingredientMap.ts`) ja kirjutab ainult need road, mis chatboti ostunimekirjaga kokku lähevad.
 
 Retseptid peavad olema **asjakohased demole**: nt hakklihapannkoogid = hakkliha + munad (taigen kodust) — mitte külmutatud köögiviljasegu, kui seda roog ei vaja.
