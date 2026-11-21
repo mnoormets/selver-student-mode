@@ -27,6 +27,9 @@ import {
   Settings,
   Info,
   X,
+  MapPin,
+  Star,
+  Monitor,
   type LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -52,24 +55,35 @@ const BOTTOM_TABS = [
   { id: "more", label: "Veel", icon: Menu },
 ] as const;
 
-/** Partnerkaart side menu — only Student Mode is interactive. */
-const SIDE_MENU: {
-  id: string;
-  label: string;
-  icon: LucideIcon;
-  action?: "student-mode";
-}[] = [
+/** Side drawer — visual only (matches Partnerkaart “Veel”). */
+const SIDE_MENU: { id: string; label: string; icon: LucideIcon }[] = [
   { id: "home", label: "Avaleht", icon: Home },
   { id: "scan", label: "Skaneeri ja osta", icon: ScanLine },
   { id: "list", label: "Ostunimekiri", icon: ListChecks },
   { id: "card", label: "Esita Partnerkaart", icon: QrCode },
   { id: "offers", label: "Pakkumised", icon: Percent },
-  { id: "student", label: "Student Mode", icon: GraduationCap, action: "student-mode" },
   { id: "pay", label: "Maksevahendid", icon: CreditCard },
   { id: "history", label: "Ostude ajalugu", icon: History },
   { id: "profile", label: "Minu andmed", icon: User },
   { id: "settings", label: "Seaded", icon: Settings },
   { id: "help", label: "Abi, kontaktid ja tagasiside", icon: Info },
+];
+
+/** Partnerkaart peamenüü — ainult Student Mode on klikitav. */
+const MAIN_MENU: {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  badge?: string;
+  notify?: string;
+  action?: "student-mode";
+}[] = [
+  { id: "list", label: "Ostunimekiri", icon: ListChecks, badge: "UUS" },
+  { id: "selfserve", label: "Partnerkaardi iseteenindus", icon: Star },
+  { id: "stores", label: "Kaupluste kontaktid", icon: MapPin },
+  { id: "offers", label: "Pakkumised", icon: Percent, notify: "1" },
+  { id: "student", label: "Student Mode", icon: GraduationCap, action: "student-mode" },
+  { id: "eshop", label: "Külasta e-poode", icon: Monitor },
 ];
 
 type Stage = "home" | "hero" | "setup" | "plan";
@@ -238,43 +252,14 @@ export function StudentModeApp() {
               )}
             </div>
           </header>
-        ) : (
-          <header className="sticky top-0 z-40 border-b border-black/10 bg-white">
-            <div className="flex items-center gap-2 px-3 py-2.5">
-              <button
-                type="button"
-                onClick={() => setMenuOpen(true)}
-                className="inline-flex size-10 items-center justify-center rounded-full bg-[#f15a22] text-white shadow-md"
-                aria-label="Ava menüü"
-              >
-                <Menu className="size-5" strokeWidth={2.4} />
-              </button>
-              <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-selver-navy/55">
-                  Partnerkaart
-                </p>
-                <p className="truncate font-display text-lg font-bold leading-tight text-selver-navy">
-                  Avaleht
-                </p>
-              </div>
-              <Image
-                src="/selver-logo.png"
-                alt="Selver"
-                width={36}
-                height={42}
-                className="h-9 w-auto object-contain"
-                priority
-              />
-            </div>
-          </header>
-        )}
+        ) : null}
 
-        {/* Partnerkaart side drawer */}
+        {/* Side drawer — visual only; Student Mode elab peamenüüs */}
         {menuOpen && (
           <div className="absolute inset-0 z-50 flex">
             <button
               type="button"
-              className="h-full w-[18%] bg-black/45"
+              className="h-full flex-1 bg-black/45"
               aria-label="Sulge menüü"
               onClick={() => setMenuOpen(false)}
             />
@@ -295,26 +280,6 @@ export function StudentModeApp() {
               <nav className="flex-1 overflow-y-auto pb-8">
                 {SIDE_MENU.map((item) => {
                   const Icon = item.icon;
-                  const active = item.action === "student-mode";
-                  if (active) {
-                    return (
-                      <button
-                        key={item.id}
-                        type="button"
-                        onClick={openStudentMode}
-                        className="flex w-full items-center gap-3 border-b border-white/10 px-5 py-3.5 text-left transition hover:bg-white/5"
-                      >
-                        <Icon
-                          className="size-[22px] shrink-0 text-[#f15a22]"
-                          strokeWidth={1.7}
-                        />
-                        <span className="text-[15px] font-medium leading-snug text-white">
-                          {item.label}
-                        </span>
-                        <ArrowRight className="ml-auto size-4 text-[#f15a22]" />
-                      </button>
-                    );
-                  }
                   return (
                     <div
                       key={item.id}
@@ -336,33 +301,128 @@ export function StudentModeApp() {
           </div>
         )}
 
-        <main className="flex flex-1 flex-col overflow-y-auto px-4 pb-24 pt-4">
+        <main
+          className={cn(
+            "flex flex-1 flex-col overflow-y-auto pb-24",
+            stage === "home" ? "bg-[#1a1a1a] px-0 pt-0" : "px-4 pt-4",
+          )}
+        >
           {stage === "home" && (
-            <section className="space-y-4 animate-enter">
-              <div className="overflow-hidden rounded-[1.5rem] bg-selver-navy p-5 text-white">
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-selver-yellow">
-                  Partnerkaart
-                </p>
-                <h1 className="mt-2 font-display text-2xl font-bold leading-tight">
-                  Tere tulemast
-                </h1>
-                <p className="mt-2 text-sm leading-relaxed text-white/75">
-                  Ava menüü (☰) ja vali <span className="text-selver-yellow">Student Mode</span>,
-                  et jõuda tudengirežiimini.
-                </p>
+            <section className="animate-enter">
+              <div className="px-4 pb-5 pt-3 text-white">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex size-9 items-center justify-center rounded-full border border-white/25">
+                      <User className="size-4 text-white/80" />
+                    </span>
+                    <p className="text-[15px] font-semibold">Hea Partner</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setMenuOpen(true)}
+                    className="inline-flex size-10 items-center justify-center rounded-full bg-[#f15a22] text-white shadow-md"
+                    aria-label="Ava kõrvalmenüü"
+                  >
+                    <Menu className="size-5" strokeWidth={2.4} />
+                  </button>
+                </div>
+
+                <div className="mb-4 flex items-end gap-6">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/55">
+                      Boonuspunktid
+                    </p>
+                    <p className="font-display text-xl font-bold text-[#f15a22]">
+                      0,38 €
+                    </p>
+                  </div>
+                  <div className="h-8 w-px bg-[#f15a22]/30" />
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/55">
+                      Kuukaardi jääk
+                    </p>
+                    <p className="font-display text-xl font-bold">57,00 €</p>
+                  </div>
+                </div>
+
+                <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#f7f7f7] via-white to-[#ffe8de] p-4 shadow-lg">
+                  <div className="mb-3 flex items-center justify-between">
+                    <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#f15a22]">
+                      partner
+                    </p>
+                    <span className="text-[10px] font-semibold text-[#f15a22]/80">
+                      Selver
+                    </span>
+                  </div>
+                  <div className="flex justify-center py-2">
+                    <div className="inline-flex items-center gap-2 rounded-full border-2 border-[#f15a22] bg-white px-4 py-2.5 text-sm font-semibold text-[#1a1a1a]">
+                      <QrCode className="size-4 text-[#f15a22]" />
+                      Esita Partnerkaart
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="rounded-[1.5rem] border border-border/70 bg-white p-4 shadow-sm">
-                <p className="text-sm text-muted-foreground">
-                  Teised menüüpunktid on näidisena — ainult Student Mode viib edasi.
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setMenuOpen(true)}
-                  className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#f15a22] px-6 text-sm font-medium text-white"
-                >
-                  <Menu className="size-4" />
-                  Ava menüü
-                </button>
+
+              <div className="rounded-t-[1.75rem] bg-white px-2 pb-6 pt-2 shadow-[0_-8px_30px_rgba(0,0,0,0.25)]">
+                <ul>
+                  {MAIN_MENU.map((item) => {
+                    const Icon = item.icon;
+                    const rowClass =
+                      "flex w-full items-center gap-3 border-b border-black/8 px-4 py-3.5 text-left";
+                    if (item.action === "student-mode") {
+                      return (
+                        <li key={item.id}>
+                          <button
+                            type="button"
+                            onClick={openStudentMode}
+                            className={cn(rowClass, "transition hover:bg-[#fff5f0]")}
+                          >
+                            <Icon
+                              className="size-5 shrink-0 text-[#f15a22]"
+                              strokeWidth={1.8}
+                            />
+                            <span className="flex-1 text-[15px] font-semibold text-[#1a1a1a]">
+                              {item.label}
+                            </span>
+                            <span className="rounded-full bg-[#f15a22]/12 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#f15a22]">
+                              Uus
+                            </span>
+                            <ArrowRight className="size-4 text-[#f15a22]" />
+                          </button>
+                        </li>
+                      );
+                    }
+                    return (
+                      <li key={item.id}>
+                        <div className={rowClass} aria-disabled>
+                          <Icon
+                            className="size-5 shrink-0 text-[#f15a22]"
+                            strokeWidth={1.8}
+                          />
+                          <span className="flex-1 text-[15px] font-semibold text-[#1a1a1a]">
+                            {item.label}
+                          </span>
+                          {item.badge && (
+                            <span className="rounded bg-[#e30613] px-1.5 py-0.5 text-[10px] font-bold uppercase text-white">
+                              {item.badge}
+                            </span>
+                          )}
+                          {item.notify && (
+                            <span className="inline-flex size-5 items-center justify-center rounded-full bg-[#e30613] text-[10px] font-bold text-white">
+                              {item.notify}
+                            </span>
+                          )}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="px-4 pt-4">
+                  <div className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#f15a22] text-sm font-bold text-white">
+                    <ScanLine className="size-5" />
+                    Skaneeri ja osta
+                  </div>
+                </div>
               </div>
             </section>
           )}
@@ -714,7 +774,7 @@ export function StudentModeApp() {
           </div>
           <p className="pb-1 text-center text-[10px] text-muted-foreground">
             {stage === "home"
-              ? "Partnerkaart · menüüst Student Mode"
+              ? "Partnerkaart · peamenüüs Student Mode"
               : "Tudengirežiim · Partnerkaardi äpi moodul"}
           </p>
         </nav>
