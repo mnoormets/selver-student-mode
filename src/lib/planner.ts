@@ -52,6 +52,10 @@ export type PlanResult = {
   saved: number;
   leftoverBudget: number;
   summary: string;
+  /** Selected student budget in euro cents (drives leftover display). */
+  budgetCents: number;
+  /** How many plan days were kept after budget fitting. */
+  days: number;
 };
 
 const DAYS_ET = ["E", "T", "K", "N", "R", "L", "P"];
@@ -215,5 +219,14 @@ export function buildPlan(prefs: Prefs): PlanResult {
       ? `Mahud ${prefs.days} päeva menüü ~${total.toFixed(2)} € sisse. Jääb ${leftoverBudget.toFixed(2)} € puhvriks või kohvikuks.`
       : `Eelarve on napilt ülepaisutatud (${Math.abs(leftoverBudget).toFixed(2)} €). Eelista Kirde oma kaubamärki ja kampaaniatoidet.`;
 
-  return { meals, basket, total, saved, leftoverBudget, summary };
+  return {
+    meals,
+    basket,
+    total,
+    saved,
+    leftoverBudget,
+    summary,
+    budgetCents: Math.round(prefs.budget * 100),
+    days: prefs.days,
+  };
 }

@@ -111,6 +111,12 @@ const STYLES: { id: Prefs["style"]; label: string; hint: string }[] = [
   { id: "liha", label: "Sisaldab liha", hint: "kana & hakk" },
 ];
 
+const CHAT_CHIPS = [
+  "Mul on kodus 10 muna",
+  "Mul on kodus taigen ja mune, tahan hakkliha pannkooke — mida osta?",
+  "Mul on 100 g spagette ja kaks muna. Mida saan kiiresti teha?",
+] as const;
+
 function euros(n: number) {
   return `${n.toFixed(2)} €`;
 }
@@ -162,11 +168,11 @@ export function StudentModeApp() {
 
   function generate() {
     startTransition(() => {
-      // C+ hackathon demo: 35 € pasta/kiire näidisplaan from sourced pack prices
-      const next = buildHackathonDemoPlan();
-      setBudget(35);
-      setDays(7);
-      setStyle("kiire");
+      const next = buildHackathonDemoPlan({
+        budgetEuros: budget,
+        days,
+        style,
+      });
       setBasePlan(next);
       setPlan(next);
       setPantryApplied(false);
@@ -176,7 +182,7 @@ export function StudentModeApp() {
         {
           id: "welcome",
           role: "assistant",
-          text: "Näidisplaan on valmis. Proovi: „Mul on kodus 10 muna“.",
+          text: `Näidisplaan on valmis (${budget} € eelarve). Proovi: „Mul on kodus 10 muna“.`,
         },
         {
           id: `plan-${Date.now()}`,
@@ -599,7 +605,7 @@ export function StudentModeApp() {
                     <p className="text-[10px] font-bold uppercase tracking-wider text-white/55">
                       Eelarve
                     </p>
-                    <p className="text-xl font-bold">35 €</p>
+                    <p className="text-xl font-bold">20–50 €</p>
                   </div>
                   <div
                     className="rounded-[10px] px-3 py-2.5 text-black"
@@ -615,8 +621,8 @@ export function StudentModeApp() {
 
               <div className="space-y-3 rounded-[14px] border border-neutral-200 bg-white p-4">
                 <p className="text-sm leading-relaxed text-neutral-600">
-                  35 €, kiirelt ja soodsalt, pasta meeldib — saad näidisnädala ja
-                  ostukorvi. Siis ütle, mis kodus juba on.
+                  Vali eelarve (nt 20 / 35 / 50 €), saa näidisplaan ja ostukorv
+                  selle piires. Siis ütle, mis kodus juba on.
                 </p>
                 <button
                   type="button"
@@ -821,20 +827,27 @@ export function StudentModeApp() {
                       className="rounded-full px-2.5 py-0.5 text-[11px] font-bold text-white"
                       style={{ backgroundColor: PK_ORANGE }}
                     >
-                      35 €
+                      {budget} €
                     </span>
                     <span className="rounded-full bg-black px-2.5 py-0.5 text-[11px] font-bold text-white">
-                      kiire · soodne
+                      {style === "odav"
+                        ? "soodne"
+                        : style === "taimne"
+                          ? "taimne"
+                          : style === "liha"
+                            ? "liha"
+                            : "kiire"}
                     </span>
                     <span className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-[11px] font-bold text-black">
-                      pasta
+                      {plan.days} päeva
                     </span>
                     <span className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-[11px] font-bold text-neutral-500">
                       näidisplaan
                     </span>
                   </div>
                   <h2 className="text-2xl font-bold tracking-tight text-black">
-                    Sinu nädal on valmis
+                    Sinu {plan.days === 7 ? "nädal" : `${plan.days} päeva`} on
+                    valmis
                   </h2>
                   <p className="mt-1 text-sm text-neutral-600">{plan.summary}</p>
                 </div>
@@ -885,6 +898,23 @@ export function StudentModeApp() {
                 )}
               </div>
 
+              <PlanAskCard
+                draft={draft}
+                setDraft={setDraft}
+                onSend={() => {
+                  sendChat();
+                  setTab("chat");
+                }}
+                onPantryDemo={() => {
+                  applyEggsAtHome(10);
+                  setTab("basket");
+                }}
+                onOpenChat={() => setTab("chat")}
+                lastAssistant={
+                  [...chat].reverse().find((m) => m.role === "assistant")?.text
+                }
+              />
+
               <div className="grid grid-cols-1 gap-2">
                 <Stat
                   label="Korvi summa"
@@ -908,7 +938,7 @@ export function StudentModeApp() {
                   [
                     ["menu", "Menüü"],
                     ["basket", "Ostukorv"],
-                    ["chat", "Abi"],
+                    ["chat", "Vestlus"],
                   ] as const
                 ).map(([id, label]) => (
                   <button
@@ -1170,6 +1200,98 @@ function BasketView({
   );
 }
 
+function PlanAskCard({
+  draft,
+  setDraft,
+  onSend,
+  onPantryDemo,
+  onOpenChat,
+  lastAssistant,
+}: {
+  draft: string;
+  setDraft: (v: string) => void;
+  onSend: () => void;
+  onPantryDemo?: () => void;
+  onOpenChat: () => void;
+  lastAssistant?: string;
+}) {
+  return (
+    <div
+      className="rounded-[14px] border-2 bg-white p-4 shadow-[0_8px_24px_rgba(249,125,0,0.12)]"
+      style={{ borderColor: PK_ORANGE }}
+    >
+      <div className="mb-2 flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <MessageCircle className="size-5" style={{ color: PK_ORANGE }} />
+          <div>
+            <p className="font-display text-base font-bold text-black">
+              Küsi tudengiabilt
+            </p>
+            <p className="text-xs text-neutral-500">
+              Ütle, mis kodus on — arvutame, mida osta.
+            </p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={onOpenChat}
+          className="shrink-0 text-xs font-bold underline underline-offset-2"
+          style={{ color: PK_ORANGE }}
+        >
+          Ava vestlus
+        </button>
+      </div>
+
+      {lastAssistant && (
+        <p className="mb-3 line-clamp-3 rounded-[10px] bg-neutral-50 px-3 py-2 text-xs leading-relaxed text-neutral-700">
+          {lastAssistant}
+        </p>
+      )}
+
+      <div className="mb-3 flex flex-wrap gap-2">
+        {CHAT_CHIPS.map((c) => (
+          <button
+            key={c}
+            type="button"
+            onClick={() => {
+              if (c.includes("10 muna") && onPantryDemo) {
+                onPantryDemo();
+                return;
+              }
+              setDraft(c);
+            }}
+            className="rounded-full border border-neutral-200 bg-white px-3 py-1 text-left text-[11px] font-bold leading-snug text-neutral-700 hover:border-[#F97D00]"
+          >
+            {c.length > 42 ? `${c.slice(0, 40)}…` : c}
+          </button>
+        ))}
+      </div>
+
+      <div className="flex gap-2">
+        <Textarea
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          placeholder="Nt: mul on kodus taigen ja mune…"
+          className="min-h-[44px] resize-none bg-white"
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              onSend();
+            }
+          }}
+        />
+        <Button
+          className="h-auto rounded-[12px] px-4 font-bold text-white hover:opacity-90"
+          style={{ backgroundColor: PK_ORANGE }}
+          onClick={onSend}
+        >
+          Saada
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 function ChatView({
   chat,
   draft,
@@ -1183,17 +1305,11 @@ function ChatView({
   onSend: () => void;
   onPantryDemo?: () => void;
 }) {
-  const chips = [
-    "Mul on kodus 10 muna",
-    "Mul on kodus taigen ja mune, tahan hakkliha pannkooke — mida osta?",
-    "Mul on 100 g spagette ja kaks muna. Mida saan kiiresti teha?",
-  ];
-
   return (
     <div className="flex min-h-[420px] flex-col overflow-hidden rounded-[14px] border border-neutral-200 bg-white">
       <div className="flex items-center gap-2 border-b border-neutral-200 px-4 py-3">
         <MessageCircle className="size-4" style={{ color: PK_ORANGE }} />
-        <p className="font-display text-lg font-bold text-black">Tudengiabi</p>
+        <p className="font-display text-lg font-bold text-black">Vestlus</p>
       </div>
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
         {chat.map((m) => (
@@ -1215,7 +1331,7 @@ function ChatView({
       </div>
       <div className="space-y-3 border-t border-neutral-200 px-4 py-3">
         <div className="flex flex-wrap gap-2">
-          {chips.map((c) => (
+          {CHAT_CHIPS.map((c) => (
             <button
               key={c}
               type="button"
@@ -1224,15 +1340,11 @@ function ChatView({
                   onPantryDemo();
                   return;
                 }
-                if (c.includes("Foto")) return;
                 setDraft(c);
               }}
-              className={cn(
-                "rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-bold text-neutral-600 hover:border-[#F97D00] hover:text-black",
-                c.includes("Foto") && "opacity-50",
-              )}
+              className="rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-bold text-neutral-600 hover:border-[#F97D00] hover:text-black"
             >
-              {c}
+              {c.length > 36 ? `${c.slice(0, 34)}…` : c}
             </button>
           ))}
         </div>

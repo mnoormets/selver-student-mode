@@ -95,6 +95,29 @@ export function verifyDemoMath(): string[] {
 
   assert(computeBasketCents([]).totalCents === 0, "empty basket should be 0");
 
+  const plan20 = buildHackathonDemoPlan({ budgetEuros: 20, days: 7 });
+  assert(plan20.budgetCents === 2000, "20€ plan should keep budgetCents");
+  assert(plan20.days >= 1, "20€ should keep at least one day");
+  assert(
+    plan20.total <= 20.5,
+    `20€ plan should stay near budget, got ${plan20.total}`,
+  );
+  assert(
+    plan20.summary.includes("20 €") || plan20.summary.includes("eelarve 20"),
+    "summary should mention selected 20€ budget",
+  );
+  logs.push(
+    `budget 20€ → ${plan20.days} days, basket ${plan20.total.toFixed(2)} €, leftover ${plan20.leftoverBudget.toFixed(2)} €`,
+  );
+
+  const plan50 = buildHackathonDemoPlan({ budgetEuros: 50, days: 7 });
+  assert(plan50.budgetCents === 5000, "50€ plan should keep budgetCents");
+  assert(plan50.days === 7, "50€ should keep full week");
+  assert(plan50.leftoverBudget > 10, "50€ should leave clear leftover");
+  logs.push(
+    `budget 50€ → ${plan50.days} days, basket ${plan50.total.toFixed(2)} €, leftover ${plan50.leftoverBudget.toFixed(2)} €`,
+  );
+
   const hakkliha = answerPantryCookQuestion(
     "Mul on kodus taignast ja mune, tahaksin teha hakkliha pannkooke, mida peaksin poest ostma",
   );
