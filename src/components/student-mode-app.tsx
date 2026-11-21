@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import {
   ArrowRight,
   ShoppingBasket,
-  Leaf,
   MessageCircle,
   Sparkles,
   Timer,
@@ -305,38 +304,32 @@ export function StudentModeApp() {
                   />
                 </div>
 
-                <div className="space-y-3">
-                  <p className="flex items-center gap-2 text-sm font-medium">
-                    <Leaf className="size-4 text-leaf" />
-                    Stiil
-                  </p>
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                    {STYLES.map((s) => (
-                      <button
-                        key={s.id}
-                        type="button"
-                        onClick={() => setStyle(s.id)}
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                  {STYLES.map((s) => (
+                    <button
+                      key={s.id}
+                      type="button"
+                      onClick={() => setStyle(s.id)}
+                      className={cn(
+                        "rounded-2xl border px-3 py-3 text-left transition",
+                        style === s.id
+                          ? "border-selver-navy bg-selver-navy text-white"
+                          : "border-border bg-white/80 hover:border-leaf/40",
+                      )}
+                    >
+                      <p className="text-sm font-semibold">{s.label}</p>
+                      <p
                         className={cn(
-                          "rounded-2xl border px-3 py-3 text-left transition",
+                          "mt-0.5 text-xs",
                           style === s.id
-                            ? "border-selver-navy bg-selver-navy text-white"
-                            : "border-border bg-white/80 hover:border-leaf/40",
+                            ? "text-leaf-foreground/75"
+                            : "text-muted-foreground",
                         )}
                       >
-                        <p className="text-sm font-semibold">{s.label}</p>
-                        <p
-                          className={cn(
-                            "mt-0.5 text-xs",
-                            style === s.id
-                              ? "text-leaf-foreground/75"
-                              : "text-muted-foreground",
-                          )}
-                        >
-                          {s.hint}
-                        </p>
-                      </button>
-                    ))}
-                  </div>
+                        {s.hint}
+                      </p>
+                    </button>
+                  ))}
                 </div>
 
                 <div className="space-y-2">
