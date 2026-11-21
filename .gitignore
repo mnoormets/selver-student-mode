@@ -1,0 +1,20 @@
+# Local environment files
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+
+# Logs
+*.log
+
+# Node dependencies and generated output
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
