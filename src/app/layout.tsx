@@ -15,9 +15,9 @@ const barlowCondensed = Barlow_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: "Selver Tudengirežiim",
+  title: "Tudengirežiim · Partnerkaart",
   description:
-    "AI-abiga nädala menüü ja ostukorv tudengi eelarvele — Selveri häkatoni prototüüp.",
+    "Selveri tudengirežiim Partnerkaardi äpis — AI nädala menüü ja ostukorv tudengi eelarvele.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -26,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="et"
       className={`${barlow.variable} ${barlowCondensed.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-[#0b1220]">{children}</body>
     </html>
   );
 }

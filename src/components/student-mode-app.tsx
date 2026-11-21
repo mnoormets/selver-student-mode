@@ -12,9 +12,14 @@ import {
   Wallet,
   GraduationCap,
   Check,
-  ExternalLink,
   Minus,
   Plus,
+  ChevronLeft,
+  Home,
+  ListChecks,
+  ScanLine,
+  Percent,
+  Menu,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,38 +34,15 @@ import {
   type Prefs,
 } from "@/lib/planner";
 
-const SELVER_URL = "https://www.selver.ee";
+const PARTNERKAART_URL = "https://www.partnerkaart.ee/et/app/";
 
-function SelverLogoLink({
-  className,
-  priority = false,
-}: {
-  className?: string;
-  priority?: boolean;
-}) {
-  return (
-    <a
-      href={SELVER_URL}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={cn(
-        "group inline-flex shrink-0 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-selver-red",
-        className,
-      )}
-      aria-label="Ava Selveri veebileht"
-      title="selver.ee"
-    >
-      <Image
-        src="/selver-logo.png"
-        alt="Selver — Hea mõte"
-        width={190}
-        height={220}
-        priority={priority}
-        className="h-auto w-full object-contain transition group-hover:scale-[1.02]"
-      />
-    </a>
-  );
-}
+const BOTTOM_TABS = [
+  { id: "home", label: "Avaleht", icon: Home },
+  { id: "list", label: "Nimekiri", icon: ListChecks },
+  { id: "scan", label: "Skaneeri", icon: ScanLine },
+  { id: "offers", label: "Soodustused", icon: Percent },
+  { id: "more", label: "Veel", icon: Menu },
+] as const;
 
 type Stage = "hero" | "setup" | "plan";
 
@@ -146,124 +128,142 @@ export function StudentModeApp() {
   }
 
   return (
-    <div className="relative flex flex-1 flex-col">
-      <header className="sticky top-0 z-40 border-b border-border/70 bg-white/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6">
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <SelverLogoLink className="w-[52px] sm:w-[60px]" priority />
-              {modeOn && (
-                <span className="pointer-events-none absolute -inset-1 rounded-xl border-2 border-selver-yellow animate-pulse-ring" />
-              )}
-            </div>
-            <div>
-              <p className="font-display text-xl font-extrabold uppercase leading-none tracking-wide text-selver-red sm:text-2xl">
-                Selver
+    <div className="relative flex flex-1 flex-col items-center bg-[#0b1220] px-3 py-4 sm:px-6 sm:py-8">
+      <div className="mb-3 flex w-full max-w-[430px] items-center justify-between px-1 text-[11px] text-white/55">
+        <span>Partnerkaart äpp</span>
+        <a
+          href={PARTNERKAART_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="underline-offset-2 hover:text-white hover:underline"
+        >
+          partnerkaart.ee
+        </a>
+      </div>
+
+      <div className="relative flex w-full max-w-[430px] flex-1 flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#f4f6fb] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.65)]">
+        <div className="flex items-center justify-between bg-selver-navy px-5 pb-1 pt-3 text-[11px] font-medium text-white/90">
+          <span>9:41</span>
+          <span className="h-1.5 w-20 rounded-full bg-white/25" />
+          <span>5G · 88%</span>
+        </div>
+
+        <header className="sticky top-0 z-40 border-b border-border/60 bg-white/95 backdrop-blur-md">
+          <div className="flex items-center gap-2 px-3 py-2.5">
+            <button
+              type="button"
+              onClick={() => {
+                if (stage === "plan") setStage("setup");
+                else if (stage === "setup") setStage("hero");
+              }}
+              className="inline-flex size-9 items-center justify-center rounded-full text-selver-navy hover:bg-mist"
+              aria-label="Tagasi Partnerkaardi avalehele"
+            >
+              <ChevronLeft className="size-5" />
+            </button>
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-selver-navy/55">
+                Partnerkaart · Selver
               </p>
-              <p className="mt-0.5 text-xs font-medium tracking-wide text-selver-navy/70">
-                {modeOn ? "Tudengirežiim sees" : "Tudengirežiim"}
+              <p className="truncate font-display text-lg font-bold leading-tight text-selver-navy">
+                Tudengirežiim
               </p>
             </div>
+            <Image
+              src="/selver-logo.png"
+              alt="Selver"
+              width={36}
+              height={42}
+              className="h-9 w-auto object-contain"
+              priority
+            />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 border-t border-border/40 bg-mist/70 px-4 py-1.5">
+            <Badge className="bg-selver-yellow text-selver-navy hover:bg-selver-yellow">
+              Äpi moodul
+            </Badge>
             {modeOn && (
-              <Badge className="bg-selver-yellow text-selver-navy hover:bg-selver-yellow">
-                <GraduationCap className="size-3.5" />
-                ISIC demo
+              <Badge variant="secondary" className="gap-1">
+                <GraduationCap className="size-3" />
+                ISIC · Partnerkaart
               </Badge>
             )}
-            <a
-              href={SELVER_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden items-center gap-1 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-selver-navy transition hover:border-selver-red hover:text-selver-red sm:inline-flex"
-            >
-              selver.ee
-              <ExternalLink className="size-3" />
-            </a>
           </div>
-        </div>
-      </header>
+        </header>
 
-      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 pb-16 pt-6 sm:px-6">
+        <main className="flex flex-1 flex-col overflow-y-auto px-4 pb-24 pt-4">
           {stage === "hero" && (
-            <section className="relative grid min-h-[78vh] items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
-              <div className="relative z-10 space-y-7">
-                <SelverLogoLink className="w-[120px] sm:w-[150px]" priority />
-                <div className="space-y-2">
-                  <p className="font-display text-5xl font-extrabold uppercase tracking-tight text-selver-red sm:text-7xl">
-                    Selver
-                  </p>
-                  <p className="text-sm font-semibold uppercase tracking-[0.28em] text-selver-navy">
-                    Hea mõte
-                  </p>
+            <section className="space-y-5 animate-enter">
+              <div className="overflow-hidden rounded-[1.5rem] bg-selver-navy p-5 text-white">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-selver-yellow">
+                      Uus Partnerkaardi moodul
+                    </p>
+                    <h1 className="mt-2 font-display text-3xl font-bold leading-tight">
+                      Tudengirežiim
+                    </h1>
+                  </div>
+                  <Image
+                    src="/selver-logo.png"
+                    alt=""
+                    width={56}
+                    height={64}
+                    className="h-14 w-auto object-contain opacity-95"
+                  />
                 </div>
-                <h1 className="max-w-xl font-display text-3xl font-bold leading-[1.05] tracking-tight text-selver-navy sm:text-5xl">
-                  Tudengirežiim
-                </h1>
-                <p className="max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
-                  Ütle eelarve — saad nädala menüü, kampaaniakorvi ja
-                  jääkide-abilise. Vähem raiskamist, rohkem täis kõhtu.
+                <p className="mt-3 text-sm leading-relaxed text-white/80">
+                  Eraldiseisev osa Partnerkaardi äpist: AI paneb nädala menüü ja
+                  Selveri korvi kokku sinu eelarve järgi.
                 </p>
-                <div className="flex flex-wrap items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={activate}
-                    className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-selver-red px-7 text-base font-medium text-white transition hover:bg-[#c50510]"
-                  >
-                    Lülita sisse
-                    <ArrowRight className="size-4" />
-                  </button>
-                  <p className="text-sm text-muted-foreground">
-                    Häkatoni prototüüp · ilma kontota
-                  </p>
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <div className="rounded-2xl bg-white/10 px-3 py-2.5">
+                    <p className="text-[10px] uppercase tracking-wider text-selver-yellow">
+                      Nädal
+                    </p>
+                    <p className="font-display text-xl font-bold">35 €</p>
+                  </div>
+                  <div className="rounded-2xl bg-selver-yellow px-3 py-2.5 text-selver-navy">
+                    <p className="text-[10px] uppercase tracking-wider opacity-70">
+                      Boonus
+                    </p>
+                    <p className="font-display text-xl font-bold">+ punktid</p>
+                  </div>
                 </div>
               </div>
 
-              <div className="relative produce-grid min-h-[340px] overflow-hidden rounded-[2rem] bg-selver-navy text-white shadow-[0_30px_80px_-40px_rgba(0,32,91,0.85)] sm:min-h-[420px]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,#ffd10055,transparent_42%),radial-gradient(circle_at_85%_75%,#e3061344,transparent_40%)]" />
-                <motion.div
-                  className="absolute left-[8%] top-[18%] rounded-3xl bg-white/10 px-5 py-4 backdrop-blur-sm"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              <div className="space-y-3 rounded-[1.5rem] border border-border/70 bg-white p-4 shadow-sm">
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  Ütle eelarve — saad menüü, kampaaniakorvi ja jääkide-abilise.
+                  Ostunimekiri läheb edasi Partnerkaardi äppi.
+                </p>
+                <button
+                  type="button"
+                  onClick={activate}
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-selver-red px-7 text-base font-medium text-white transition hover:bg-[#c50510]"
                 >
-                  <p className="text-xs uppercase tracking-[0.2em] text-selver-yellow">
-                    Nädal 1
-                  </p>
-                  <p className="mt-1 font-display text-2xl font-bold">35 € eelarve</p>
-                </motion.div>
-                <motion.div
-                  className="absolute bottom-[16%] right-[10%] max-w-[220px] rounded-3xl bg-selver-yellow px-5 py-4 text-selver-navy shadow-lg"
-                  animate={{ y: [0, 12, 0] }}
-                  transition={{
-                    duration: 6,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0.4,
-                  }}
-                >
-                  <p className="font-display text-lg font-bold">14 söögikorda</p>
-                  <p className="mt-1 text-sm opacity-80">
-                    AI paneb sama sibula mitmesse retsepti
-                  </p>
-                </motion.div>
-                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-selver-navy to-transparent" />
+                  Ava tudengirežiim
+                  <ArrowRight className="size-4" />
+                </button>
+                <p className="text-center text-xs text-muted-foreground">
+                  Häkatoni prototüüp · Partnerkaart × Selver
+                </p>
               </div>
             </section>
           )}
 
           {stage === "setup" && (
-            <section className="mx-auto w-full max-w-2xl space-y-8 py-6 animate-enter">
-              <div className="space-y-2">
-                <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+            <section className="space-y-5 animate-enter">
+              <div className="space-y-1">
+                <h2 className="font-display text-2xl font-bold tracking-tight text-selver-navy">
                   Seadista oma nädal
                 </h2>
-                <p className="text-muted-foreground">
-                  Kolm liugurit, üks stiil — menüü valmib sekundiga.
+                <p className="text-sm text-muted-foreground">
+                  Eelarve, päevad ja stiil — menüü valmib sekundiga.
                 </p>
               </div>
 
-              <div className="space-y-6 rounded-[1.75rem] border border-border/70 bg-white/70 p-5 shadow-sm backdrop-blur sm:p-7">
+              <div className="space-y-6 rounded-[1.5rem] border border-border/70 bg-white p-4 shadow-sm sm:p-5">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-3">
                     <label className="flex items-center gap-2 text-sm font-medium">
@@ -416,7 +416,7 @@ export function StudentModeApp() {
                 type="button"
                 onClick={generate}
                 disabled={pending}
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-selver-red px-8 text-base font-medium text-white transition hover:bg-[#c50510] disabled:opacity-50 sm:w-auto"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-selver-red px-8 text-base font-medium text-white transition hover:bg-[#c50510] disabled:opacity-50"
               >
                 <Sparkles className="size-4" />
                 {pending ? "Planeerin…" : "Loo menüü ja korv"}
@@ -425,13 +425,13 @@ export function StudentModeApp() {
           )}
 
           {stage === "plan" && plan && (
-            <section className="space-y-6 py-4 animate-enter">
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <section className="space-y-5 animate-enter">
+              <div className="space-y-3">
                 <div>
-                  <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+                  <h2 className="font-display text-2xl font-bold tracking-tight text-selver-navy">
                     Sinu nädal on valmis
                   </h2>
-                  <p className="mt-1 max-w-xl text-muted-foreground">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     {plan.summary}
                   </p>
                 </div>
@@ -452,7 +452,7 @@ export function StudentModeApp() {
                 </div>
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-3">
+              <div className="grid grid-cols-1 gap-2">
                 <Stat
                   label="Korvi summa"
                   value={euros(plan.total)}
@@ -506,7 +506,32 @@ export function StudentModeApp() {
               )}
             </section>
           )}
-      </main>
+        </main>
+
+        <nav className="absolute inset-x-0 bottom-0 border-t border-border/70 bg-white/95 px-1 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-1 backdrop-blur-md">
+          <div className="grid grid-cols-5">
+            {BOTTOM_TABS.map((item) => {
+              const Icon = item.icon;
+              const active = item.id === "more" || (modeOn && item.id === "list");
+              return (
+                <div
+                  key={item.id}
+                  className={cn(
+                    "flex flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[10px] font-medium",
+                    active ? "text-selver-red" : "text-selver-navy/45",
+                  )}
+                >
+                  <Icon className="size-5" strokeWidth={active ? 2.4 : 1.8} />
+                  {item.label}
+                </div>
+              );
+            })}
+          </div>
+          <p className="pb-1 text-center text-[10px] text-muted-foreground">
+            Tudengirežiim · Partnerkaardi äpi moodul
+          </p>
+        </nav>
+      </div>
     </div>
   );
 }
@@ -558,7 +583,7 @@ function MenuView({ plan }: { plan: PlanResult }) {
             </span>
             <p className="font-display text-lg font-bold">Päev {day}</p>
           </div>
-          <div className="grid gap-3 md:grid-cols-3">
+          <div className="grid gap-2">
             {meals.map((meal) => (
               <div
                 key={`${meal.day}-${meal.slot}`}

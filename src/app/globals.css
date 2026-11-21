@@ -108,14 +108,9 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
     font-family: var(--font-sans), system-ui, sans-serif;
-    background-image:
-      radial-gradient(ellipse 90% 55% at 8% -8%, #ffd10055, transparent 55%),
-      radial-gradient(ellipse 70% 50% at 100% 0%, #e3061328, transparent 52%),
-      radial-gradient(ellipse 45% 40% at 70% 100%, #00205b18, transparent 45%),
-      linear-gradient(180deg, #fafbff 0%, #f0f3fa 45%, #e8eef8 100%);
-    background-attachment: fixed;
+    background: #0b1220;
     min-height: 100%;
   }
   h1,
