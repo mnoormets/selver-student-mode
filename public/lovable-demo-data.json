@@ -79,7 +79,9 @@
       "packQuantity": 600,
       "unit": "g",
       "priceCents": 239,
-      "sourceUrl": "https://soodsadhinnad.ee/en/p/qtzwkv/ameerika-koogiviljasegu-first-price-600-g?kategooria=kulm-koogiviljad"
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/qtzwkv/ameerika-koogiviljasegu-first-price-600-g?kategooria=kulm-koogiviljad",
+      "eSelverUrl": "https://www.selver.ee/ameerika-koogiviljasegu-first-price-600-g",
+      "checkedAt": "2026-11-21"
     },
     {
       "id": "chicken",
@@ -317,10 +319,30 @@
         {
           "productId": "minced-meat",
           "quantity": 300
+        }
+      ]
+    },
+    {
+      "id": "chicken-stew",
+      "title": "Chicken and vegetable stew",
+      "totalMinutes": 22,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 150
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 140
         },
         {
           "productId": "mixed-veg",
-          "quantity": 100
+          "quantity": 150
         }
       ]
     }

@@ -212,9 +212,9 @@ function explainIngredientWhy(
     return {
       recipeId: id,
       text: [
-        "Hakkliha pannkookides on köögiviljasegu täidise jaoks — sibul/porgand/hernes annab mahlasust ja teeb portsjoni odavamaks.",
-        "Kui sul on juba köögivilju kodus, ütle mitu grammi — siis võtan ostunimekirjast maha.",
-        "Kui tahad ainult hakkliha + muna (ilma seguta), ütle „tee ilma köögiviljata“.",
+        "Hakklihapannkookide jaoks köögiviljasegu ei ole vaja.",
+        "Poest piisab tavaliselt hakklihast (+ munad, kui taigen/munad kodus puuduvad).",
+        "Sibul/maitseained eeldame kodustest varudest.",
       ].join("\n"),
     };
   }

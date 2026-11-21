@@ -33,9 +33,14 @@ Iga kirje:
 
 Ära looda, et brauserist “kogu selver.ee” skreipimine oleks stabiilne või ToS-iga OK — demos piisab kontrollitud pakkidest koos `sourceUrl` + `checkedAt`.
 
-## Käsk
+## Käsud
 
 ```bash
-# valideeri + kirjuta imports/extra-from-dump.json
+# tooted → imports/extra-from-dump.json
 npm run import:products -- ./my-selver-dump.json
+
+# retseptid → imports/extra-recipes.json (productId peab katalogis olema)
+npm run import:recipes -- ./my-recipes.json
 ```
+
+Retseptid peavad olema **asjakohased demole**: nt hakklihapannkoogid = hakkliha + munad (taigen kodust) — mitte külmutatud köögiviljasegu, kui seda roog ei vaja.

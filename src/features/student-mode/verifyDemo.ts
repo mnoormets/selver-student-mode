@@ -131,9 +131,8 @@ export function verifyDemoMath(): string[] {
     { demo: true, forceRecipeId: "hakkliha-pannkoogid" },
   );
   assert(
-    why.reply.toLowerCase().includes("täidise") ||
-      why.reply.toLowerCase().includes("mahlasus"),
-    "why-question should explain veg in minced-meat pancakes",
+    why.reply.toLowerCase().includes("ei ole vaja"),
+    "why-question should say veg mix is not needed for minced-meat pancakes",
   );
   assert(
     !why.reply.includes("Palju köögiviljasegu sul on"),
@@ -187,8 +186,26 @@ export function verifyDemoMath(): string[] {
     !hakkliha.includes("1× Munad"),
     "should not buy an egg pack when eggs are at home",
   );
+  assert(
+    !hakkliha.toLowerCase().includes("köögiviljas"),
+    "hakkliha pancakes should not require mixed-veg",
+  );
   assert(!hakkliha.includes("Kana-tomati"), "must not fall back to week-menu blurb");
+
+  const hakklihaEmpty = answerCookChatTurn(
+    "Mul pole kodus midagi, tahaksin teha hakklihapannkooke, mida peaksin poest ostma",
+    {},
+    { demo: true },
+  );
+  assert(hakklihaEmpty.recipeId === "hakkliha-pannkoogid", "empty pantry → pancakes");
+  assert(hakklihaEmpty.reply.includes("Hakkliha"), "should name pancakes");
+  assert(hakklihaEmpty.reply.includes("Hakkliha") || hakklihaEmpty.reply.includes("hakkliha"), "meat on list");
+  assert(
+    !hakklihaEmpty.reply.includes("Köögiviljasegu"),
+    "shopping list must not include mixed-veg for pancakes",
+  );
   logs.push(hakkliha);
+  logs.push("hakkliha empty-pantry list without veg ok");
 
   return logs;
 }

@@ -9,7 +9,8 @@
     "lint": "eslint",
     "verify:demo": "npx --yes tsx --tsconfig tsconfig.json scripts/verify-demo.ts",
     "export:lovable": "npx --yes tsx --tsconfig tsconfig.json scripts/export-lovable-demo.ts",
-    "import:products": "npx --yes tsx --tsconfig tsconfig.json scripts/import-selver-products.ts"
+    "import:products": "npx --yes tsx --tsconfig tsconfig.json scripts/import-selver-products.ts",
+    "import:recipes": "npx --yes tsx --tsconfig tsconfig.json scripts/import-recipes.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
