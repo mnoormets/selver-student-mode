@@ -415,7 +415,7 @@ export function StudentModeApp() {
                   <div className="flex items-center gap-2.5">
                     <User className="size-[22px] text-white" strokeWidth={1.6} />
                     <p className="text-[17px] font-bold tracking-tight">
-                      Aaron Siimon
+                      Mari Mets
                     </p>
                   </div>
                   <button
@@ -440,7 +440,7 @@ export function StudentModeApp() {
                         Boonuspunktid
                       </p>
                       <p className="mt-0.5 text-[28px] font-bold leading-none tracking-tight text-white">
-                        0,47 €
+                        12,40 €
                       </p>
                     </div>
                   </div>
@@ -484,8 +484,8 @@ export function StudentModeApp() {
                     </div>
                   </div>
                   <div className="relative flex items-end justify-between font-mono text-[12px] font-medium tracking-wider text-black">
-                    <span>9233 6600 4795 1885</span>
-                    <span>10/2028</span>
+                    <span>4242 0000 1111 2222</span>
+                    <span>12/2030</span>
                   </div>
                 </div>
               </div>
