@@ -61,6 +61,8 @@ function toBasketLines(
     saved: 0,
     onPromo: false,
     sourceUrl: line.sourceUrl,
+    selverSku: line.selverSku,
+    eSelverUrl: line.eSelverUrl,
   }));
 }
 

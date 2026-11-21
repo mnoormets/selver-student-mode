@@ -8,6 +8,7 @@ import {
 } from "../../lib/demo-plan";
 import { computeBasketCents, eurosFromCents } from "./computeBasket";
 import { answerSpaghettiEggsQuickMeal } from "./quickMeal";
+import { validateDemoCatalog } from "./validateCatalog";
 
 function assert(cond: unknown, message: string): asserts cond {
   if (!cond) throw new Error(message);
@@ -16,6 +17,9 @@ function assert(cond: unknown, message: string): asserts cond {
 /** Runnable checks for the locked hackathon demo maths. */
 export function verifyDemoMath(): string[] {
   const logs: string[] = [];
+  validateDemoCatalog();
+  logs.push("catalog validation ok");
+
   const plan = buildHackathonDemoPlan();
   const eggsNeeded = countEggsNeeded(plan.meals);
   assert(eggsNeeded === 14, `expected 14 eggs needed, got ${eggsNeeded}`);
@@ -35,17 +39,24 @@ export function verifyDemoMath(): string[] {
   }
 
   const total0 = Math.round(plan.total * 100);
+  // Milk pack verified on e-Selver at 139¢ (+10¢ vs older citation).
+  const expected0 = LEGACY_DEMO_TOTAL_CENTS + 10;
+  assert(total0 === expected0, `expected ${expected0}¢, got ${total0}¢`);
   assert(
-    total0 === LEGACY_DEMO_TOTAL_CENTS,
-    `expected ${LEGACY_DEMO_TOTAL_CENTS}¢, got ${total0}¢`,
+    plan.summary.includes("Arvutatud korv") ||
+      plan.summary.includes("Allikaviidetega"),
+    "summary should explain computed vs legacy total",
   );
-  logs.push(`basket @0 eggs: ${eurosFromCents(total0)} €`);
+  logs.push(
+    `basket @0 eggs: ${eurosFromCents(total0)} € (legacy pitch ${eurosFromCents(LEGACY_DEMO_TOTAL_CENTS)} €)`,
+  );
 
   const pantry10 = applyPantryStock(plan, { eggs: 10 });
   const total10 = Math.round(pantry10.total * 100);
+  const expected10 = LEGACY_DEMO_PANTRY10_TOTAL_CENTS + 10;
   assert(
-    total10 === LEGACY_DEMO_PANTRY10_TOTAL_CENTS,
-    `expected ${LEGACY_DEMO_PANTRY10_TOTAL_CENTS}¢ with 10 eggs, got ${total10}¢`,
+    total10 === expected10,
+    `expected ${expected10}¢ with 10 eggs, got ${total10}¢`,
   );
   assert(
     (pantry10.basket.find((l) => l.productId === "eggs")?.qty ?? 0) === 1,

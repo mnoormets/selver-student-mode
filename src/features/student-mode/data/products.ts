@@ -1,7 +1,12 @@
-import type { SelverProduct } from '../types';
+import type { SelverProduct } from "../types";
 
-// Date the controlled snapshot was compiled. The linked price histories have their own observation dates.
-export const priceSnapshotDate = '2026-11-21';
+/**
+ * Sole product source for the Student Mode demo.
+ * - `sourceUrl` = original citation (kept even after e-Selver checks).
+ * - `priceCents` is updated only when `checkedAt` + e-Selver page confirm the pack price.
+ * - Products without a matching e-Selver pack keep the cited price and omit checkedAt.
+ */
+export const priceSnapshotDate = "2026-11-21";
 
 export const selverProducts: readonly SelverProduct[] = [
   {
@@ -9,16 +14,24 @@ export const selverProducts: readonly SelverProduct[] = [
     name: "Täistera kiirkaerahelbed, TARTU MILL",
     packQuantity: 1000,
     unit: "g",
+    // Exact 1 kg pack SKU not confirmed on e-Selver HTML; keep cited pack price.
     priceCents: 239,
-    sourceUrl: "https://soodsadhinnad.ee/en/p/hsvd7t/taistera-kiirkaerahelbed-tartu-mill-1-kg?kategooria=hommikuhelbed",
+    sourceUrl:
+      "https://soodsadhinnad.ee/en/p/hsvd7t/taistera-kiirkaerahelbed-tartu-mill-1-kg?kategooria=hommikuhelbed",
+    eSelverUrl: "https://www.selver.ee/taistera-kiirkaerahelbed-tartu-mill-1-kg",
   },
   {
     id: "milk",
     name: "Piim 2,5%, ALMA",
     packQuantity: 1500,
     unit: "ml",
-    priceCents: 129,
-    sourceUrl: "https://soodsadhinnad.ee/en/p/x5ww6f/piim-2-5-alma-1-5-l?kategooria=piim-koor",
+    // e-Selver verified 1,39 € (was 1,29 € on citation snapshot).
+    priceCents: 139,
+    sourceUrl:
+      "https://soodsadhinnad.ee/en/p/x5ww6f/piim-2-5-alma-1-5-l?kategooria=piim-koor",
+    selverSku: "T000008889",
+    eSelverUrl: "https://www.selver.ee/piim-2-5-alma-1-5-l",
+    checkedAt: "2026-11-21",
   },
   {
     id: "berries",
@@ -26,7 +39,11 @@ export const selverProducts: readonly SelverProduct[] = [
     packQuantity: 300,
     unit: "g",
     priceCents: 329,
-    sourceUrl: "https://soodsadhinnad.ee/en/p/rxd34k/marjasegu-vaarikatega-hortex-300-g?kategooria=kulm-koogiviljad",
+    sourceUrl:
+      "https://soodsadhinnad.ee/en/p/rxd34k/marjasegu-vaarikatega-hortex-300-g?kategooria=kulm-koogiviljad",
+    selverSku: "T000056734",
+    eSelverUrl: "https://www.selver.ee/marjasegu-vaarikatega-hortex-300-g",
+    checkedAt: "2026-11-21",
   },
   {
     id: "eggs",
@@ -34,15 +51,21 @@ export const selverProducts: readonly SelverProduct[] = [
     packQuantity: 10,
     unit: "pcs",
     priceCents: 189,
-    sourceUrl: "https://soodsadhinnad.ee/en/p/tqcftg/munad-m10-valged-selver-10-tk?kategooria=munad",
+    sourceUrl:
+      "https://soodsadhinnad.ee/en/p/tqcftg/munad-m10-valged-selver-10-tk?kategooria=munad",
+    selverSku: "T000032551",
+    eSelverUrl: "https://www.selver.ee/munad-m10-valged-selver-10-tk",
+    checkedAt: "2026-11-21",
   },
   {
     id: "spaghetti",
     name: "Spagetid, FIRST PRICE",
     packQuantity: 1000,
     unit: "g",
+    // 1 kg FIRST PRICE spaghetti not listed on e-Selver; keep cited price.
     priceCents: 229,
-    sourceUrl: "https://soodsadhinnad.ee/p/v3b22p/spagetid-first-price-1-kg?kategooria=pasta",
+    sourceUrl:
+      "https://soodsadhinnad.ee/p/v3b22p/spagetid-first-price-1-kg?kategooria=pasta",
   },
   {
     id: "chickpeas",
@@ -50,7 +73,8 @@ export const selverProducts: readonly SelverProduct[] = [
     packQuantity: 240,
     unit: "g",
     priceCents: 99,
-    sourceUrl: "https://soodsadhinnad.ee/en/p/r5v9j6/kikerherned-first-price-240-g?kategooria=aedviljakonservid",
+    sourceUrl:
+      "https://soodsadhinnad.ee/en/p/r5v9j6/kikerherned-first-price-240-g?kategooria=aedviljakonservid",
   },
   {
     id: "tomatoes",
@@ -58,7 +82,8 @@ export const selverProducts: readonly SelverProduct[] = [
     packQuantity: 400,
     unit: "g",
     priceCents: 189,
-    sourceUrl: "https://soodsadhinnad.ee/en/p/3nv229/tukeldatud-mahe-tomatid-first-price-400-g?kategooria=aedviljakonservid",
+    sourceUrl:
+      "https://soodsadhinnad.ee/en/p/3nv229/tukeldatud-mahe-tomatid-first-price-400-g?kategooria=aedviljakonservid",
   },
   {
     id: "mixed-veg",
@@ -66,14 +91,25 @@ export const selverProducts: readonly SelverProduct[] = [
     packQuantity: 600,
     unit: "g",
     priceCents: 239,
-    sourceUrl: "https://soodsadhinnad.ee/en/p/qtzwkv/ameerika-koogiviljasegu-first-price-600-g?kategooria=kulm-koogiviljad",
+    sourceUrl:
+      "https://soodsadhinnad.ee/en/p/qtzwkv/ameerika-koogiviljasegu-first-price-600-g?kategooria=kulm-koogiviljad",
   },
   {
     id: "chicken",
     name: "Eestimaine broileririnnafilee sisetükk, TALLEGG",
     packQuantity: 400,
     unit: "g",
+    // Direct e-Selver product page + SKU not confirmed yet; keep cited pack price.
     priceCents: 539,
-    sourceUrl: "https://soodsadhinnad.ee/en/p/t64rn3/eestimaine-broileririnnafilee-sisetukk-tallegg-400-g?kategooria=linnuliha",
+    sourceUrl:
+      "https://soodsadhinnad.ee/en/p/t64rn3/eestimaine-broileririnnafilee-sisetukk-tallegg-400-g?kategooria=linnuliha",
   },
 ];
+
+export function productById(id: string): SelverProduct {
+  const product = selverProducts.find((p) => p.id === id);
+  if (!product) {
+    throw new Error(`Unknown demo product id: ${id}`);
+  }
+  return product;
+}

@@ -1,0 +1,351 @@
+{
+  "exportedAt": "2026-11-21T00:00:00.000Z",
+  "priceSnapshotDate": "2026-11-21",
+  "profile": {
+    "budgetCents": 3500,
+    "diet": "standard",
+    "cookUnderMinutes": 20
+  },
+  "products": [
+    {
+      "id": "oats",
+      "name": "Täistera kiirkaerahelbed, TARTU MILL",
+      "packQuantity": 1000,
+      "unit": "g",
+      "priceCents": 239,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/hsvd7t/taistera-kiirkaerahelbed-tartu-mill-1-kg?kategooria=hommikuhelbed",
+      "eSelverUrl": "https://www.selver.ee/taistera-kiirkaerahelbed-tartu-mill-1-kg"
+    },
+    {
+      "id": "milk",
+      "name": "Piim 2,5%, ALMA",
+      "packQuantity": 1500,
+      "unit": "ml",
+      "priceCents": 139,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/x5ww6f/piim-2-5-alma-1-5-l?kategooria=piim-koor",
+      "selverSku": "T000008889",
+      "eSelverUrl": "https://www.selver.ee/piim-2-5-alma-1-5-l",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "berries",
+      "name": "Marjasegu vaarikatega, HORTEX",
+      "packQuantity": 300,
+      "unit": "g",
+      "priceCents": 329,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/rxd34k/marjasegu-vaarikatega-hortex-300-g?kategooria=kulm-koogiviljad",
+      "selverSku": "T000056734",
+      "eSelverUrl": "https://www.selver.ee/marjasegu-vaarikatega-hortex-300-g",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "eggs",
+      "name": "Munad M10 valged, SELVER",
+      "packQuantity": 10,
+      "unit": "pcs",
+      "priceCents": 189,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/tqcftg/munad-m10-valged-selver-10-tk?kategooria=munad",
+      "selverSku": "T000032551",
+      "eSelverUrl": "https://www.selver.ee/munad-m10-valged-selver-10-tk",
+      "checkedAt": "2026-11-21"
+    },
+    {
+      "id": "spaghetti",
+      "name": "Spagetid, FIRST PRICE",
+      "packQuantity": 1000,
+      "unit": "g",
+      "priceCents": 229,
+      "sourceUrl": "https://soodsadhinnad.ee/p/v3b22p/spagetid-first-price-1-kg?kategooria=pasta"
+    },
+    {
+      "id": "chickpeas",
+      "name": "Kikerherned, FIRST PRICE",
+      "packQuantity": 240,
+      "unit": "g",
+      "priceCents": 99,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/r5v9j6/kikerherned-first-price-240-g?kategooria=aedviljakonservid"
+    },
+    {
+      "id": "tomatoes",
+      "name": "Tükeldatud mahe tomatid, FIRST PRICE",
+      "packQuantity": 400,
+      "unit": "g",
+      "priceCents": 189,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/3nv229/tukeldatud-mahe-tomatid-first-price-400-g?kategooria=aedviljakonservid"
+    },
+    {
+      "id": "mixed-veg",
+      "name": "Ameerika köögiviljasegu, FIRST PRICE",
+      "packQuantity": 600,
+      "unit": "g",
+      "priceCents": 239,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/qtzwkv/ameerika-koogiviljasegu-first-price-600-g?kategooria=kulm-koogiviljad"
+    },
+    {
+      "id": "chicken",
+      "name": "Eestimaine broileririnnafilee sisetükk, TALLEGG",
+      "packQuantity": 400,
+      "unit": "g",
+      "priceCents": 539,
+      "sourceUrl": "https://soodsadhinnad.ee/en/p/t64rn3/eestimaine-broileririnnafilee-sisetukk-tallegg-400-g?kategooria=linnuliha"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "berry-oats",
+      "title": "Warm berry oats",
+      "totalMinutes": 8,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "oats",
+          "quantity": 70
+        },
+        {
+          "productId": "milk",
+          "quantity": 200
+        },
+        {
+          "productId": "berries",
+          "quantity": 60
+        }
+      ]
+    },
+    {
+      "id": "egg-oats",
+      "title": "Savory egg and vegetable oats",
+      "totalMinutes": 13,
+      "mealSlots": [
+        "breakfast"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "oats",
+          "quantity": 65
+        },
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 80
+        }
+      ]
+    },
+    {
+      "id": "chickpea-pasta",
+      "title": "Tomato and chickpea spaghetti",
+      "totalMinutes": 17,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 90
+        },
+        {
+          "productId": "chickpeas",
+          "quantity": 100
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 100
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 80
+        }
+      ]
+    },
+    {
+      "id": "egg-pasta",
+      "title": "Egg and vegetable spaghetti",
+      "totalMinutes": 16,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "spaghetti",
+          "quantity": 90
+        },
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 130
+        }
+      ]
+    },
+    {
+      "id": "chickpea-stew",
+      "title": "Chickpea and vegetable tomato stew",
+      "totalMinutes": 15,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "chickpeas",
+          "quantity": 120
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 120
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 150
+        }
+      ]
+    },
+    {
+      "id": "chicken-tomato-pasta",
+      "title": "Chicken and tomato spaghetti",
+      "totalMinutes": 19,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 130
+        },
+        {
+          "productId": "spaghetti",
+          "quantity": 90
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 130
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 60
+        }
+      ]
+    },
+    {
+      "id": "chicken-veg-pasta",
+      "title": "Chicken and vegetable spaghetti",
+      "totalMinutes": 19,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": false,
+      "ingredients": [
+        {
+          "productId": "chicken",
+          "quantity": 130
+        },
+        {
+          "productId": "spaghetti",
+          "quantity": 90
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 150
+        }
+      ]
+    },
+    {
+      "id": "tomato-eggs",
+      "title": "Tomato and egg skillet",
+      "totalMinutes": 16,
+      "mealSlots": [
+        "lunch",
+        "dinner"
+      ],
+      "vegetarian": true,
+      "ingredients": [
+        {
+          "productId": "eggs",
+          "quantity": 2
+        },
+        {
+          "productId": "tomatoes",
+          "quantity": 140
+        },
+        {
+          "productId": "mixed-veg",
+          "quantity": 80
+        }
+      ]
+    }
+  ],
+  "demoWeek": [
+    {
+      "day": "Monday",
+      "meals": {
+        "breakfast": "berry-oats",
+        "lunch": "chickpea-pasta",
+        "dinner": "chicken-tomato-pasta"
+      }
+    },
+    {
+      "day": "Tuesday",
+      "meals": {
+        "breakfast": "egg-oats",
+        "lunch": "egg-pasta",
+        "dinner": "tomato-eggs"
+      }
+    },
+    {
+      "day": "Wednesday",
+      "meals": {
+        "breakfast": "berry-oats",
+        "lunch": "chickpea-stew",
+        "dinner": "chicken-veg-pasta"
+      }
+    },
+    {
+      "day": "Thursday",
+      "meals": {
+        "breakfast": "berry-oats",
+        "lunch": "egg-pasta",
+        "dinner": "chickpea-pasta"
+      }
+    },
+    {
+      "day": "Friday",
+      "meals": {
+        "breakfast": "egg-oats",
+        "lunch": "chickpea-pasta",
+        "dinner": "chicken-tomato-pasta"
+      }
+    },
+    {
+      "day": "Saturday",
+      "meals": {
+        "breakfast": "berry-oats",
+        "lunch": "chickpea-stew",
+        "dinner": "tomato-eggs"
+      }
+    },
+    {
+      "day": "Sunday",
+      "meals": {
+        "breakfast": "berry-oats",
+        "lunch": "egg-pasta",
+        "dinner": "chickpea-stew"
+      }
+    }
+  ]
+}

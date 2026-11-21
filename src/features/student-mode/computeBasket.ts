@@ -1,5 +1,6 @@
 import { selverProducts } from "./data/products";
 import type { SelverProduct } from "./types";
+import { validateDemoCatalog } from "./validateCatalog";
 
 /** Needed amount of a product in the product's native unit (g / ml / pcs). */
 export type IngredientNeed = {
@@ -22,6 +23,9 @@ export type BasketLineCents = {
   unitPriceCents: number;
   lineTotalCents: number;
   sourceUrl: string;
+  selverSku?: string;
+  eSelverUrl?: string;
+  checkedAt?: string;
 };
 
 export type BasketResultCents = {
@@ -33,13 +37,14 @@ export type BasketResultCents = {
 };
 
 function productMap(): Map<string, SelverProduct> {
+  validateDemoCatalog();
   return new Map(selverProducts.map((p) => [p.id, p]));
 }
 
 /**
  * Aggregate recipe ingredient quantities, subtract pantry stock, round each
  * missing amount up to whole packs, and sum the basket in euro cents.
- * Every line price comes from the sourced product dataset.
+ * Every line price comes from `src/features/student-mode/data/products.ts`.
  */
 export function computeBasketCents(
   ingredients: readonly IngredientNeed[],
@@ -49,8 +54,15 @@ export function computeBasketCents(
   const neededByProduct: Record<string, number> = {};
 
   for (const ing of ingredients) {
-    if (!products.has(ing.productId)) {
+    const product = products.get(ing.productId);
+    if (!product) {
       throw new Error(`Unknown product id in recipe: ${ing.productId}`);
+    }
+    if (!Number.isFinite(product.packQuantity) || product.packQuantity <= 0) {
+      throw new Error(`Product "${ing.productId}" is missing packQuantity`);
+    }
+    if (!Number.isFinite(product.priceCents) || product.priceCents <= 0) {
+      throw new Error(`Product "${ing.productId}" is missing priceCents`);
     }
     neededByProduct[ing.productId] =
       (neededByProduct[ing.productId] ?? 0) + ing.quantity;
@@ -76,6 +88,9 @@ export function computeBasketCents(
       unitPriceCents: product.priceCents,
       lineTotalCents: packs * product.priceCents,
       sourceUrl: product.sourceUrl,
+      selverSku: product.selverSku,
+      eSelverUrl: product.eSelverUrl,
+      checkedAt: product.checkedAt,
     });
   }
 

@@ -41,6 +41,8 @@ export type BasketLine = {
   privateLabel?: boolean;
   onPromo: boolean;
   sourceUrl?: string;
+  selverSku?: string;
+  eSelverUrl?: string;
 };
 
 export type PlanResult = {
