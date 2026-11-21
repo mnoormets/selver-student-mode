@@ -605,7 +605,7 @@ export function StudentModeApp() {
                     <p className="text-[10px] font-bold uppercase tracking-wider text-white/55">
                       Eelarve
                     </p>
-                    <p className="text-xl font-bold">20–50 €</p>
+                    <p className="text-xl font-bold">20–60 €</p>
                   </div>
                   <div
                     className="rounded-[10px] px-3 py-2.5 text-black"
@@ -621,8 +621,8 @@ export function StudentModeApp() {
 
               <div className="space-y-3 rounded-[14px] border border-neutral-200 bg-white p-4">
                 <p className="text-sm leading-relaxed text-neutral-600">
-                  Vali eelarve (nt 20 / 35 / 50 €), saa näidisplaan ja ostukorv
-                  selle piires. Siis ütle, mis kodus juba on.
+                  Vali nädala eelarve 20–60 € (odav tudengile), saa näidisplaan
+                  ja ostukorv selle piires. Siis ütle, mis kodus juba on.
                 </p>
                 <button
                   type="button"
@@ -659,7 +659,7 @@ export function StudentModeApp() {
                       <button
                         type="button"
                         aria-label="Vähenda eelarvet"
-                        onClick={() => setBudget((b) => Math.max(15, b - 1))}
+                        onClick={() => setBudget((b) => Math.max(20, b - 1))}
                         className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-black active:scale-95"
                       >
                         <Minus className="size-4" />
@@ -679,7 +679,7 @@ export function StudentModeApp() {
                   </div>
                   <Slider
                     value={[budget]}
-                    min={15}
+                    min={20}
                     max={60}
                     step={1}
                     onValueChange={(v) =>
@@ -687,7 +687,7 @@ export function StudentModeApp() {
                     }
                   />
                   <div className="flex flex-wrap gap-2">
-                    {[20, 35, 50].map((preset) => (
+                    {[20, 35, 50, 60].map((preset) => (
                       <button
                         key={preset}
                         type="button"
