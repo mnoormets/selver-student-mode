@@ -13,10 +13,21 @@ export type Prefs = {
   delivery: string;
 };
 
+/** UI meal recipe — catalog Recipe or sourced demo recipe adapter. */
+export type MealRecipe = {
+  id: string;
+  name: string;
+  minutes: number;
+  servings?: number;
+  tags?: string[];
+  ingredients: { productId: string; qty: number }[];
+  tip: string;
+};
+
 export type PlannedMeal = {
   day: number;
   slot: "hommik" | "lõuna" | "õhtu";
-  recipe: Recipe;
+  recipe: MealRecipe;
   cost: number;
 };
 
@@ -29,6 +40,7 @@ export type BasketLine = {
   saved: number;
   privateLabel?: boolean;
   onPromo: boolean;
+  sourceUrl?: string;
 };
 
 export type PlanResult = {

@@ -9,7 +9,9 @@ Häkatoni prototüüp: **Tudengirežiim** kui eraldiseisev moodul Partnerkaardi 
 3. Vajuta **Mul on kodus 10 muna** → munad 2→1 karp, korv **32,35 €**
 4. „Jätka e-Selveris“ (tuleviku CTA)
 
-Demo töötab ilma API-võtmeta (fikseeritud häkatoni näidisplaan).
+Demo töötab ilma API-võtmeta. Korv arvutatakse sentides allikaviidetega andmestikust (`src/features/student-mode/data/`), retseptide koostisosad on seotud toote ID-dega.
+
+Kontroll: `npm run verify:demo` — 14 muna → 0/10/14 kodus annavad 2/1/0 karpi; spageti+muna proovijuhtum.
 
 ## Käivitamine
 

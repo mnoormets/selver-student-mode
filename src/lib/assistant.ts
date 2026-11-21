@@ -1,3 +1,7 @@
+import {
+  answerSpaghettiEggsQuickMeal,
+  SPAGHETTI_EGGS_PROMPT,
+} from "@/features/student-mode/quickMeal";
 import { PRODUCTS, RECIPES, unitPrice } from "./catalog";
 import type { PlanResult } from "./planner";
 
@@ -7,8 +11,18 @@ export type ChatMessage = {
   text: string;
 };
 
+export { SPAGHETTI_EGGS_PROMPT };
+
 function money(n: number): string {
   return `${n.toFixed(2)} €`;
+}
+
+function isSpaghettiEggsPrompt(q: string): boolean {
+  const hasPasta =
+    q.includes("spagett") || q.includes("pasta") || q.includes("spaget");
+  const hasEggs = q.includes("muna");
+  const hasGrams = /\d+\s*g/.test(q) || q.includes("100");
+  return hasPasta && hasEggs && (hasGrams || q.includes("kaks") || q.includes("2"));
 }
 
 export function replyToStudent(
@@ -21,9 +35,18 @@ export function replyToStudent(
     return "Küsi nt „mul on 5 eurot“ või „mis teha kana jääkidest?“";
   }
 
+  if (isSpaghettiEggsPrompt(q)) {
+    return answerSpaghettiEggsQuickMeal({
+      spaghettiGrams: 100,
+      eggs: 2,
+    }).summaryEt;
+  }
+
   if (
     (q.includes("kodus") || q.includes("mul on")) &&
-    q.includes("muna")
+    q.includes("muna") &&
+    !q.includes("spagett") &&
+    !q.includes("spaget")
   ) {
     return "Vajuta „Mul on kodus 10 muna“ või kirjuta täpselt nii — siis arvutan korvi uuesti (34,24 € → 32,35 €).";
   }

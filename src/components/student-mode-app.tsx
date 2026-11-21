@@ -141,7 +141,9 @@ export function StudentModeApp() {
     () => ({ budget, days, style, delivery }),
     [budget, days, style, delivery],
   );
-  const eggLine = plan?.basket.find((l) => l.productId === "munad");
+  const eggLine = plan?.basket.find(
+    (l) => l.productId === "eggs" || l.productId === "munad",
+  );
   const eggsNeeded = plan ? countEggsNeeded(plan.meals) : 0;
 
   function openStudentMode() {
@@ -218,8 +220,12 @@ export function StudentModeApp() {
     };
 
     const lower = text.toLowerCase();
+    const isQuickSpaghetti =
+      (lower.includes("spagett") || lower.includes("spaget") || lower.includes("pasta")) &&
+      lower.includes("muna");
     const eggMatch = lower.match(/(\d+)\s*muna/);
     const wantsPantry =
+      !isQuickSpaghetti &&
       (lower.includes("kodus") || lower.includes("mul on")) &&
       lower.includes("muna");
 
@@ -1112,7 +1118,7 @@ function BasketView({
             className={cn(
               "flex items-start justify-between gap-3 px-4 py-3 sm:px-5",
               highlightEggs &&
-                line.productId === "munad" &&
+                (line.productId === "eggs" || line.productId === "munad") &&
                 "bg-[#fff0e3]",
             )}
           >
@@ -1151,7 +1157,8 @@ function BasketView({
       <div className="border-t border-neutral-200 bg-neutral-50 px-4 py-4 sm:px-5">
         <div className="flex items-center gap-2 text-sm text-neutral-600">
           <Check className="size-4" style={{ color: PK_ORANGE }} />
-          Sama sibul ja porgand jagunevad mitme retsepti peale — vähem raiskamist.
+          Hinnad allikaviidetega andmestikust; kogused ühendatakse retsepti
+          toote ID-dega ja ümardatakse täispakkideks.
         </div>
       </div>
     </div>
@@ -1173,8 +1180,8 @@ function ChatView({
 }) {
   const chips = [
     "Mul on kodus 10 muna",
+    "Mul on 100 g spagette ja kaks muna. Mida saan kiiresti teha?",
     "Kiire enne loengut",
-    "Taimne õhtusöök",
     "Foto (tulekul)",
   ];
 
