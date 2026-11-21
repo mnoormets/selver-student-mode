@@ -6,7 +6,7 @@
 | --- | --- |
 | The starter renders from one entry point. | Split product logic from rendering as soon as the first demo flow has meaningful logic. |
 | The repo uses a local type and build check. It has no automated product test or CI workflow yet. | Add one focused check with the first feature. Add CI if the two machines cannot reproduce the same check reliably. |
-| The plan starts with local fixtures and browser-only state. | Confirm that seeded data and reload support the actual demo. Add persistence only if the chosen journey requires it. |
+| The plan starts with local fixtures and browser-only state. | Verify both Shift Rescue scenarios from the seeded roster and confirm reset restores it. Revisit persistence only if a later real-world journey needs it. |
 
 ## Hackathon assumptions
 

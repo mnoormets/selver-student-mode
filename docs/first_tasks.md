@@ -1,4 +1,6 @@
-# First Implementation Tasks
+# Original Kickoff Tasks
+
+The [Shift Rescue backlog](backlog.md) is the active development queue. This outline records the original kickoff plan.
 
 Estimates are hands-on time after prerequisites are met. P0 is required for the demo and P1 improves presentation. The operator confirms the scenario, GitHub access, and submission requirements.
 

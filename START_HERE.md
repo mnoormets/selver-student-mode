@@ -1,6 +1,6 @@
 # Start Here
 
-Read [PROJECT_STATUS.md](PROJECT_STATUS.md) first. At kickoff, compare the [demo ideas](DEMO_IDEA_WORKSHOP.md) against the event brief. Once the operator confirms the idea, Claude copies the [MVP template](docs/mvp_template.md) to `docs/mvp.md` and records the agreed scope.
+Read [PROJECT_STATUS.md](PROJECT_STATUS.md), the [Shift Rescue MVP](docs/mvp.md), and the [next task](docs/current_task.md) first. Claude checks the selected scope against the event brief and reviews each implementation slice.
 
 | Owner | Role and files |
 | --- | --- |
@@ -15,4 +15,4 @@ Read [PROJECT_STATUS.md](PROJECT_STATUS.md) first. At kickoff, compare the [demo
 3. Claude checks that SHA against the acceptance criteria and records the outcome in `docs/review.md`. If changes are requested, Claude marks the task Fixes needed and hands the branch back to Codex. On approval, Claude marks the task Done and pushes the review and status update.
 4. The operator squash-merges once Claude approves, the acceptance checks pass, and the task status is Done. Both machines start their next task from updated `main`.
 
-Use one writer per feature branch. See [setup](SETUP.md) for commands and [the first tasks](docs/first_tasks.md) for the kickoff sequence.
+Use one writer per feature branch. See [setup](SETUP.md) for commands and the [backlog](docs/backlog.md) for the development sequence.

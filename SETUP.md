@@ -27,7 +27,7 @@ The operator creates an empty repository from the GitHub account the team will u
 
 ## Branch workflow
 
-Machine 2 starts with `git switch main` and `git pull --ff-only`. For the first handoff, create `feature/first-demo-flow` with `git switch -c feature/first-demo-flow`, commit the task brief, and run `git push -u origin HEAD`. Machine 1 runs `git fetch origin` and `git switch --track origin/feature/first-demo-flow` the first time it checks out the branch. On later handoffs to either machine, switch to the existing local feature branch and run `git pull --ff-only` before writing. Use `git rev-parse --short HEAD` to identify each handoff. After implementation, run the check, commit, push, and open the PR to `main`. Follow [GIT_WORKFLOW.md](GIT_WORKFLOW.md) for review and merge.
+Machine 2 starts with `git switch main` and `git pull --ff-only`. For SR-01, create `feature/sr-01-roster` with `git switch -c feature/sr-01-roster` and publish it with `git push -u origin HEAD`. The task brief is already on `main`. Machine 1 runs `git fetch origin` and `git switch --track origin/feature/sr-01-roster` the first time it checks out the branch. On later handoffs to either machine, switch to the existing local feature branch and run `git pull --ff-only` before writing. Use `git rev-parse --short HEAD` to identify each handoff. After implementation, run the check, commit, push, and open the PR to `main`. Follow [GIT_WORKFLOW.md](GIT_WORKFLOW.md) for review and merge.
 
 ## Daily workflow
 

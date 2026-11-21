@@ -2,38 +2,41 @@
 
 ## Objective
 
-Choose one demo scenario and agree on its input, output, and acceptance check so Codex can build the first complete slice.
+SR-01 — Show the first real Shift Rescue screen using the offline roster fixture. Estimated effort is 60–90 minutes.
 
 ## Requirements
 
-- Pick one target user and one action that fits the event brief.
-- Use one reproducible example with an expected result that can be checked in the browser.
-- Decide whether a live external dependency is essential to proving the core value.
-
-## Files Expected To Change
-
-- `docs/mvp.md` for the chosen scope, copied from the [MVP template](mvp_template.md).
-- `docs/roadmap.md` for any changes to priorities or timing.
-- `docs/current_task.md` for the first implementation brief.
-- `docs/decisions.md` for the input-to-result boundary and any essential integration.
+- Replace the startup confirmation with a single read-only roster at `/`.
+- Render the event name, time, station labels, assignees, and coverage count from the fixture. Derive the count from assignments.
+- Keep the roster markup in a feature component and the React mount in `src/main.tsx`. Use semantic headings and a list or table.
+- Reserve cancellation, replacement, and reset for later backlog items.
 
 ## Acceptance Criteria
 
-- [ ] The team can describe the target user, action, and result in one sentence.
-- [ ] The brief records one concrete input, its expected result, and one explicit scope cut.
+- [ ] The page is titled Shift Rescue and shows Riverside Community Fair.
+- [ ] The 10:00–11:00 roster shows Check-in assigned to Ava Chen, Welcome Desk assigned to Jordan Lee, and Supply Table assigned to Riley Brooks.
+- [ ] The page displays 3/3 shifts covered. The same three assignments render after reload.
+- [ ] No new runtime dependencies or external requests are needed.
+
+## Files Expected To Change
+
+- `src/main.tsx` and `index.html` to mount and name the product.
+- `src/features/shift-rescue/ShiftRescue.tsx` for the roster, importing the existing `demoRoster.ts`.
+- A feature stylesheet only if needed for a readable roster.
 
 ## Testing Requirements
 
-- Walk through the exact sample input and expected result against the event criteria.
-- Confirm the first implementation task includes `npm run check` and one reproducible browser check.
+- Run `npm run check`.
+- Open `/` in development or preview and compare all station names, assignees, time, and coverage against the fixture. Reload to verify the starting state.
 
 ## Definition Of Done
 
-- [ ] The operator confirms the scope captured in `docs/mvp.md`.
-- [ ] Claude publishes the first implementation brief using the [task template](task_template.md) and shares the branch and commit with Codex.
+- [ ] The acceptance checks pass and Codex shares the implementation SHA, PR when available, and browser check results.
+- [ ] Claude verifies the fixture-driven roster and records the review.
 
 ## Status
 
 - State: Ready
-- Owner: Claude Code with team operator input
-- Next action: Use the event brief to choose the scenario at kickoff.
+- Owner: Codex
+- Branch: `feature/sr-01-roster`
+- Next action: Render the read-only roster using the bundled fixture.
