@@ -445,7 +445,10 @@ export function StudentModeApp() {
                         Boonuspunktid
                       </p>
                       <p className="mt-0.5 text-[28px] font-bold leading-none tracking-tight text-white">
-                        12,40 €
+                        25,00 €
+                      </p>
+                      <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.08em] text-white/45">
+                        Näidis
                       </p>
                     </div>
                   </div>
