@@ -182,10 +182,12 @@ export function StudentModeApp() {
     setDraft("");
   }
 
+  const statusLight = stage === "home";
+
   return (
-    <div className="relative flex flex-1 flex-col items-center bg-[#0b1220] px-3 py-4 sm:px-6 sm:py-8">
+    <div className="relative flex flex-1 flex-col items-center justify-center bg-[#0b1220] px-3 py-5 sm:px-6 sm:py-8">
       <div className="mb-3 flex w-full max-w-[430px] items-center justify-between px-1 text-[11px] text-white/55">
-        <span>Partnerkaart äpp</span>
+        <span>iPhone 16 · Partnerkaart</span>
         <a
           href={PARTNERKAART_URL}
           target="_blank"
@@ -196,17 +198,58 @@ export function StudentModeApp() {
         </a>
       </div>
 
-      <div className="relative flex w-full max-w-[430px] flex-1 flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#f4f6fb] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.65)]">
+      {/* Figma-style iPhone 16 frame: 393×852 screen, ~55pt corners, Dynamic Island */}
+      <div className="relative w-full max-w-[430px]">
+        {/* Hardware side buttons */}
         <div
-          className={cn(
-            "flex items-center justify-between px-5 pb-1 pt-3 text-[11px] font-medium",
-            stage === "home" ? "bg-[#1a1a1a] text-white/90" : "bg-selver-navy text-white/90",
-          )}
-        >
-          <span>9:41</span>
-          <span className="h-1.5 w-20 rounded-full bg-white/25" />
-          <span>5G · 88%</span>
-        </div>
+          aria-hidden
+          className="absolute -left-[3px] top-[120px] h-8 w-[3px] rounded-l-sm bg-[#3a3a3c]"
+        />
+        <div
+          aria-hidden
+          className="absolute -left-[3px] top-[168px] h-14 w-[3px] rounded-l-sm bg-[#3a3a3c]"
+        />
+        <div
+          aria-hidden
+          className="absolute -left-[3px] top-[232px] h-14 w-[3px] rounded-l-sm bg-[#3a3a3c]"
+        />
+        <div
+          aria-hidden
+          className="absolute -right-[3px] top-[190px] h-20 w-[3px] rounded-r-sm bg-[#3a3a3c]"
+        />
+
+        <div className="relative rounded-[3.4rem] border border-[#2c2c2e] bg-[#1c1c1e] p-[11px] shadow-[0_40px_100px_-24px_rgba(0,0,0,0.85)] ring-1 ring-white/10">
+          <div
+            className="relative mx-auto flex w-full max-w-[393px] flex-col overflow-hidden rounded-[2.85rem] bg-[#f4f6fb]"
+            style={{
+              width: "min(393px, 100%)",
+              height: "min(852px, calc(100dvh - 7rem))",
+              aspectRatio: "393 / 852",
+            }}
+          >
+            {/* Status bar + Dynamic Island (safe area ~59pt) */}
+            <div
+              className={cn(
+                "relative z-30 flex h-[59px] shrink-0 items-end px-7 pb-2",
+                statusLight ? "bg-[#1a1a1a] text-white" : "bg-selver-navy text-white",
+              )}
+            >
+              <span className="w-[72px] text-[15px] font-semibold tracking-tight">
+                9:41
+              </span>
+              <div className="flex flex-1 justify-center">
+                <div
+                  className="h-[37px] w-[126px] rounded-full bg-black shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]"
+                  aria-hidden
+                />
+              </div>
+              <div className="flex w-[72px] items-center justify-end gap-1.5 text-[12px] font-medium">
+                <span className="opacity-90">5G</span>
+                <span className="inline-flex h-[11px] w-[24px] items-center rounded-[3px] border border-current/80 p-[1px]">
+                  <span className="h-full w-[70%] rounded-[1px] bg-current" />
+                </span>
+              </div>
+            </div>
 
         {inStudentMode ? (
           <header className="sticky top-0 z-40 border-b border-border/60 bg-white/95 backdrop-blur-md">
@@ -743,41 +786,42 @@ export function StudentModeApp() {
           )}
         </main>
 
-        <nav className="absolute inset-x-0 bottom-0 border-t border-border/70 bg-white/95 px-1 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-1 backdrop-blur-md">
-          <div className="grid grid-cols-5">
-            {BOTTOM_TABS.map((item) => {
-              const Icon = item.icon;
-              const active =
-                (stage === "home" && item.id === "home") ||
-                (inStudentMode && item.id === "more") ||
-                (stage === "plan" && item.id === "list");
-              const openMenu = item.id === "more" || item.id === "home";
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => {
-                    if (item.id === "more") setMenuOpen(true);
-                    else if (item.id === "home") goHome();
-                  }}
-                  className={cn(
-                    "flex flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[10px] font-medium",
-                    active ? "text-selver-red" : "text-selver-navy/45",
-                    !openMenu && "pointer-events-none",
-                  )}
-                >
-                  <Icon className="size-5" strokeWidth={active ? 2.4 : 1.8} />
-                  {item.label}
-                </button>
-              );
-            })}
+            <nav className="absolute inset-x-0 bottom-0 z-20 border-t border-border/70 bg-white/95 px-1 pb-5 pt-1 backdrop-blur-md">
+              <div className="grid grid-cols-5">
+                {BOTTOM_TABS.map((item) => {
+                  const Icon = item.icon;
+                  const active =
+                    (stage === "home" && item.id === "home") ||
+                    (inStudentMode && item.id === "more") ||
+                    (stage === "plan" && item.id === "list");
+                  const openMenu = item.id === "more" || item.id === "home";
+                  return (
+                    <button
+                      key={item.id}
+                      type="button"
+                      onClick={() => {
+                        if (item.id === "more") setMenuOpen(true);
+                        else if (item.id === "home") goHome();
+                      }}
+                      className={cn(
+                        "flex flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[10px] font-medium",
+                        active ? "text-selver-red" : "text-selver-navy/45",
+                        !openMenu && "pointer-events-none",
+                      )}
+                    >
+                      <Icon className="size-5" strokeWidth={active ? 2.4 : 1.8} />
+                      {item.label}
+                    </button>
+                  );
+                })}
+              </div>
+              {/* iPhone home indicator */}
+              <div className="flex justify-center pb-1 pt-1" aria-hidden>
+                <div className="h-[5px] w-[134px] rounded-full bg-black/80" />
+              </div>
+            </nav>
           </div>
-          <p className="pb-1 text-center text-[10px] text-muted-foreground">
-            {stage === "home"
-              ? "Partnerkaart · peamenüüs Student Mode"
-              : "Tudengirežiim · Partnerkaardi äpi moodul"}
-          </p>
-        </nav>
+        </div>
       </div>
     </div>
   );
