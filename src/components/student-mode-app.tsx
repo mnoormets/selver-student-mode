@@ -190,7 +190,7 @@ export function StudentModeApp() {
           {stage === "hero" && (
             <motion.section
               key="hero"
-              initial={{ opacity: 0, y: 18 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.45 }}
@@ -263,7 +263,7 @@ export function StudentModeApp() {
           {stage === "setup" && (
             <motion.section
               key="setup"
-              initial={{ opacity: 0, y: 16 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               className="mx-auto w-full max-w-2xl space-y-8 py-6"
@@ -391,7 +391,7 @@ export function StudentModeApp() {
           {stage === "plan" && plan && (
             <motion.section
               key="plan"
-              initial={{ opacity: 0, y: 16 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               className="space-y-6 py-4"
             >
