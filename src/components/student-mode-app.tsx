@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   ArrowRight,
   ShoppingBasket,
@@ -186,16 +186,8 @@ export function StudentModeApp() {
       </header>
 
       <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 pb-16 pt-6 sm:px-6">
-        <AnimatePresence mode="wait">
           {stage === "hero" && (
-            <motion.section
-              key="hero"
-              initial={false}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.45 }}
-              className="relative grid min-h-[78vh] items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]"
-            >
+            <section className="relative grid min-h-[78vh] items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]">
               <div className="relative z-10 space-y-7">
                 <SelverLogoLink className="w-[120px] sm:w-[150px]" priority />
                 <div className="space-y-2">
@@ -214,14 +206,14 @@ export function StudentModeApp() {
                   jääkide-abilise. Vähem raiskamist, rohkem täis kõhtu.
                 </p>
                 <div className="flex flex-wrap items-center gap-3">
-                  <Button
-                    size="lg"
-                    className="h-12 rounded-full bg-selver-red px-7 text-base text-white hover:bg-[#c50510]"
+                  <button
+                    type="button"
                     onClick={activate}
+                    className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-selver-red px-7 text-base font-medium text-white transition hover:bg-[#c50510]"
                   >
                     Lülita sisse
                     <ArrowRight className="size-4" />
-                  </Button>
+                  </button>
                   <p className="text-sm text-muted-foreground">
                     Häkatoni prototüüp · ilma kontota
                   </p>
@@ -257,17 +249,11 @@ export function StudentModeApp() {
                 </motion.div>
                 <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-selver-navy to-transparent" />
               </div>
-            </motion.section>
+            </section>
           )}
 
           {stage === "setup" && (
-            <motion.section
-              key="setup"
-              initial={false}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="mx-auto w-full max-w-2xl space-y-8 py-6"
-            >
+            <section className="mx-auto w-full max-w-2xl space-y-8 py-6 animate-enter">
               <div className="space-y-2">
                 <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
                   Seadista oma nädal
@@ -376,25 +362,20 @@ export function StudentModeApp() {
                 </div>
               </div>
 
-              <Button
-                size="lg"
-                className="h-12 w-full rounded-full bg-selver-red text-base text-white hover:bg-[#c50510] sm:w-auto sm:px-8"
+              <button
+                type="button"
                 onClick={generate}
                 disabled={pending}
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-selver-red px-8 text-base font-medium text-white transition hover:bg-[#c50510] disabled:opacity-50 sm:w-auto"
               >
                 <Sparkles className="size-4" />
                 {pending ? "Planeerin…" : "Loo menüü ja korv"}
-              </Button>
-            </motion.section>
+              </button>
+            </section>
           )}
 
           {stage === "plan" && plan && (
-            <motion.section
-              key="plan"
-              initial={false}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-6 py-4"
-            >
+            <section className="space-y-6 py-4 animate-enter">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 <div>
                   <h2 className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
@@ -473,9 +454,8 @@ export function StudentModeApp() {
                   onSend={sendChat}
                 />
               )}
-            </motion.section>
+            </section>
           )}
-        </AnimatePresence>
       </main>
     </div>
   );
