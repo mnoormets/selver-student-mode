@@ -1,8 +1,6 @@
 # Review
 
-- Branch or PR: [Reference]
-- Reviewed commit: [SHA]
-- Result: [Approved or changes requested]
+No implementation PR has been reviewed yet. When reviewing, replace this line with the PR link, the implementation SHA under review, and the result (**Approved** or **Changes requested**).
 
 ## Bugs Found
 

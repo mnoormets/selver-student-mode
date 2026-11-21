@@ -19,7 +19,7 @@ Open the clone in Codex and read [START_HERE.md](START_HERE.md) and [the current
 
 ## Machine 2
 
-Open the clone in Cursor, then start Claude Code with `claude` from the repository root. Read [START_HERE.md](START_HERE.md), [the roadmap](docs/roadmap.md), and [project context](docs/project_context.md). Run the same bootstrap commands. Review the exact implementation SHA from the handoff. Use Lovable when this machine owns UI generation, and share the result with Codex for integration.
+Open the clone in Cursor, then start Claude Code with `claude` from the repository root. Read [START_HERE.md](START_HERE.md), [PROJECT_STATUS.md](PROJECT_STATUS.md), and [project context](docs/project_context.md). Run the same bootstrap commands. Review the exact implementation SHA from the handoff. Use Lovable when this machine owns UI generation, and share the result with Codex for integration.
 
 ## GitHub
 
@@ -31,4 +31,4 @@ Machine 2 starts with `git switch main` and `git pull --ff-only`. For the first 
 
 ## Daily workflow
 
-Start each session by syncing `main` and checking the current task. Use the active PR for branch and SHA handoffs. Before stopping, push completed work and leave the next action and any failure reproduction steps in the PR. Keep `main` runnable and rehearse the production preview before the submission window.
+At kickoff, sync `main` and check the current task. If a feature is already in progress, resume on its branch and fast-forward it before writing. Use the active PR for branch and SHA handoffs. Before stopping, push completed work and leave the next action and any failure reproduction steps in the PR. Keep `main` runnable and rehearse the production preview before the submission window.

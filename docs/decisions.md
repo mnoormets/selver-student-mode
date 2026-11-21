@@ -14,5 +14,5 @@
 
 ## Key Assumptions
 
-- The event allows a web demo. Confirm its submission requirements at kickoff.
+- The event allows a web demo. Confirm its submission requirements at kickoff. See [technical debt and assumptions](technical_debt.md) for what to revisit after the first slice.
 - One synthetic example can demonstrate the main value unless the chosen idea requires a live interaction.

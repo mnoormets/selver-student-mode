@@ -2,7 +2,7 @@
 
 ## Vision
 
-By hour 48, deliver a browser demo in which one target user completes one valuable action and sees the outcome. At kickoff, the team will choose the user, problem, input, and outcome from the event brief and record them in the current task. The starter assumes a browser demo.
+By hour 48, deliver a browser demo in which one target user completes one valuable action and sees the outcome. At kickoff, the team will choose the user, problem, input, and outcome from the event brief. Claude records that scope in `docs/mvp.md` using the [MVP template](mvp_template.md) and turns it into the [current task](current_task.md). The starter assumes a browser demo.
 
 ## MVP Features
 
