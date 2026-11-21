@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
-import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -20,7 +19,31 @@ import {
   ScanLine,
   Percent,
   Menu,
+  QrCode,
+  CreditCard,
+  History,
+  User,
+  Settings,
+  Info,
+  X,
+  MapPin,
+  Star,
+  MessageSquare,
+  type LucideIcon,
 } from "lucide-react";
+
+/** Measured from Partnerkaart app screenshot CTA — locked default. */
+const PK_ORANGE = "#F97D00";
+
+/** iPhone 14 screen (pt) — exact, then scaled to fit viewport. */
+const IPHONE14 = {
+  w: 390,
+  h: 844,
+  radius: 47.33,
+  status: 47,
+  notchW: 164,
+  notchH: 32,
+} as const;
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
@@ -28,13 +51,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { replyToStudent, type ChatMessage } from "@/lib/assistant";
 import {
-  buildPlan,
-  dayLabel,
-  type PlanResult,
-  type Prefs,
-} from "@/lib/planner";
-
-const PARTNERKAART_URL = "https://www.partnerkaart.ee/et/app/";
+  applyPantryStock,
+  buildHackathonDemoPlan,
+  countEggsNeeded,
+} from "@/lib/demo-plan";
+import { dayLabel, type PlanResult, type Prefs } from "@/lib/planner";
 
 const BOTTOM_TABS = [
   { id: "home", label: "Avaleht", icon: Home },
@@ -44,7 +65,37 @@ const BOTTOM_TABS = [
   { id: "more", label: "Veel", icon: Menu },
 ] as const;
 
-type Stage = "hero" | "setup" | "plan";
+/** Side drawer — visual only (matches Partnerkaart “Veel”). */
+const SIDE_MENU: { id: string; label: string; icon: LucideIcon }[] = [
+  { id: "home", label: "Avaleht", icon: Home },
+  { id: "scan", label: "Skaneeri ja osta", icon: ScanLine },
+  { id: "list", label: "Ostunimekiri", icon: ListChecks },
+  { id: "card", label: "Esita Partnerkaart", icon: QrCode },
+  { id: "offers", label: "Pakkumised", icon: Percent },
+  { id: "pay", label: "Maksevahendid", icon: CreditCard },
+  { id: "history", label: "Ostude ajalugu", icon: History },
+  { id: "profile", label: "Minu andmed", icon: User },
+  { id: "settings", label: "Seaded", icon: Settings },
+  { id: "help", label: "Abi, kontaktid ja tagasiside", icon: Info },
+];
+
+/** Partnerkaart peamenüü — ainult Student Mode on klikitav. */
+const MAIN_MENU: {
+  id: string;
+  label: string;
+  icon: LucideIcon;
+  notify?: string;
+  action?: "student-mode";
+}[] = [
+  { id: "list", label: "Ostunimekiri", icon: ListChecks },
+  { id: "selfserve", label: "Partnerkaardi iseteenindus", icon: Star },
+  { id: "stores", label: "Kaupluste kontaktid", icon: MapPin },
+  { id: "offers", label: "Pakkumised", icon: Percent, notify: "5" },
+  { id: "student", label: "Student Mode", icon: GraduationCap, action: "student-mode" },
+  { id: "feedback", label: "Tagasiside", icon: MessageSquare },
+];
+
+type Stage = "home" | "hero" | "setup" | "plan";
 
 const DELIVERY_OPTIONS = [
   "Kojutoomine täna",
@@ -65,44 +116,91 @@ function euros(n: number) {
 }
 
 export function StudentModeApp() {
-  const [stage, setStage] = useState<Stage>("hero");
-  const [modeOn, setModeOn] = useState(false);
+  const [stage, setStage] = useState<Stage>("home");
+  const [menuOpen, setMenuOpen] = useState(false);
   const [budget, setBudget] = useState(35);
-  const [days, setDays] = useState(5);
-  const [style, setStyle] = useState<Prefs["style"]>("odav");
+  const [days, setDays] = useState(7);
+  const [style, setStyle] = useState<Prefs["style"]>("kiire");
   const [delivery, setDelivery] = useState(DELIVERY_OPTIONS[0]!);
   const [plan, setPlan] = useState<PlanResult | null>(null);
+  const [basePlan, setBasePlan] = useState<PlanResult | null>(null);
+  const [pantryApplied, setPantryApplied] = useState(false);
   const [pending, startTransition] = useTransition();
   const [tab, setTab] = useState<"menu" | "basket" | "chat">("menu");
   const [chat, setChat] = useState<ChatMessage[]>([
     {
       id: "welcome",
       role: "assistant",
-      text: "Tere! Olen Selveri tudengiabi. Küsi eelarve, kiiruse või jääkide kohta.",
+      text: "Tere! Ütle nt „Mul on kodus 10 muna“ — arvutan ostukorvi uuesti.",
     },
   ]);
   const [draft, setDraft] = useState("");
 
+  const inStudentMode = stage !== "home";
   const prefs: Prefs = useMemo(
     () => ({ budget, days, style, delivery }),
     [budget, days, style, delivery],
   );
+  const eggLine = plan?.basket.find((l) => l.productId === "munad");
+  const eggsNeeded = plan ? countEggsNeeded(plan.meals) : 0;
+
+  function openStudentMode() {
+    setMenuOpen(false);
+    setStage("hero");
+  }
 
   function activate() {
-    setModeOn(true);
     setStage("setup");
+  }
+
+  function goHome() {
+    setStage("home");
+    setMenuOpen(false);
   }
 
   function generate() {
     startTransition(() => {
-      const next = buildPlan(prefs);
+      // C+ hackathon demo: fixed 35 € pasta/kiire näidisplaan @ 34.24 €
+      const next = buildHackathonDemoPlan();
+      setBudget(35);
+      setDays(7);
+      setStyle("kiire");
+      setBasePlan(next);
       setPlan(next);
+      setPantryApplied(false);
       setStage("plan");
       setTab("menu");
-      setChat((prev) => [
-        ...prev,
+      setChat([
+        {
+          id: "welcome",
+          role: "assistant",
+          text: "Näidisplaan on valmis. Proovi: „Mul on kodus 10 muna“.",
+        },
         {
           id: `plan-${Date.now()}`,
+          role: "assistant",
+          text: next.summary,
+        },
+      ]);
+    });
+  }
+
+  function applyEggsAtHome(eggs = 10) {
+    if (!basePlan) return;
+    startTransition(() => {
+      const next = applyPantryStock(basePlan, { eggs });
+      setPlan(next);
+      setPantryApplied(true);
+      setTab("basket");
+      setChat((c) => [
+        ...c,
+        {
+          id: `u-pantry-${Date.now()}`,
+          role: "user",
+          text: `Mul on kodus ${eggs} muna`,
+        },
+        {
+          id: `a-pantry-${Date.now()}`,
           role: "assistant",
           text: next.summary,
         },
@@ -118,6 +216,20 @@ export function StudentModeApp() {
       role: "user",
       text,
     };
+
+    const lower = text.toLowerCase();
+    const eggMatch = lower.match(/(\d+)\s*muna/);
+    const wantsPantry =
+      (lower.includes("kodus") || lower.includes("mul on")) &&
+      lower.includes("muna");
+
+    if (wantsPantry && basePlan) {
+      const eggs = eggMatch ? Number(eggMatch[1]) : 10;
+      setDraft("");
+      applyEggsAtHome(eggs);
+      return;
+    }
+
     const answer: ChatMessage = {
       id: `a-${Date.now()}`,
       role: "assistant",
@@ -127,147 +239,392 @@ export function StudentModeApp() {
     setDraft("");
   }
 
+  const statusLight = stage === "home";
+  const bezel = 12;
+  const frameW = IPHONE14.w + bezel * 2;
+  const frameH = IPHONE14.h + bezel * 2;
+
   return (
-    <div className="relative flex flex-1 flex-col items-center bg-[#0b1220] px-3 py-4 sm:px-6 sm:py-8">
-      <div className="mb-3 flex w-full max-w-[430px] items-center justify-between px-1 text-[11px] text-white/55">
-        <span>Partnerkaart äpp</span>
-        <a
-          href={PARTNERKAART_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="underline-offset-2 hover:text-white hover:underline"
+    <div className="relative flex flex-1 flex-col items-center justify-center overflow-hidden bg-neutral-950 px-3 py-4">
+      {/* Exact iPhone 14 canvas (390×844), scaled to viewport */}
+      <div
+        className="relative shrink-0"
+        style={{
+          width: frameW,
+          height: frameH,
+          transform: `scale(min(1, (100vw - 24px) / ${frameW}, (100dvh - 32px) / ${frameH}))`,
+          transformOrigin: "center center",
+        }}
+      >
+        <div
+          aria-hidden
+          className="absolute -left-[3px] top-[120px] h-8 w-[3px] rounded-l-sm bg-[#3a3a3c]"
+        />
+        <div
+          aria-hidden
+          className="absolute -left-[3px] top-[168px] h-14 w-[3px] rounded-l-sm bg-[#3a3a3c]"
+        />
+        <div
+          aria-hidden
+          className="absolute -left-[3px] top-[232px] h-14 w-[3px] rounded-l-sm bg-[#3a3a3c]"
+        />
+        <div
+          aria-hidden
+          className="absolute -right-[3px] top-[190px] h-20 w-[3px] rounded-r-sm bg-[#3a3a3c]"
+        />
+
+        <div
+          className="relative h-full w-full border border-[#2c2c2e] bg-[#1c1c1e] shadow-[0_40px_100px_-24px_rgba(0,0,0,0.85)] ring-1 ring-white/10"
+          style={{ borderRadius: IPHONE14.radius + bezel, padding: bezel }}
         >
-          partnerkaart.ee
-        </a>
-      </div>
+          <div
+            className={cn(
+              "relative flex flex-col overflow-hidden",
+              statusLight ? "bg-black" : "bg-white",
+            )}
+            style={{
+              width: IPHONE14.w,
+              height: IPHONE14.h,
+              borderRadius: IPHONE14.radius,
+            }}
+          >
+            {/* iPhone 14 notch */}
+            <div
+              className="pointer-events-none absolute left-1/2 top-0 z-50 -translate-x-1/2 bg-black"
+              style={{
+                width: IPHONE14.notchW,
+                height: IPHONE14.notchH,
+                borderRadius: "0 0 18px 18px",
+              }}
+              aria-hidden
+            />
 
-      <div className="relative flex w-full max-w-[430px] flex-1 flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#f4f6fb] shadow-[0_30px_80px_-20px_rgba(0,0,0,0.65)]">
-        <div className="flex items-center justify-between bg-selver-navy px-5 pb-1 pt-3 text-[11px] font-medium text-white/90">
-          <span>9:41</span>
-          <span className="h-1.5 w-20 rounded-full bg-white/25" />
-          <span>5G · 88%</span>
-        </div>
+            {/* Status bar — safe area 47pt */}
+            <div
+              className={cn(
+                "relative z-30 flex shrink-0 items-end justify-between px-6 pb-1.5",
+                "bg-black text-white",
+              )}
+              style={{ height: IPHONE14.status }}
+            >
+              <span className="w-[64px] text-[15px] font-semibold tracking-tight">
+                9:41
+              </span>
+              <div className="flex w-[64px] items-center justify-end gap-1.5 text-[12px] font-medium">
+                <span className="opacity-90">5G</span>
+                <span className="inline-flex h-[11px] w-[24px] items-center rounded-[3px] border border-current/80 p-[1px]">
+                  <span className="h-full w-[70%] rounded-[1px] bg-current" />
+                </span>
+              </div>
+            </div>
 
-        <header className="sticky top-0 z-40 border-b border-border/60 bg-white/95 backdrop-blur-md">
-          <div className="flex items-center gap-2 px-3 py-2.5">
+        {inStudentMode ? (
+          <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white">
+            <div className="flex items-center gap-2 px-3 py-2.5">
+              <button
+                type="button"
+                onClick={() => {
+                  if (stage === "plan") setStage("setup");
+                  else if (stage === "setup") setStage("hero");
+                  else goHome();
+                }}
+                className="inline-flex size-9 items-center justify-center rounded-full text-black hover:bg-neutral-100"
+                aria-label="Tagasi"
+              >
+                <ChevronLeft className="size-5" />
+              </button>
+              <div className="min-w-0 flex-1">
+                <p
+                  className="font-display text-[11px] font-bold lowercase tracking-tight"
+                  style={{ color: PK_ORANGE }}
+                >
+                  partner
+                </p>
+                <p className="truncate font-display text-lg font-bold leading-tight text-black">
+                  Student Mode
+                </p>
+              </div>
+              <span
+                className="inline-flex size-9 items-center justify-center rounded-full text-white"
+                style={{ backgroundColor: PK_ORANGE }}
+              >
+                <GraduationCap className="size-4" />
+              </span>
+            </div>
+          </header>
+        ) : null}
+
+        {/* Side drawer — visual only; Student Mode elab peamenüüs */}
+        {menuOpen && (
+          <div className="absolute inset-0 z-50 flex">
             <button
               type="button"
-              onClick={() => {
-                if (stage === "plan") setStage("setup");
-                else if (stage === "setup") setStage("hero");
-              }}
-              className="inline-flex size-9 items-center justify-center rounded-full text-selver-navy hover:bg-mist"
-              aria-label="Tagasi Partnerkaardi avalehele"
-            >
-              <ChevronLeft className="size-5" />
-            </button>
-            <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-selver-navy/55">
-                Partnerkaart · Selver
-              </p>
-              <p className="truncate font-display text-lg font-bold leading-tight text-selver-navy">
-                Tudengirežiim
-              </p>
-            </div>
-            <Image
-              src="/selver-logo.png"
-              alt="Selver"
-              width={36}
-              height={42}
-              className="h-9 w-auto object-contain"
-              priority
+              className="h-full flex-1 bg-black/45"
+              aria-label="Sulge menüü"
+              onClick={() => setMenuOpen(false)}
             />
-          </div>
-          <div className="flex items-center gap-2 border-t border-border/40 bg-mist/70 px-4 py-1.5">
-            <Badge className="bg-selver-yellow text-selver-navy hover:bg-selver-yellow">
-              Äpi moodul
-            </Badge>
-            {modeOn && (
-              <Badge variant="secondary" className="gap-1">
-                <GraduationCap className="size-3" />
-                ISIC · Partnerkaart
-              </Badge>
-            )}
-          </div>
-        </header>
-
-        <main className="flex flex-1 flex-col overflow-y-auto px-4 pb-24 pt-4">
-          {stage === "hero" && (
-            <section className="space-y-5 animate-enter">
-              <div className="overflow-hidden rounded-[1.5rem] bg-selver-navy p-5 text-white">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-selver-yellow">
-                      Uus Partnerkaardi moodul
-                    </p>
-                    <h1 className="mt-2 font-display text-3xl font-bold leading-tight">
-                      Tudengirežiim
-                    </h1>
-                  </div>
-                  <Image
-                    src="/selver-logo.png"
-                    alt=""
-                    width={56}
-                    height={64}
-                    className="h-14 w-auto object-contain opacity-95"
-                  />
-                </div>
-                <p className="mt-3 text-sm leading-relaxed text-white/80">
-                  Eraldiseisev osa Partnerkaardi äpist: AI paneb nädala menüü ja
-                  Selveri korvi kokku sinu eelarve järgi.
+            <aside className="flex h-full w-[82%] flex-col bg-[#1c1c1c] text-white shadow-2xl animate-enter">
+              <div className="flex items-center justify-between px-4 pb-2 pt-3">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/45">
+                  Menüü
                 </p>
-                <div className="mt-4 grid grid-cols-2 gap-2">
-                  <div className="rounded-2xl bg-white/10 px-3 py-2.5">
-                    <p className="text-[10px] uppercase tracking-wider text-selver-yellow">
-                      Nädal
+                <button
+                  type="button"
+                  onClick={() => setMenuOpen(false)}
+                  className="inline-flex size-8 items-center justify-center rounded-full text-white/70 hover:bg-white/10"
+                  aria-label="Sulge"
+                >
+                  <X className="size-4" />
+                </button>
+              </div>
+              <nav className="flex-1 overflow-y-auto pb-8">
+                {SIDE_MENU.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <div
+                      key={item.id}
+                      className="flex items-center gap-3 border-b border-white/10 px-5 py-3.5 opacity-90"
+                      aria-disabled
+                    >
+                      <Icon
+                        className="size-[22px] shrink-0"
+                        style={{ color: PK_ORANGE }}
+                        strokeWidth={1.7}
+                      />
+                      <span className="font-display text-[15px] font-bold leading-snug text-white">
+                        {item.label}
+                      </span>
+                    </div>
+                  );
+                })}
+              </nav>
+            </aside>
+          </div>
+        )}
+
+        <main
+          className={cn(
+            "flex min-h-0 flex-1 flex-col overflow-y-auto",
+            stage === "home" ? "bg-black px-0 pb-0 pt-0" : "px-4 pb-28 pt-4",
+          )}
+        >
+          {stage === "home" && (
+            <section className="flex min-h-full flex-col animate-enter font-display">
+              <div className="bg-black px-5 pb-4 pt-1 text-white">
+                <div className="mb-5 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <User className="size-[22px] text-white" strokeWidth={1.6} />
+                    <p className="text-[17px] font-bold tracking-tight">
+                      Aaron Siimon
                     </p>
-                    <p className="font-display text-xl font-bold">35 €</p>
                   </div>
-                  <div className="rounded-2xl bg-selver-yellow px-3 py-2.5 text-selver-navy">
-                    <p className="text-[10px] uppercase tracking-wider opacity-70">
-                      Boonus
+                  <button
+                    type="button"
+                    onClick={() => setMenuOpen(true)}
+                    className="inline-flex size-[42px] items-center justify-center rounded-full text-white"
+                    style={{ backgroundColor: PK_ORANGE }}
+                    aria-label="Ava kõrvalmenüü"
+                  >
+                    <Menu className="size-5" strokeWidth={2.6} />
+                  </button>
+                </div>
+
+                <div className="mb-5 flex items-stretch gap-4">
+                  <div className="flex gap-3">
+                    <div
+                      className="w-[3px] self-stretch rounded-full"
+                      style={{ backgroundColor: PK_ORANGE }}
+                    />
+                    <div>
+                      <p className="text-[11px] font-bold uppercase tracking-[0.06em] text-white">
+                        Boonuspunktid
+                      </p>
+                      <p className="mt-0.5 text-[28px] font-bold leading-none tracking-tight text-white">
+                        0,47 €
+                      </p>
+                    </div>
+                  </div>
+                  <div
+                    className="w-px self-stretch"
+                    style={{ backgroundColor: PK_ORANGE }}
+                  />
+                  <div className="min-w-0 flex-1 pt-0.5">
+                    <p
+                      className="text-[13px] font-bold uppercase leading-tight tracking-wide underline decoration-2 underline-offset-2"
+                      style={{ color: PK_ORANGE }}
+                    >
+                      Soovid maksta hiljem?
                     </p>
-                    <p className="font-display text-xl font-bold">+ punktid</p>
+                    <span className="mt-1.5 inline-flex rounded-[4px] bg-[#e30613] px-1.5 py-[2px] text-[10px] font-bold uppercase tracking-wide text-white">
+                      Uus!
+                    </span>
+                  </div>
+                </div>
+
+                <div className="relative overflow-hidden rounded-[14px] bg-white px-4 pb-3.5 pt-3.5 shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
+                  <Star
+                    aria-hidden
+                    className="pointer-events-none absolute -right-6 -top-4 size-40 rotate-12 opacity-[0.12]"
+                    style={{ color: PK_ORANGE }}
+                    strokeWidth={1.2}
+                    fill="currentColor"
+                  />
+                  <p
+                    className="relative text-[18px] font-bold lowercase tracking-tight"
+                    style={{ color: PK_ORANGE }}
+                  >
+                    partner
+                  </p>
+                  <div className="relative my-5 flex justify-center">
+                    <div className="inline-flex items-center gap-2 rounded-[10px] border border-black/80 bg-white px-4 py-2.5 shadow-[0_0_0_3px_rgba(255,106,0,0.18)]">
+                      <QrCode className="size-4 text-black" strokeWidth={2} />
+                      <span className="text-[13px] font-bold uppercase tracking-[0.04em] text-black">
+                        Esita Partnerkaart
+                      </span>
+                    </div>
+                  </div>
+                  <div className="relative flex items-end justify-between font-mono text-[12px] font-medium tracking-wider text-black">
+                    <span>9233 6600 4795 1885</span>
+                    <span>10/2028</span>
                   </div>
                 </div>
               </div>
 
-              <div className="space-y-3 rounded-[1.5rem] border border-border/70 bg-white p-4 shadow-sm">
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  Ütle eelarve — saad menüü, kampaaniakorvi ja jääkide-abilise.
-                  Ostunimekiri läheb edasi Partnerkaardi äppi.
+              <div className="flex flex-1 flex-col rounded-t-[22px] bg-white pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2 shadow-[0_-10px_40px_rgba(0,0,0,0.45)]">
+                <div className="mb-1 flex justify-center py-1.5" aria-hidden>
+                  <div className="h-1 w-10 rounded-full bg-neutral-300" />
+                </div>
+                <ul className="flex-1">
+                  {MAIN_MENU.map((item, index) => {
+                    const Icon = item.icon;
+                    const rowClass =
+                      "flex w-full items-center gap-3.5 px-5 py-[15px] text-left";
+                    const border =
+                      index < MAIN_MENU.length - 1
+                        ? "border-b border-neutral-200"
+                        : "";
+                    if (item.action === "student-mode") {
+                      return (
+                        <li key={item.id} className={border}>
+                          <button
+                            type="button"
+                            onClick={openStudentMode}
+                            className={cn(rowClass, "active:bg-neutral-50")}
+                          >
+                            <Icon
+                              className="size-[22px] shrink-0"
+                              style={{ color: PK_ORANGE }}
+                              strokeWidth={1.85}
+                            />
+                            <span className="flex-1 text-[17px] font-bold tracking-tight text-black">
+                              {item.label}
+                            </span>
+                          </button>
+                        </li>
+                      );
+                    }
+                    return (
+                      <li key={item.id} className={border}>
+                        <div className={rowClass} aria-disabled>
+                          <Icon
+                            className="size-[22px] shrink-0"
+                            style={{ color: PK_ORANGE }}
+                            strokeWidth={1.85}
+                          />
+                          <span className="flex-1 text-[17px] font-bold tracking-tight text-black">
+                            {item.label}
+                          </span>
+                          {item.notify && (
+                            <span className="inline-flex size-[22px] items-center justify-center rounded-full bg-[#e30613] text-[11px] font-bold text-white">
+                              {item.notify}
+                            </span>
+                          )}
+                        </div>
+                      </li>
+                    );
+                  })}
+                </ul>
+                <div className="px-5 pb-2 pt-3">
+                  <div
+                    className="flex h-[52px] w-full items-center justify-center gap-2.5 rounded-full text-[15px] font-bold uppercase tracking-[0.06em] text-white"
+                    style={{ backgroundColor: PK_ORANGE }}
+                  >
+                    <ScanLine className="size-5" strokeWidth={2.2} />
+                    Skaneeri ja osta
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {stage === "hero" && (
+            <section className="space-y-4 animate-enter font-display">
+              <div className="overflow-hidden rounded-[14px] bg-black p-5 text-white">
+                <p
+                  className="text-[11px] font-bold uppercase tracking-[0.14em]"
+                  style={{ color: PK_ORANGE }}
+                >
+                  Partnerkaart
+                </p>
+                <h1 className="mt-2 text-3xl font-bold leading-tight tracking-tight">
+                  Student Mode
+                </h1>
+                <p className="mt-3 text-sm leading-relaxed text-white/75">
+                  Kiired toidud sinu eelarve piires — otse Partnerkaardi äpis.
+                </p>
+                <div className="mt-4 grid grid-cols-2 gap-2">
+                  <div className="rounded-[10px] bg-white/10 px-3 py-2.5">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/55">
+                      Eelarve
+                    </p>
+                    <p className="text-xl font-bold">35 €</p>
+                  </div>
+                  <div
+                    className="rounded-[10px] px-3 py-2.5 text-black"
+                    style={{ backgroundColor: PK_ORANGE }}
+                  >
+                    <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
+                      Fookus
+                    </p>
+                    <p className="text-xl font-bold">Kiire · pasta</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3 rounded-[14px] border border-neutral-200 bg-white p-4">
+                <p className="text-sm leading-relaxed text-neutral-600">
+                  35 €, kiirelt ja soodsalt, pasta meeldib — saad näidisnädala ja
+                  ostukorvi. Siis ütle, mis kodus juba on.
                 </p>
                 <button
                   type="button"
                   onClick={activate}
-                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-selver-red px-7 text-base font-medium text-white transition hover:bg-[#c50510]"
+                  className="inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[15px] font-bold uppercase tracking-[0.04em] text-white"
+                  style={{ backgroundColor: PK_ORANGE }}
                 >
-                  Ava tudengirežiim
+                  Alusta
                   <ArrowRight className="size-4" />
                 </button>
-                <p className="text-center text-xs text-muted-foreground">
-                  Häkatoni prototüüp · Partnerkaart × Selver
-                </p>
               </div>
             </section>
           )}
 
           {stage === "setup" && (
-            <section className="space-y-5 animate-enter">
+            <section className="space-y-5 animate-enter font-display">
               <div className="space-y-1">
-                <h2 className="font-display text-2xl font-bold tracking-tight text-selver-navy">
+                <h2 className="text-2xl font-bold tracking-tight text-black">
                   Seadista oma nädal
                 </h2>
-                <p className="text-sm text-muted-foreground">
-                  Eelarve, päevad ja stiil — menüü valmib sekundiga.
+                <p className="text-sm text-neutral-600">
+                  Eelarve, tempo ja eelistused — plaan valmib sekundiga.
                 </p>
               </div>
 
-              <div className="space-y-6 rounded-[1.5rem] border border-border/70 bg-white p-4 shadow-sm sm:p-5">
+              <div className="space-y-6 rounded-[14px] border border-neutral-200 bg-white p-4">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-3">
-                    <label className="flex items-center gap-2 text-sm font-medium">
-                      <Wallet className="size-4 text-leaf" />
+                    <label className="flex items-center gap-2 text-sm font-bold text-black">
+                      <Wallet className="size-4" style={{ color: PK_ORANGE }} />
                       Nädala eelarve
                     </label>
                     <div className="flex items-center gap-2">
@@ -275,18 +632,18 @@ export function StudentModeApp() {
                         type="button"
                         aria-label="Vähenda eelarvet"
                         onClick={() => setBudget((b) => Math.max(15, b - 1))}
-                        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
+                        className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-black active:scale-95"
                       >
                         <Minus className="size-4" />
                       </button>
-                      <span className="min-w-[4.5rem] text-center font-display text-3xl font-bold tabular-nums text-grove">
+                      <span className="min-w-[4.5rem] text-center text-3xl font-bold tabular-nums text-black">
                         {budget} €
                       </span>
                       <button
                         type="button"
                         aria-label="Suurenda eelarvet"
                         onClick={() => setBudget((b) => Math.min(60, b + 1))}
-                        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
+                        className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-black active:scale-95"
                       >
                         <Plus className="size-4" />
                       </button>
@@ -308,11 +665,16 @@ export function StudentModeApp() {
                         type="button"
                         onClick={() => setBudget(preset)}
                         className={cn(
-                          "rounded-full border px-3 py-1 text-xs font-semibold transition",
+                          "rounded-full border px-3 py-1 text-xs font-bold transition",
                           budget === preset
-                            ? "border-selver-red bg-selver-red text-white"
-                            : "border-border bg-white text-selver-navy hover:border-selver-red",
+                            ? "border-transparent text-white"
+                            : "border-neutral-200 bg-white text-black",
                         )}
+                        style={
+                          budget === preset
+                            ? { backgroundColor: PK_ORANGE }
+                            : undefined
+                        }
                       >
                         {preset} €
                       </button>
@@ -322,8 +684,8 @@ export function StudentModeApp() {
 
                 <div className="space-y-3">
                   <div className="flex items-center justify-between gap-3">
-                    <label className="flex items-center gap-2 text-sm font-medium">
-                      <Timer className="size-4 text-leaf" />
+                    <label className="flex items-center gap-2 text-sm font-bold text-black">
+                      <Timer className="size-4" style={{ color: PK_ORANGE }} />
                       Päevi planeerida
                     </label>
                     <div className="flex items-center gap-2">
@@ -331,18 +693,18 @@ export function StudentModeApp() {
                         type="button"
                         aria-label="Vähenda päevi"
                         onClick={() => setDays((d) => Math.max(3, d - 1))}
-                        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
+                        className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-black active:scale-95"
                       >
                         <Minus className="size-4" />
                       </button>
-                      <span className="min-w-[2.5rem] text-center font-display text-3xl font-bold tabular-nums text-grove">
+                      <span className="min-w-[2.5rem] text-center text-3xl font-bold tabular-nums text-black">
                         {days}
                       </span>
                       <button
                         type="button"
                         aria-label="Suurenda päevi"
                         onClick={() => setDays((d) => Math.min(7, d + 1))}
-                        className="inline-flex size-10 items-center justify-center rounded-full border border-border bg-white text-selver-navy transition hover:border-selver-red hover:text-selver-red active:scale-95"
+                        className="inline-flex size-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-black active:scale-95"
                       >
                         <Plus className="size-4" />
                       </button>
@@ -359,26 +721,24 @@ export function StudentModeApp() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                <div className="grid grid-cols-2 gap-2">
                   {STYLES.map((s) => (
                     <button
                       key={s.id}
                       type="button"
                       onClick={() => setStyle(s.id)}
                       className={cn(
-                        "rounded-2xl border px-3 py-3 text-left transition",
+                        "rounded-[12px] border px-3 py-3 text-left transition",
                         style === s.id
-                          ? "border-selver-navy bg-selver-navy text-white"
-                          : "border-border bg-white/80 hover:border-leaf/40",
+                          ? "border-black bg-black text-white"
+                          : "border-neutral-200 bg-white text-black",
                       )}
                     >
-                      <p className="text-sm font-semibold">{s.label}</p>
+                      <p className="text-sm font-bold">{s.label}</p>
                       <p
                         className={cn(
                           "mt-0.5 text-xs",
-                          style === s.id
-                            ? "text-leaf-foreground/75"
-                            : "text-muted-foreground",
+                          style === s.id ? "text-white/70" : "text-neutral-500",
                         )}
                       >
                         {s.hint}
@@ -388,8 +748,8 @@ export function StudentModeApp() {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm font-medium">Tarne üle Eesti</p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-sm font-bold text-black">Tarne üle Eesti</p>
+                  <p className="text-xs text-neutral-500">
                     e-Selveri kojutoomine — kiire ja üleriigiline
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -399,11 +759,16 @@ export function StudentModeApp() {
                         type="button"
                         onClick={() => setDelivery(option)}
                         className={cn(
-                          "rounded-full border px-3 py-1.5 text-sm transition",
+                          "rounded-full border px-3 py-1.5 text-sm font-bold transition",
                           delivery === option
-                            ? "border-citrus bg-citrus text-accent-foreground"
-                            : "border-border bg-white/70 text-foreground hover:border-leaf/40",
+                            ? "border-transparent text-white"
+                            : "border-neutral-200 bg-white text-black",
                         )}
+                        style={
+                          delivery === option
+                            ? { backgroundColor: PK_ORANGE }
+                            : undefined
+                        }
                       >
                         {option}
                       </button>
@@ -416,7 +781,8 @@ export function StudentModeApp() {
                 type="button"
                 onClick={generate}
                 disabled={pending}
-                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-selver-red px-8 text-base font-medium text-white transition hover:bg-[#c50510] disabled:opacity-50"
+                className="inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[15px] font-bold uppercase tracking-[0.04em] text-white disabled:opacity-50"
+                style={{ backgroundColor: PK_ORANGE }}
               >
                 <Sparkles className="size-4" />
                 {pending ? "Planeerin…" : "Loo menüü ja korv"}
@@ -425,31 +791,76 @@ export function StudentModeApp() {
           )}
 
           {stage === "plan" && plan && (
-            <section className="space-y-5 animate-enter">
+            <section className="space-y-5 animate-enter font-display">
               <div className="space-y-3">
                 <div>
-                  <h2 className="font-display text-2xl font-bold tracking-tight text-selver-navy">
+                  <div className="mb-2 flex flex-wrap gap-1.5">
+                    <span
+                      className="rounded-full px-2.5 py-0.5 text-[11px] font-bold text-white"
+                      style={{ backgroundColor: PK_ORANGE }}
+                    >
+                      35 €
+                    </span>
+                    <span className="rounded-full bg-black px-2.5 py-0.5 text-[11px] font-bold text-white">
+                      kiire · soodne
+                    </span>
+                    <span className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-[11px] font-bold text-black">
+                      pasta
+                    </span>
+                    <span className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-[11px] font-bold text-neutral-500">
+                      näidisplaan
+                    </span>
+                  </div>
+                  <h2 className="text-2xl font-bold tracking-tight text-black">
                     Sinu nädal on valmis
                   </h2>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {plan.summary}
-                  </p>
+                  <p className="mt-1 text-sm text-neutral-600">{plan.summary}</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Button
                     variant="outline"
-                    className="rounded-full"
+                    className="rounded-full border-neutral-200 font-bold text-black"
                     onClick={() => setStage("setup")}
                   >
                     Muuda seadeid
                   </Button>
-                  <Button
-                    className="rounded-full bg-selver-red text-white hover:bg-[#c50510]"
-                    onClick={generate}
-                  >
-                    Genereeri uuesti
-                  </Button>
+                  {!pantryApplied ? (
+                    <Button
+                      className="rounded-full font-bold text-white hover:opacity-90"
+                      style={{ backgroundColor: PK_ORANGE }}
+                      onClick={() => applyEggsAtHome(10)}
+                    >
+                      Mul on kodus 10 muna
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="outline"
+                      className="rounded-full border-neutral-200 font-bold text-black"
+                      onClick={() => {
+                        if (basePlan) {
+                          setPlan(basePlan);
+                          setPantryApplied(false);
+                        }
+                      }}
+                    >
+                      Lähtesta korv
+                    </Button>
+                  )}
                 </div>
+                {pantryApplied && (
+                  <div
+                    className="rounded-[12px] border px-3 py-2.5 text-sm font-bold"
+                    style={{
+                      borderColor: PK_ORANGE,
+                      backgroundColor: "#fff0e3",
+                      color: "#000",
+                    }}
+                  >
+                    Korv {euros(basePlan?.total ?? 34.24)} → {euros(plan.total)}.
+                    Munad: {eggsNeeded} tk nädalaks · ostad {eggLine?.qty ?? 1}{" "}
+                    karbi (varem 2).
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 gap-2">
@@ -470,7 +881,7 @@ export function StudentModeApp() {
                 />
               </div>
 
-              <div className="flex gap-2 rounded-full border border-border/70 bg-white/60 p-1 backdrop-blur">
+              <div className="flex gap-2 rounded-full border border-neutral-200 bg-neutral-50 p-1">
                 {(
                   [
                     ["menu", "Menüü"],
@@ -483,10 +894,10 @@ export function StudentModeApp() {
                     type="button"
                     onClick={() => setTab(id)}
                     className={cn(
-                      "flex-1 rounded-full px-3 py-2 text-sm font-medium transition",
+                      "flex-1 rounded-full px-3 py-2 text-sm font-bold transition",
                       tab === id
-                        ? "bg-selver-navy text-white shadow-sm"
-                        : "text-muted-foreground hover:text-foreground",
+                        ? "bg-black text-white"
+                        : "text-neutral-500 hover:text-black",
                     )}
                   >
                     {label}
@@ -495,42 +906,84 @@ export function StudentModeApp() {
               </div>
 
               {tab === "menu" && <MenuView plan={plan} />}
-              {tab === "basket" && <BasketView plan={plan} />}
+              {tab === "basket" && (
+                <BasketView plan={plan} highlightEggs={pantryApplied} />
+              )}
               {tab === "chat" && (
                 <ChatView
                   chat={chat}
                   draft={draft}
                   setDraft={setDraft}
                   onSend={sendChat}
+                  onPantryDemo={() => applyEggsAtHome(10)}
                 />
               )}
+
+              <div className="rounded-[14px] border border-neutral-200 bg-neutral-50 p-4">
+                <p className="text-sm font-bold text-black">Järgmine samm</p>
+                <p className="mt-1 text-sm text-neutral-600">
+                  Tulevikus võiks selle nimekirjaga jätkata e-Selveris.
+                </p>
+                <button
+                  type="button"
+                  className="mt-3 inline-flex h-11 w-full items-center justify-center gap-2 rounded-full text-sm font-bold uppercase tracking-[0.04em] text-white"
+                  style={{ backgroundColor: PK_ORANGE }}
+                >
+                  Jätka e-Selveris
+                  <ArrowRight className="size-4" />
+                </button>
+              </div>
             </section>
           )}
         </main>
 
-        <nav className="absolute inset-x-0 bottom-0 border-t border-border/70 bg-white/95 px-1 pb-[max(0.5rem,env(safe-area-inset-bottom))] pt-1 backdrop-blur-md">
-          <div className="grid grid-cols-5">
-            {BOTTOM_TABS.map((item) => {
-              const Icon = item.icon;
-              const active = item.id === "more" || (modeOn && item.id === "list");
-              return (
-                <div
-                  key={item.id}
-                  className={cn(
-                    "flex flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[10px] font-medium",
-                    active ? "text-selver-red" : "text-selver-navy/45",
-                  )}
-                >
-                  <Icon className="size-5" strokeWidth={active ? 2.4 : 1.8} />
-                  {item.label}
+            {inStudentMode ? (
+              <nav className="absolute inset-x-0 bottom-0 z-20 border-t border-border/70 bg-white/95 px-1 pb-5 pt-1 backdrop-blur-md">
+                <div className="grid grid-cols-5">
+                  {BOTTOM_TABS.map((item) => {
+                    const Icon = item.icon;
+                    const active =
+                      item.id === "more" ||
+                      (stage === "plan" && item.id === "list");
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => {
+                          if (item.id === "more") setMenuOpen(true);
+                          else if (item.id === "home") goHome();
+                        }}
+                        className={cn(
+                          "flex flex-col items-center gap-0.5 rounded-xl px-1 py-2 text-[10px] font-medium",
+                          active ? "text-[#F97D00]" : "text-neutral-400",
+                          item.id !== "more" &&
+                            item.id !== "home" &&
+                            "pointer-events-none",
+                        )}
+                      >
+                        <Icon
+                          className="size-5"
+                          strokeWidth={active ? 2.4 : 1.8}
+                        />
+                        {item.label}
+                      </button>
+                    );
+                  })}
                 </div>
-              );
-            })}
+                <div className="flex justify-center pb-1 pt-1" aria-hidden>
+                  <div className="h-[5px] w-[134px] rounded-full bg-black/80" />
+                </div>
+              </nav>
+            ) : (
+              <div
+                className="pointer-events-none absolute inset-x-0 bottom-2 z-20 flex justify-center"
+                aria-hidden
+              >
+                <div className="h-[5px] w-[134px] rounded-full bg-black/85" />
+              </div>
+            )}
           </div>
-          <p className="pb-1 text-center text-[10px] text-muted-foreground">
-            Tudengirežiim · Partnerkaardi äpi moodul
-          </p>
-        </nav>
+        </div>
       </div>
     </div>
   );
@@ -546,12 +999,12 @@ function Stat({
   hint: string;
 }) {
   return (
-    <div className="rounded-[1.5rem] border border-border/70 bg-white/75 px-5 py-4 backdrop-blur">
-      <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
+    <div className="rounded-[14px] border border-neutral-200 bg-white px-5 py-4">
+      <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-neutral-500">
         {label}
       </p>
-      <p className="mt-1 font-display text-3xl font-bold text-grove">{value}</p>
-      <p className="mt-1 text-sm text-muted-foreground">{hint}</p>
+      <p className="mt-1 font-display text-3xl font-bold text-black">{value}</p>
+      <p className="mt-1 text-sm text-neutral-500">{hint}</p>
     </div>
   );
 }
@@ -575,19 +1028,24 @@ function MenuView({ plan }: { plan: PlanResult }) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.05 }}
-          className="rounded-[1.5rem] border border-border/70 bg-white/75 p-4 backdrop-blur sm:p-5"
+          className="rounded-[14px] border border-neutral-200 bg-white p-4"
         >
           <div className="mb-3 flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-citrus font-display text-sm font-bold text-accent-foreground">
+            <span
+              className="flex h-8 w-8 items-center justify-center rounded-full font-display text-sm font-bold text-white"
+              style={{ backgroundColor: PK_ORANGE }}
+            >
               {dayLabel(day)}
             </span>
-            <p className="font-display text-lg font-bold">Päev {day}</p>
+            <p className="font-display text-lg font-bold text-black">
+              Päev {day}
+            </p>
           </div>
           <div className="grid gap-2">
             {meals.map((meal) => (
               <div
                 key={`${meal.day}-${meal.slot}`}
-                className="rounded-2xl bg-mist/80 px-3 py-3"
+                className="rounded-[12px] bg-neutral-50 px-3 py-3"
               >
                 <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
                   {meal.slot}
@@ -615,26 +1073,37 @@ function MenuView({ plan }: { plan: PlanResult }) {
   );
 }
 
-function BasketView({ plan }: { plan: PlanResult }) {
+function BasketView({
+  plan,
+  highlightEggs,
+}: {
+  plan: PlanResult;
+  highlightEggs?: boolean;
+}) {
   return (
-    <div className="overflow-hidden rounded-[1.5rem] border border-border/70 bg-white/80 backdrop-blur">
-      <div className="flex items-center justify-between border-b border-border/60 px-4 py-3 sm:px-5">
+    <div className="overflow-hidden rounded-[14px] border border-neutral-200 bg-white">
+      <div className="flex items-center justify-between border-b border-neutral-200 px-4 py-3 sm:px-5">
         <div className="flex items-center gap-2">
-          <ShoppingBasket className="size-4 text-leaf" />
-          <p className="font-display text-lg font-bold">Ostukorv</p>
+          <ShoppingBasket className="size-4" style={{ color: PK_ORANGE }} />
+          <p className="font-display text-lg font-bold text-black">Ostukorv</p>
         </div>
-        <p className="font-display text-xl font-bold text-grove">
+        <p className="font-display text-xl font-bold text-black">
           {euros(plan.total)}
         </p>
       </div>
-      <ul className="divide-y divide-border/50">
+      <ul className="divide-y divide-neutral-200">
         {plan.basket.map((line, i) => (
           <motion.li
             key={line.productId}
             initial={{ opacity: 0, x: -8 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.03 }}
-            className="flex items-start justify-between gap-3 px-4 py-3 sm:px-5"
+            className={cn(
+              "flex items-start justify-between gap-3 px-4 py-3 sm:px-5",
+              highlightEggs &&
+                line.productId === "munad" &&
+                "bg-[#fff0e3]",
+            )}
           >
             <div>
               <p className="font-medium leading-snug">{line.name}</p>
@@ -648,24 +1117,29 @@ function BasketView({ plan }: { plan: PlanResult }) {
                   </Badge>
                 )}
                 {line.onPromo && (
-                  <Badge className="h-5 bg-citrus text-[10px] text-accent-foreground hover:bg-citrus">
+                  <Badge
+                    className="h-5 text-[10px] text-white hover:opacity-90"
+                    style={{ backgroundColor: PK_ORANGE }}
+                  >
                     Kampaania
                   </Badge>
                 )}
               </div>
             </div>
             <div className="text-right">
-              <p className="font-semibold">{euros(line.lineTotal)}</p>
+              <p className="font-semibold text-black">{euros(line.lineTotal)}</p>
               {line.saved > 0 && (
-                <p className="text-xs text-leaf">−{euros(line.saved)}</p>
+                <p className="text-xs font-bold" style={{ color: PK_ORANGE }}>
+                  −{euros(line.saved)}
+                </p>
               )}
             </div>
           </motion.li>
         ))}
       </ul>
-      <div className="border-t border-border/60 bg-mist/70 px-4 py-4 sm:px-5">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <Check className="size-4 text-leaf" />
+      <div className="border-t border-neutral-200 bg-neutral-50 px-4 py-4 sm:px-5">
+        <div className="flex items-center gap-2 text-sm text-neutral-600">
+          <Check className="size-4" style={{ color: PK_ORANGE }} />
           Sama sibul ja porgand jagunevad mitme retsepti peale — vähem raiskamist.
         </div>
       </div>
@@ -678,48 +1152,63 @@ function ChatView({
   draft,
   setDraft,
   onSend,
+  onPantryDemo,
 }: {
   chat: ChatMessage[];
   draft: string;
   setDraft: (v: string) => void;
   onSend: () => void;
+  onPantryDemo?: () => void;
 }) {
   const chips = [
-    "Mul on 5 eurot",
+    "Mul on kodus 10 muna",
     "Kiire enne loengut",
     "Taimne õhtusöök",
-    "Kana jäägid",
+    "Foto (tulekul)",
   ];
 
   return (
-    <div className="flex min-h-[420px] flex-col overflow-hidden rounded-[1.5rem] border border-border/70 bg-white/80 backdrop-blur">
-      <div className="flex items-center gap-2 border-b border-border/60 px-4 py-3">
-        <MessageCircle className="size-4 text-leaf" />
-        <p className="font-display text-lg font-bold">Tudengiabi</p>
+    <div className="flex min-h-[420px] flex-col overflow-hidden rounded-[14px] border border-neutral-200 bg-white">
+      <div className="flex items-center gap-2 border-b border-neutral-200 px-4 py-3">
+        <MessageCircle className="size-4" style={{ color: PK_ORANGE }} />
+        <p className="font-display text-lg font-bold text-black">Tudengiabi</p>
       </div>
       <div className="flex-1 space-y-3 overflow-y-auto px-4 py-4">
         {chat.map((m) => (
           <div
             key={m.id}
             className={cn(
-              "max-w-[90%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
+              "max-w-[90%] rounded-[12px] px-3.5 py-2.5 text-sm leading-relaxed",
               m.role === "assistant"
-                ? "bg-mist text-foreground"
-                : "ml-auto bg-selver-red text-white",
+                ? "bg-neutral-100 text-black"
+                : "ml-auto text-white",
             )}
+            style={
+              m.role === "user" ? { backgroundColor: PK_ORANGE } : undefined
+            }
           >
             {m.text}
           </div>
         ))}
       </div>
-      <div className="space-y-3 border-t border-border/60 px-4 py-3">
+      <div className="space-y-3 border-t border-neutral-200 px-4 py-3">
         <div className="flex flex-wrap gap-2">
           {chips.map((c) => (
             <button
               key={c}
               type="button"
-              onClick={() => setDraft(c)}
-              className="rounded-full border border-border bg-white px-3 py-1 text-xs text-muted-foreground hover:border-leaf/40 hover:text-foreground"
+              onClick={() => {
+                if (c.includes("10 muna") && onPantryDemo) {
+                  onPantryDemo();
+                  return;
+                }
+                if (c.includes("Foto")) return;
+                setDraft(c);
+              }}
+              className={cn(
+                "rounded-full border border-neutral-200 bg-white px-3 py-1 text-xs font-bold text-neutral-600 hover:border-[#F97D00] hover:text-black",
+                c.includes("Foto") && "opacity-50",
+              )}
             >
               {c}
             </button>
@@ -739,7 +1228,8 @@ function ChatView({
             }}
           />
           <Button
-            className="h-auto rounded-2xl bg-selver-red px-4 text-white hover:bg-[#c50510]"
+            className="h-auto rounded-[12px] px-4 font-bold text-white hover:opacity-90"
+            style={{ backgroundColor: PK_ORANGE }}
             onClick={onSend}
           >
             Saada

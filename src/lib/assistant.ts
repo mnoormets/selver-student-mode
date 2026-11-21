@@ -21,6 +21,13 @@ export function replyToStudent(
     return "Küsi nt „mul on 5 eurot“ või „mis teha kana jääkidest?“";
   }
 
+  if (
+    (q.includes("kodus") || q.includes("mul on")) &&
+    q.includes("muna")
+  ) {
+    return "Vajuta „Mul on kodus 10 muna“ või kirjuta täpselt nii — siis arvutan korvi uuesti (34,24 € → 32,35 €).";
+  }
+
   if (q.includes("5 euro") || q.includes("5€") || q.includes("viis euro")) {
     const picks = PRODUCTS.filter((p) => unitPrice(p) <= 2)
       .sort((a, b) => unitPrice(a) - unitPrice(b))

@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
-import { Barlow, Barlow_Condensed } from "next/font/google";
+import { Roboto, Roboto_Condensed } from "next/font/google";
 import "./globals.css";
 
-const barlow = Barlow({
+/** Partnerkaart UI uses a tight condensed bold sans — match that voice. */
+const roboto = Roboto({
   variable: "--font-sans",
   subsets: ["latin", "latin-ext"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "700"],
 });
 
-const barlowCondensed = Barlow_Condensed({
+const robotoCondensed = Roboto_Condensed({
   variable: "--font-display",
   subsets: ["latin", "latin-ext"],
-  weight: ["600", "700", "800"],
+  weight: ["500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -24,9 +25,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="et"
-      className={`${barlow.variable} ${barlowCondensed.variable} h-full antialiased`}
+      className={`${roboto.variable} ${robotoCondensed.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#0b1220]">{children}</body>
+      <body className="min-h-full flex flex-col bg-black font-sans">{children}</body>
     </html>
   );
 }
