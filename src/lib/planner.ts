@@ -10,7 +10,7 @@ export type Prefs = {
   budget: number;
   days: number;
   style: "kiire" | "odav" | "taimne" | "liha";
-  campus: string;
+  delivery: string;
 };
 
 export type PlannedMeal = {

@@ -63,12 +63,11 @@ function SelverLogoLink({
 
 type Stage = "hero" | "setup" | "plan";
 
-const CAMPUSES = [
-  "TalTech Mustamäe",
-  "TÜ peahoone",
-  "TLÜ Mare",
-  "EMÜ Tartu",
-  "Selver e-pood",
+const DELIVERY_OPTIONS = [
+  "Kojutoomine täna",
+  "Kojutoomine homme",
+  "Express 2 h",
+  "Tulen ise Selverisse",
 ];
 
 const STYLES: { id: Prefs["style"]; label: string; hint: string }[] = [
@@ -88,7 +87,7 @@ export function StudentModeApp() {
   const [budget, setBudget] = useState(35);
   const [days, setDays] = useState(5);
   const [style, setStyle] = useState<Prefs["style"]>("odav");
-  const [campus, setCampus] = useState(CAMPUSES[0]!);
+  const [delivery, setDelivery] = useState(DELIVERY_OPTIONS[0]!);
   const [plan, setPlan] = useState<PlanResult | null>(null);
   const [pending, startTransition] = useTransition();
   const [tab, setTab] = useState<"menu" | "basket" | "chat">("menu");
@@ -102,8 +101,8 @@ export function StudentModeApp() {
   const [draft, setDraft] = useState("");
 
   const prefs: Prefs = useMemo(
-    () => ({ budget, days, style, campus }),
-    [budget, days, style, campus],
+    () => ({ budget, days, style, delivery }),
+    [budget, days, style, delivery],
   );
 
   function activate() {
@@ -341,21 +340,24 @@ export function StudentModeApp() {
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-sm font-medium">Kättesaamise koht</p>
+                  <p className="text-sm font-medium">Tarne üle Eesti</p>
+                  <p className="text-xs text-muted-foreground">
+                    e-Selveri kojutoomine — kiire ja üleriigiline
+                  </p>
                   <div className="flex flex-wrap gap-2">
-                    {CAMPUSES.map((c) => (
+                    {DELIVERY_OPTIONS.map((option) => (
                       <button
-                        key={c}
+                        key={option}
                         type="button"
-                        onClick={() => setCampus(c)}
+                        onClick={() => setDelivery(option)}
                         className={cn(
                           "rounded-full border px-3 py-1.5 text-sm transition",
-                          campus === c
+                          delivery === option
                             ? "border-citrus bg-citrus text-accent-foreground"
                             : "border-border bg-white/70 text-foreground hover:border-leaf/40",
                         )}
                       >
-                        {c}
+                        {option}
                       </button>
                     ))}
                   </div>
@@ -416,7 +418,7 @@ export function StudentModeApp() {
                 <Stat
                   label="Järelejäänud"
                   value={euros(Math.max(0, plan.leftoverBudget))}
-                  hint={campus}
+                  hint={delivery}
                 />
               </div>
 
