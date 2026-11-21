@@ -1,10 +1,10 @@
 # Start Here
 
-Read [PROJECT_STATUS.md](PROJECT_STATUS.md), the [Shift Rescue MVP](docs/mvp.md), and the [next task](docs/current_task.md) first. Claude checks the selected scope against the event brief and reviews each implementation slice.
+Read [PROJECT_STATUS.md](PROJECT_STATUS.md), the [Selver Student Mode MVP](docs/mvp.md), and the [next task](docs/current_task.md) first. Claude checks the selected scope against the event brief and reviews each implementation slice.
 
 | Owner | Role and files |
 | --- | --- |
-| Claude Code, Machine 2 | Proposes MVP scope and architecture, writes the next task and reviews the implementation. Leads edits to `docs/mvp.md` once created, `docs/roadmap.md`, `docs/current_task.md`, `docs/decisions.md`, `docs/first_tasks.md`, and `docs/review.md`. |
+| Claude Code, Machine 2 | Proposes MVP scope and architecture, writes the next task and reviews the implementation. Leads edits to `docs/mvp.md`, `docs/roadmap.md`, `docs/current_task.md`, `docs/decisions.md`, `docs/backlog.md`, and `docs/review.md`. |
 | Codex, Machine 1 | Implements product code, integrates generated UI, adds focused tests, and fixes findings. Leads edits to `src/`, `index.html`, package and build configuration, and technical setup docs. Updates implementation status in `docs/current_task.md` during its turn. |
 | Cursor, Machine 2 | Helps Claude and the operator navigate and debug. Keep proposed changes local and share them with Codex unless the branch owner hands over editing. |
 | Lovable, either machine | Generates UI for the agreed screen. One operator per task shares a preview or export in the PR. Codex owns integration and the repository edits. |

@@ -1,45 +1,34 @@
-# Shift Rescue MVP
+# Selver Student Mode MVP
 
-## Product name
+## Pitch
 
-Shift Rescue
+Turn a student's weekly budget, diet, and cooking-time preference into a seven-day menu and a Selver shopping list with a total they can check.
 
-## One-sentence pitch
+## Problem and user
 
-Shift Rescue helps a community event coordinator fill a last-minute volunteer gap by showing who can take the shift and updating coverage as soon as the coordinator assigns someone.
+A student living independently needs to decide what to cook, what to buy, and whether the weekly basket fits their budget. Buying packs for separate meals can leave ingredients unused.
 
-## Problem
+## Demo in under three minutes
 
-When a volunteer cancels, the coordinator has to cross-check qualifications, availability, and existing assignments before assigning a substitute. A hurried guess can leave a second station uncovered.
-
-## User
-
-The volunteer coordinator at a small community event. They need a fast decision just before a staffed shift starts.
-
-## Demo workflow
-
-Use the fictional Riverside Community Fair roster. All three stations start covered for 10:00–11:00.
-
-1. Cancel Ava Chen at Check-in. The station opens and coverage drops from 3/3 to 2/3.
-2. The app lists Maya Patel as the only eligible replacement. Assign her and show coverage return to 3/3.
-3. In the extended demo, cancel Riley Brooks at Supply Table. The station stays open with a clear “No eligible replacements” message. Reset to restore the original roster for the next run.
-
-30-second narration: “A volunteer cancels just before the fair. Check-in loses coverage. Shift Rescue finds the one qualified person who is available and free. Assign Maya and we’re back to full coverage.”
+1. **0:00–0:30** — Open the planner with €35, Standard diet, and Under 20 minutes selected. Click Generate.
+2. **0:30–1:20** — Show seven days of breakfasts, lunches, and dinners for one student. Point out the cooking times.
+3. **1:20–2:30** — Open the shopping list and show whole packs, line totals, basket total, and remaining budget. Use chopped tomatoes as the example of one ingredient appearing in several recipes.
+4. **2:30–2:50** — Point out the dated demo prices. If the AI provider is unavailable, use the labeled offline sample.
 
 ## Core features
 
-- One roster screen with a coverage count, named stations, time slots, and current assignees.
-- Cancel an assignment and keep that volunteer unavailable for the affected slot until reset.
-- For each open shift, show people who are qualified for its role, available in its slot, uncancelled in that slot, and free of other assignments in that slot.
-- Assign an eligible replacement, show an explicit empty state if nobody qualifies, and reset the seeded demo.
+- Three profile inputs and one Generate action. Standard is the reference profile. Vegetarian is supported from the same catalog if a valid plan can be found.
+- AI suggests a week by choosing and arranging recipes from the catalog. Code validates the suggestions against the profile.
+- The shopping list comes from a frozen sample of Selver packages with published regular prices. Code aggregates quantities, rounds up to whole packs, and computes totals and budget remaining in euro cents.
+- Ingredient reuse shows which recipes share a product and how much of the purchased pack capacity is unused. Water, salt, pepper, and cooking oil are treated as pantry staples.
 
 ## Non-goals
 
-Accounts, database, network requests, AI, notifications, real volunteer data, editable schedules, and automatic roster optimization. The demo uses predefined slots with one person per station.
+Live Selver pricing or inventory, loyalty promotions, checkout, accounts, delivery, meal swaps, nutrition optimization, and pantry tracking.
 
 ## Success criteria
 
-- [ ] A judge can see the gap and its resolution in 30 seconds or less, with coverage changing from 3/3 to 2/3 and back to 3/3.
-- [ ] Maya is the only candidate for the seeded Check-in cancellation. The cancelled volunteer, a busy qualified volunteer, and an unavailable qualified volunteer are all excluded.
-- [ ] Cancelling Riley leaves Supply Table open and shows zero eligible replacements. Reset restores the same three original assignments.
-- [ ] The production demo runs from a local preview with external network access disabled and needs no credentials.
+- The demo profile produces 21 meal slots across seven days, each with a recipe whose estimated time is strictly below 20 minutes.
+- Every basket line maps to a catalog product with a source. The offline reference week costs €34.24 and leaves €0.76 from €35 using the sample prices.
+- Chopped tomatoes appear in four distinct recipes and need three 400 g packs for the reference week.
+- Invalid AI suggestions never appear as valid plans. The offline sample is labeled and only used if it satisfies the submitted preferences and budget.

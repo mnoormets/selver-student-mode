@@ -1,5 +1,7 @@
 # Demo Idea Workshop
 
+The [Selver Student Mode MVP](docs/mvp.md) is the active project. This list is prior brainstorming.
+
 Pick one idea that fits the event brief. Each idea assumes one screen or flow, synthetic demo data, and a React, TypeScript, and Vite frontend. The estimates cover one working demo slice plus a smoke check. They exclude event research and presentation prep.
 
 For an AI idea, start with a saved example response and show it as fixture mode. If live inference is central to judging, put provider credentials behind a small server endpoint and validate the response before rendering. The original input and model suggestions should remain visible so a person can verify the result.
@@ -18,12 +20,7 @@ For an AI idea, start with a saved example response and show it as fixture mode.
 
 | Idea | Problem | User | Demo flow | Why judges would care | Difficulty |
 | --- | --- | --- | --- | --- | --- |
-| Shift Rescue | A late volunteer cancellation leaves a staffed station uncovered. | Community event coordinator | Load a sample roster. Cancel a volunteer, show available qualified substitutes, apply one reassignment, and see coverage recover. Also show a case with no eligible replacement. | Clear before-and-after outcome with visible eligibility rules and a reliable offline demo. | Easy, 5–8 hours with fixed rules and a seeded roster. |
 | Pantry Plan | Staff need to distribute limited donated items across pickup slots. | Food pantry coordinator | Load sample inventory and pickup slots. Allocate stock to a slot and show remaining quantities and any shortfall. | The demo makes a resource constraint visible and prevents over-allocation in one interaction. | Easy, 5–8 hours with local fixtures and no personal data. |
 | Queue Replay | Teams cannot explain how staffing changes affect wait times at an event. | Registration desk lead | Load a small arrival sequence. Run one versus two desks and compare the same queue's maximum and median wait. | A deterministic comparison gives judges a concrete result they can reproduce. | Easy to moderate, 6–10 hours with a simplified simulation. |
 | Gear Check | Shared kit gets packed without a key component or returned incomplete. | Student media crew | Select a kit, mark components as packed, and see the missing item. Switch to return mode and compare with the packing list. | A short demo shows a preventable failure and a repeatable check for the next crew. | Easy, 4–7 hours with local fixture data and reset. |
 | Break Board | A coordinator assigning event breaks can accidentally leave a station unstaffed. | Small venue floor manager | Load a sample schedule. Propose a break, show the coverage conflict, then move it to a valid slot. | Judges see a constraint that users can understand and correct in seconds. | Easy to moderate, 6–9 hours with fixed slots and one coverage rule. |
-
-## Kickoff recommendation
-
-Start with **Shift Rescue** unless the event requires AI. Define eligibility as qualified, available, and unassigned for the affected slot. Demo one successful reassignment and one blocked case. Estimate success by whether a first-time user can restore coverage with the seeded roster in under 60 seconds. Defer accounts, notifications, and persistence. If AI is required, test **Handoff Lens** with synthetic notes and verify each extracted task against its source excerpt.

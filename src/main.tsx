@@ -1,4 +1,5 @@
 import { createRoot } from 'react-dom/client';
+import { StudentMode } from './features/student-mode/StudentMode';
 
 const container = document.getElementById('root');
 
@@ -6,9 +7,4 @@ if (!container) {
   throw new Error('React root is missing from index.html');
 }
 
-createRoot(container).render(
-  <main>
-    <h1>Hackathon Starter</h1>
-    <p>The starter is running.</p>
-  </main>,
-);
+createRoot(container).render(<StudentMode />);

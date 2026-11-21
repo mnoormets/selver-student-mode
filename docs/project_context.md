@@ -1,23 +1,25 @@
-# Project Context
+# Selver Student Mode Architecture
 
-## Architecture
+## One-screen app
 
-Shift Rescue is a single-screen React app built with TypeScript and Vite. `index.html` loads `src/main.tsx`, which currently mounts the starter screen. The [first task](current_task.md) will mount the Shift Rescue roster there. Demo data is synthetic, bundled in source, and works without a server API.
+React, TypeScript, and Vite serve one screen at `/`. Keep form input and the current generation result in local React state. Derive basket and reuse values from the accepted week. Avoid a router, global store, or database for this demo.
 
-## Folder structure and components
+## Data and responsibilities
 
-- `src/main.tsx` mounts the root and hands rendering to the feature.
-- `src/features/shift-rescue/` contains the existing `types.ts` and `demoRoster.ts`. Add `ShiftRescue.tsx` here for the one-screen roster. Once replacement logic is needed, put the pure selector and its focused tests beside the feature.
-- Let the feature own the coverage summary, roster, and open-shift controls. Extract a shift row or candidate list when it has independent behavior or when it makes the feature easier to read.
+- `src/main.tsx` mounts `src/features/student-mode/StudentMode.tsx`.
+- `src/features/student-mode/types.ts` defines the profile, plan, recipe, and catalog contracts.
+- `src/features/student-mode/data/` holds the dated Selver product snapshot, one-serving recipes with estimated total cooking times, and an offline reference week.
+- Add `basket.ts` for pure aggregation and pricing, and `plan.ts` for candidate validation. Extract form, week, basket, and reuse UI components only as their markup grows.
+- For live AI, use one server-side handler. Send the profile and allowed recipe metadata, with recipe IDs and ingredients to guide variety and reuse. Expect only seven days with breakfast, lunch, and dinner recipe IDs. Keep provider credentials on the server.
 
-Keep the seed, types, and UI together. Create shared folders when a second feature needs to reuse something.
+## Deterministic path
 
-## State and routing
+Validate the candidate's shape, distinct days, allowed recipes, meal slots, dietary preference, and strict time limit. Resolve ingredient product IDs, sum quantities by product, and buy `ceil(totalQuantity / packQuantity)` whole packs. Each product defines its base unit. Multiply by its pinned pack price in cents and sum the lines. Subtract the total from budget cents. Reject over-budget candidates and report no plan if neither the candidate nor the offline sample is valid for this profile.
 
-The read-only roster needs no mutable state. When cancellation starts, keep assignments by shift ID and cancellations by slot in one local React state value owned by `ShiftRescue`. Derive coverage and candidates from that state and the fixture. Use pure helpers for eligibility and immutable state updates so cancel, assign, and reset stay predictable.
+Reuse is the distinct recipes using a product, alongside leftover quantity from the packs purchased. It makes no prediction about waste. The reference week prices all listed ingredients and assumes water, salt, pepper, and cooking oil are already on hand.
 
-Serve the roster at `/`. Keep dialogs and open-shift controls on the same screen. The planned demo needs no router, global store, or persistence.
+## Price provenance and demo
 
-## Build process
+The product file links each exact package to price evidence from Soodsad Hinnad's published Selver listings or price history. The snapshot assembled on 21 November 2026 uses observed regular prices and never assumes a loyalty discount. The date identifies the fixture compilation, while source observations may be earlier. Label it as sample pricing in the UI. The basket engine makes no retailer requests.
 
-Both machines use Node.js 24 LTS and npm. `npm run dev` serves the app locally. `npm run check` runs TypeScript and a production build. Vite writes assets to ignored `dist/`. `npm run preview` serves the build locally. The running demo makes no external requests.
+Use `npm run dev` for local development, `npm run check` for type checking and building, and `npm run preview` to rehearse. See the [team brief](https://docs.google.com/document/d/1lM6kpeXfCHaYGz2LevyXPDY4DfCj4lkzWuC-rikamNI/edit?tab=t.0).

@@ -1,18 +1,6 @@
 # Decisions
 
-## Architectural Decisions
-
-- Use a single client-side web app and one shared Git repository. Start with a fixture so the demo can run locally and both machines can test it.
-- Keep input validation and result logic separate from the UI when the first feature is built. This gives Codex a small testable surface and Lovable a stable screen contract.
-- Add a server only if the scenario requires a private credential, a shared source of truth, or another operation that cannot run in the browser.
-
-## Libraries Used
-
-- React and React DOM render the UI.
-- TypeScript checks application code. Vite runs the development server and builds static assets.
-- Node.js 24 LTS and npm provide one toolchain on both machines.
-
-## Key Assumptions
-
-- The event allows a web demo. Confirm its submission requirements at kickoff. See [technical debt and assumptions](technical_debt.md) for what to revisit after the first slice.
-- One synthetic example can demonstrate the main value unless the chosen idea requires a live interaction.
+- **Retail data.** Use a frozen snapshot of published Selver pack prices with a source per SKU. Disclose sample prices in the demo and omit current stock, loyalty, and checkout.
+- **AI boundary.** The model proposes recipe IDs for the week. Production code validates the plan and calculates cart quantities, budget, and ingredient reuse.
+- **Reference profile.** Use €35, Standard diet, and Under 20 minutes. A labeled offline reference week is available and must pass the same validation and budget check.
+- **Stack.** Keep React, TypeScript, and Vite. Live AI needs only one server-side endpoint. [Architecture](project_context.md)
