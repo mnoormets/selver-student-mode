@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { answerBudgetPastaQuestion } from "@/features/student-mode/budgetPasta";
+import { answerCheeseNoodlesQuestion, type BudgetMealContext } from "@/features/student-mode/cheeseNoodles";
 import {
   answerCookChatTurn,
   cookChatCatalogPrompt,
@@ -14,6 +15,7 @@ type Body = {
   message: string;
   pantry?: CookPantry;
   recipeId?: string | null;
+  budgetMeal?: BudgetMealContext | null;
 };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -22,12 +24,20 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isCookChatBody(value: unknown): value is Body {
   if (!isRecord(value)) return false;
-  const { message, pantry, recipeId } = value;
+  const { message, pantry, recipeId, budgetMeal } = value;
+
+  const validBudgetMeal = budgetMeal == null ||
+    (isRecord(budgetMeal) && budgetMeal.dish === "cheese-noodles" &&
+      (budgetMeal.budgetCents === null ||
+        (typeof budgetMeal.budgetCents === "number" &&
+          Number.isSafeInteger(budgetMeal.budgetCents) &&
+          budgetMeal.budgetCents >= 0 && budgetMeal.budgetCents <= 99_999_999)));
 
   return (
     typeof message === "string" &&
     message.trim().length > 0 &&
     (recipeId == null || typeof recipeId === "string") &&
+    validBudgetMeal &&
     (pantry === undefined ||
       (isRecord(pantry) &&
         Object.values(pantry).every(
@@ -72,6 +82,9 @@ export async function POST(request: Request) {
 
   const budgetReply = answerBudgetPastaQuestion(message, pantryIn);
   if (budgetReply) return budgetPastaResponse(budgetReply, pantryIn);
+
+  const noodleReply = answerCheeseNoodlesQuestion(message, pantryIn, body.budgetMeal);
+  if (noodleReply) return NextResponse.json(noodleReply);
 
   const apiKey = process.env.OPENAI_API_KEY?.trim();
   if (apiKey) {

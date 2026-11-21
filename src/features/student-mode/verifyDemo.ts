@@ -8,6 +8,7 @@ import {
 } from "../../lib/demo-plan";
 import { computeBasketCents, eurosFromCents } from "./computeBasket";
 import { answerBudgetPastaQuestion } from "./budgetPasta";
+import { answerCheeseNoodlesQuestion } from "./cheeseNoodles";
 import { answerCookChatTurn } from "./cookChat";
 import { answerPantryCookQuestion } from "./pantryCook";
 import { answerSpaghettiEggsQuickMeal } from "./quickMeal";
@@ -235,6 +236,37 @@ export function verifyDemoMath(): string[] {
     "weekly requests stay on the existing flow",
   );
   logs.push("budget pasta portion, basket, pantry and low-budget checks passed");
+
+  const noodleQuestion = "Mul on kodus pakk nuudleid ja juustu. Mul on 5 €. Mida ma teha saan?";
+  const noodlePrompt = answerCheeseNoodlesQuestion(noodleQuestion, {});
+  assert(noodlePrompt, "noodle request should be recognized");
+  assert(noodlePrompt.reply.includes("Mitu grammi nuudleid ja juustu"), "unknown pack weight needs clarification");
+  assert(noodlePrompt.budgetMeal.budgetCents === 500, "retain the budget for the reply");
+
+  const noodleResult = answerCheeseNoodlesQuestion(
+    "200 g nuudleid ja 100 g juustu",
+    noodlePrompt.pantry,
+    noodlePrompt.budgetMeal,
+  );
+  assert(noodleResult, "quantity follow-up should keep the noodle request active");
+  assert(noodleResult.reply.includes("2 portsjonit juustunuudleid · 0,00 €"), "home ingredients should cover two portions");
+  assert(noodleResult.reply.includes("Korv 4,28 € · alles 0,72 €"), "extras should use catalog pack prices");
+  assert(!noodleResult.reply.includes("× Spagetid") && !noodleResult.reply.includes("× Juust"), "don't rebuy pantry ingredients");
+
+  const cheaperNoodles = answerCheeseNoodlesQuestion(
+    "Aga 3 €?",
+    noodleResult.pantry,
+    noodleResult.budgetMeal,
+  );
+  assert(cheaperNoodles?.reply.includes("ei mahu 3,00 € eelarvesse"), "budget follow-up removes the unaffordable add-on");
+
+  const onePortion = answerCheeseNoodlesQuestion(
+    "Tegelikult on nuudleid 90 g.",
+    noodleResult.pantry,
+    noodleResult.budgetMeal,
+  );
+  assert(onePortion?.reply.includes("1 portsjon juustunuudleid"), "revised pantry quantity changes portions");
+  logs.push("cheese noodles clarification, portions and optional shopping pass");
 
   return logs;
 }

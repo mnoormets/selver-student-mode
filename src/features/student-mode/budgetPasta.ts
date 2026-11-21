@@ -1,17 +1,8 @@
-import {
-  computeBasketCents,
-  type IngredientNeed,
-  type PantryStockCents,
-} from "./computeBasket";
+import { affordableMeal, formatBudgetCents as formatCents, mealBasket, readBudgetCents, type MealVariant } from "./budgetMeal";
+import type { PantryStockCents } from "./computeBasket";
 import { productById } from "./data/products";
 
-type PastaVariant = {
-  name: string;
-  ingredients: readonly IngredientNeed[];
-  method: string;
-};
-
-const variants: readonly PastaVariant[] = [
+const variants: readonly MealVariant[] = [
   {
     name: "Hakklihapasta tomati-oakastme ja kapsa-porgandisalatiga",
     ingredients: [
@@ -44,39 +35,6 @@ const variants: readonly PastaVariant[] = [
   },
 ];
 
-const money = new Intl.NumberFormat("et-EE", { style: "currency", currency: "EUR" });
-const formatCents = (cents: number) => money.format(cents / 100).replaceAll("\u00a0", " ");
-
-function basketFor(variant: PastaVariant, portions: number, pantry: PantryStockCents) {
-  return computeBasketCents(
-    variant.ingredients.map(({ productId, quantity }) => ({
-      productId,
-      quantity: quantity * portions,
-    })),
-    pantry,
-  );
-}
-
-function maxPortions(variant: PastaVariant, budgetCents: number, pantry: PantryStockCents) {
-  // Each ingredient bounds the portions even if all the money were spent on it.
-  let upper = Math.min(...variant.ingredients.map(({ productId, quantity }) => {
-    const product = productById(productId);
-    const packs = Math.floor(budgetCents / product.priceCents);
-    return Math.floor(((pantry[productId] ?? 0) + packs * product.packQuantity) / quantity);
-  }));
-  // Whole-pack basket cost never decreases when adding portions.
-  let lower = 0;
-  while (lower < upper) {
-    const middle = lower + Math.ceil((upper - lower) / 2);
-    if (basketFor(variant, middle, pantry).totalCents <= budgetCents) {
-      lower = middle;
-    } else {
-      upper = middle - 1;
-    }
-  }
-  return lower;
-}
-
 export function answerBudgetPastaQuestion(
   message: string,
   stock: PantryStockCents,
@@ -84,25 +42,19 @@ export function answerBudgetPastaQuestion(
 ): { reply: string; readyToCook: boolean } | null {
   const question = message.toLowerCase();
   if (/nädal|nadal/.test(question)) return null;
-  const budget = question.match(
-    /(?:^|\s|\()(?:(\d{1,6}(?:[.,]\d{1,2})?)\s*(?:€|eur(?:ot?|i)?\b)|€\s*(\d{1,6}(?:[.,]\d{1,2})?)(?!\d|[.,]\d))/,
-  );
-  if (!budget) return null;
+  const budgetCents = readBudgetCents(question);
+  if (budgetCents === null) return null;
   if (!recognizedByAi && !(/hakklih/.test(question) && /past|spaget/.test(question) && /salat/.test(question))) {
     return null;
   }
-  const budgetCents = Math.round(Number((budget[1] ?? budget[2]).replace(",", ".")) * 100);
   const pantry = Object.fromEntries(
     Object.entries(stock).filter(([, amount]) => Number.isFinite(amount) && amount >= 0 && amount <= 1_000_000),
   );
-  const candidates = variants.map((variant) => {
-    const portions = maxPortions(variant, budgetCents, pantry);
-    return { variant, portions, basket: basketFor(variant, portions, pantry) };
-  });
+  const candidates = variants.map((variant) => affordableMeal(variant, budgetCents, pantry));
   candidates.sort((a, b) => b.portions - a.portions || a.basket.totalCents - b.basket.totalCents);
   const best = candidates[0]!;
   if (best.portions === 0) {
-    const minimum = Math.min(...variants.map((variant) => basketFor(variant, 1, pantry).totalCents));
+    const minimum = Math.min(...variants.map((variant) => mealBasket(variant, 1, pantry).totalCents));
     return {
       readyToCook: false,
       reply: [
