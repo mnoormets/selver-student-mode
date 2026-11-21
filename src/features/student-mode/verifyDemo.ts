@@ -13,6 +13,7 @@ import { answerCookChatTurn } from "./cookChat";
 import { answerPantryCookQuestion } from "./pantryCook";
 import { answerSpaghettiEggsQuickMeal } from "./quickMeal";
 import { validateDemoCatalog } from "./validateCatalog";
+import { answerWeeklyMealQuestion } from "./weeklyMeals";
 
 function assert(cond: unknown, message: string): asserts cond {
   if (!cond) throw new Error(message);
@@ -267,6 +268,25 @@ export function verifyDemoMath(): string[] {
   );
   assert(onePortion?.reply.includes("1 portsjon juustunuudleid"), "revised pantry quantity changes portions");
   logs.push("cheese noodles clarification, portions and optional shopping pass");
+
+  const weeklyQuestion = "Mul on nädalaks 30 eurot ja tahan liha ka süüa.";
+  const weeklyPrompt = answerWeeklyMealQuestion(weeklyQuestion, {});
+  assert(weeklyPrompt, "recognize the 30€ weekly request");
+  assert(weeklyPrompt.reply.includes("kolme söögikorda päevas"), "clarify the meal scope");
+
+  const fullWeek = answerWeeklyMealQuestion("Kõik söögikorrad", {}, weeklyPrompt.budgetMeal);
+  assert(fullWeek, "remember the weekly budget after clarification");
+  assert(fullWeek.reply.includes("7/7 päeva · 21 söögikorda · liha 4 päeval"), "cover a week with meat on four days");
+  assert(fullWeek.reply.includes("Korv 29,85 € · alles 0,15 €"), "use one pooled whole-pack basket");
+  assert(fullWeek.reply.includes("1 × Kodune hakkliha"), "reuse one pack of meat across four meals");
+
+  const dinnerWeek = answerWeeklyMealQuestion("Ainult õhtusöögid", {}, fullWeek.budgetMeal);
+  assert(dinnerWeek?.reply.includes("7/7 päeva · 7 söögikorda"), "switch to dinners only");
+  const reducedWeek = answerWeeklyMealQuestion("Aga 27 €?", {}, fullWeek.budgetMeal);
+  assert(reducedWeek?.reply.includes("7/7 päeva") && reducedWeek.reply.includes("Korv 26,56 €"), "use the cheaper weekly variant when needed");
+  const tooTightWeek = answerWeeklyMealQuestion("Aga 1 €?", {}, fullWeek.budgetMeal);
+  assert(tooTightWeek?.reply.includes("ei mahu"), "do not present an over-budget plan as affordable");
+  logs.push("weekly chat scope, 21 meals, pooled basket and lower-budget variant pass");
 
   return logs;
 }

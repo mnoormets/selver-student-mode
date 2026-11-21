@@ -11,6 +11,12 @@ export type MealVariant = {
   method: string;
 };
 
+export type WeeklyMealScope = "all-meals" | "dinners";
+
+export type BudgetMealContext =
+  | { dish: "cheese-noodles"; budgetCents: number | null }
+  | { dish: "weekly-meals"; budgetCents: number | null; scope: WeeklyMealScope | null };
+
 const euroFormat = new Intl.NumberFormat("et-EE", { style: "currency", currency: "EUR" });
 
 export function formatBudgetCents(cents: number): string {
@@ -22,6 +28,10 @@ export function readBudgetCents(message: string): number | null {
     /(?:^|\s|\()(?:(\d{1,6}(?:[.,]\d{1,2})?)\s*(?:€|eur(?:ot?|i)?\b)|€\s*(\d{1,6}(?:[.,]\d{1,2})?)(?!\d|[.,]\d))/i,
   );
   return budget ? Math.round(Number((budget[1] ?? budget[2]).replace(",", ".")) * 100) : null;
+}
+
+export function isBudgetOnlyMessage(message: string): boolean {
+  return /^(?:(?:mul on|eelarve on|aga|ainult)\s+)*(?:\d+(?:[.,]\d{1,2})?\s*(?:€|eur(?:ot?|i)?)|€\s*\d+(?:[.,]\d{1,2})?)[.!?\s]*$/i.test(message);
 }
 
 export function mealBasket(variant: MealVariant, portions: number, pantry: PantryStockCents) {

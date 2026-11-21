@@ -50,7 +50,7 @@ import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { replyToStudent, type ChatMessage } from "@/lib/assistant";
-import type { BudgetMealContext } from "@/features/student-mode/cheeseNoodles";
+import type { BudgetMealContext } from "@/features/student-mode/budgetMeal";
 import {
   applyPantryStock,
   buildHackathonDemoPlan,
@@ -745,6 +745,7 @@ export function StudentModeApp() {
                 setDraft={setCookDraft}
                 onSend={() => void sendCookChat()}
                 chips={[
+                  "30 € nädalaks, soovin ka liha",
                   "10 € eest hakklihapastat ja salatit",
                   "Kodus on nuudlid ja juust, eelarve 5 €",
                   "Mul on 100 g spagette ja kaks muna. Mida ma kiiresti teha saaks?",

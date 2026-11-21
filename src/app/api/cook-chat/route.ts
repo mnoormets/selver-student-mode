@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
+import type { BudgetMealContext } from "@/features/student-mode/budgetMeal";
 import { answerBudgetPastaQuestion } from "@/features/student-mode/budgetPasta";
-import { answerCheeseNoodlesQuestion, type BudgetMealContext } from "@/features/student-mode/cheeseNoodles";
+import { answerCheeseNoodlesQuestion } from "@/features/student-mode/cheeseNoodles";
 import {
   answerCookChatTurn,
   cookChatCatalogPrompt,
   type CookPantry,
 } from "@/features/student-mode/cookChat";
+import { answerWeeklyMealQuestion } from "@/features/student-mode/weeklyMeals";
 
 export const runtime = "nodejs";
 
@@ -26,12 +28,16 @@ function isCookChatBody(value: unknown): value is Body {
   if (!isRecord(value)) return false;
   const { message, pantry, recipeId, budgetMeal } = value;
 
-  const validBudgetMeal = budgetMeal == null ||
-    (isRecord(budgetMeal) && budgetMeal.dish === "cheese-noodles" &&
-      (budgetMeal.budgetCents === null ||
-        (typeof budgetMeal.budgetCents === "number" &&
-          Number.isSafeInteger(budgetMeal.budgetCents) &&
-          budgetMeal.budgetCents >= 0 && budgetMeal.budgetCents <= 99_999_999)));
+  const validBudgetMeal = budgetMeal == null || (
+    isRecord(budgetMeal) &&
+    (budgetMeal.budgetCents === null ||
+      (typeof budgetMeal.budgetCents === "number" &&
+        Number.isSafeInteger(budgetMeal.budgetCents) &&
+        budgetMeal.budgetCents >= 0 && budgetMeal.budgetCents <= 99_999_999)) &&
+    (budgetMeal.dish === "cheese-noodles" ||
+      (budgetMeal.dish === "weekly-meals" &&
+        (budgetMeal.scope === null || budgetMeal.scope === "all-meals" || budgetMeal.scope === "dinners")))
+  );
 
   return (
     typeof message === "string" &&
@@ -79,6 +85,9 @@ export async function POST(request: Request) {
   const message = body.message.trim();
   const pantryIn = body.pantry ?? {};
   const forceRecipeId = body.recipeId ?? null;
+
+  const weeklyReply = answerWeeklyMealQuestion(message, pantryIn, body.budgetMeal);
+  if (weeklyReply) return NextResponse.json(weeklyReply);
 
   const budgetReply = answerBudgetPastaQuestion(message, pantryIn);
   if (budgetReply) return budgetPastaResponse(budgetReply, pantryIn);

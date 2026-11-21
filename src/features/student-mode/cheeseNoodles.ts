@@ -1,10 +1,12 @@
-import { affordableMeal, formatBudgetCents, readBudgetCents, type MealVariant } from "./budgetMeal";
+import {
+  affordableMeal,
+  formatBudgetCents,
+  isBudgetOnlyMessage,
+  readBudgetCents,
+  type BudgetMealContext,
+  type MealVariant,
+} from "./budgetMeal";
 import type { PantryStockCents } from "./computeBasket";
-
-export type BudgetMealContext = {
-  dish: "cheese-noodles";
-  budgetCents: number | null;
-};
 
 // The user already owns the noodles. Reuse the dry-pasta quantity for portion
 // math and keep both base ingredients out of the shopping basket.
@@ -47,11 +49,12 @@ export function answerCheeseNoodlesQuestion(
   const budget = readBudgetCents(question);
   const mentionsPantry = question.includes("nuudl") && question.includes("juust") &&
     /kodus|mul on|olemas/.test(question);
-  const budgetOnly = /^(?:(?:mul on|eelarve on|aga|ainult)\s+)*(?:\d+(?:[.,]\d{1,2})?\s*(?:€|eur(?:ot?|i)?)|€\s*\d+(?:[.,]\d{1,2})?)[.!?\s]*$/.test(question);
-  const continues = context && (noodleGrams !== undefined || cheeseGrams !== undefined || (budget !== null && budgetOnly));
+  const previous = context?.dish === "cheese-noodles" ? context : null;
+  const continues = previous &&
+    (noodleGrams !== undefined || cheeseGrams !== undefined || (budget !== null && isBudgetOnlyMessage(question)));
   if (!mentionsPantry && !continues) return null;
 
-  const budgetCents = budget ?? context?.budgetCents ?? null;
+  const budgetCents = budget ?? previous?.budgetCents ?? null;
   const budgetMeal: BudgetMealContext = { dish: "cheese-noodles", budgetCents };
   const pantry: Record<string, number> = {
     ...Object.fromEntries(Object.entries(stock).filter(
