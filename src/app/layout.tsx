@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
-import { Figtree, Syne } from "next/font/google";
+import { Barlow, Barlow_Condensed } from "next/font/google";
 import "./globals.css";
 
-const figtree = Figtree({
+const barlow = Barlow({
   variable: "--font-sans",
   subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const syne = Syne({
+const barlowCondensed = Barlow_Condensed({
   variable: "--font-display",
   subsets: ["latin", "latin-ext"],
   weight: ["600", "700", "800"],
@@ -23,7 +24,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="et"
-      className={`${figtree.variable} ${syne.variable} h-full antialiased`}
+      className={`${barlow.variable} ${barlowCondensed.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>

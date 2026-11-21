@@ -45,6 +45,9 @@
   --color-grove: var(--grove);
   --color-mist: var(--mist);
   --color-citrus: var(--citrus);
+  --color-selver-red: var(--selver-red);
+  --color-selver-navy: var(--selver-navy);
+  --color-selver-yellow: var(--selver-yellow);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -53,43 +56,51 @@
 }
 
 :root {
-  --background: #f3f7f1;
-  --foreground: #13261c;
+  /* Official-leaning Selver palette from brand mark */
+  --selver-red: #e30613;
+  --selver-navy: #00205b;
+  --selver-yellow: #ffd100;
+
+  --background: #f4f6fb;
+  --foreground: #00205b;
   --card: #ffffff;
-  --card-foreground: #13261c;
+  --card-foreground: #00205b;
   --popover: #ffffff;
-  --popover-foreground: #13261c;
-  --primary: #0c6b45;
-  --primary-foreground: #f5fff8;
-  --secondary: #e4f0e4;
-  --secondary-foreground: #1a3d2a;
-  --muted: #e8efe6;
-  --muted-foreground: #4d6556;
-  --accent: #d8f06a;
-  --accent-foreground: #1a330f;
-  --destructive: #c2410c;
-  --border: #c9d9c8;
-  --input: #c9d9c8;
-  --ring: #0c6b45;
-  --leaf: #0c6b45;
-  --leaf-foreground: #f5fff8;
-  --grove: #083d28;
-  --mist: #eef5ea;
-  --citrus: #d8f06a;
-  --chart-1: #0c6b45;
-  --chart-2: #d8f06a;
-  --chart-3: #f59e0b;
-  --chart-4: #2dd4bf;
+  --popover-foreground: #00205b;
+  --primary: #e30613;
+  --primary-foreground: #ffffff;
+  --secondary: #e8eef8;
+  --secondary-foreground: #00205b;
+  --muted: #e9eef7;
+  --muted-foreground: #4a5a7a;
+  --accent: #ffd100;
+  --accent-foreground: #00205b;
+  --destructive: #b91c1c;
+  --border: #cfd8ea;
+  --input: #cfd8ea;
+  --ring: #e30613;
+
+  /* Legacy tokens remapped to Selver theme */
+  --leaf: #e30613;
+  --leaf-foreground: #ffffff;
+  --grove: #00205b;
+  --mist: #eef2f9;
+  --citrus: #ffd100;
+
+  --chart-1: #e30613;
+  --chart-2: #ffd100;
+  --chart-3: #00205b;
+  --chart-4: #3b82f6;
   --chart-5: #64748b;
   --radius: 0.75rem;
-  --sidebar: #eef5ea;
-  --sidebar-foreground: #13261c;
-  --sidebar-primary: #0c6b45;
-  --sidebar-primary-foreground: #f5fff8;
-  --sidebar-accent: #e4f0e4;
-  --sidebar-accent-foreground: #1a3d2a;
-  --sidebar-border: #c9d9c8;
-  --sidebar-ring: #0c6b45;
+  --sidebar: #eef2f9;
+  --sidebar-foreground: #00205b;
+  --sidebar-primary: #e30613;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e8eef8;
+  --sidebar-accent-foreground: #00205b;
+  --sidebar-border: #cfd8ea;
+  --sidebar-ring: #e30613;
 }
 
 @layer base {
@@ -100,10 +111,10 @@
     @apply bg-background text-foreground;
     font-family: var(--font-sans), system-ui, sans-serif;
     background-image:
-      radial-gradient(ellipse 90% 60% at 10% -10%, #d8f06a55, transparent 55%),
-      radial-gradient(ellipse 70% 50% at 100% 0%, #0c6b4533, transparent 50%),
-      radial-gradient(ellipse 50% 40% at 80% 100%, #a7d7b855, transparent 45%),
-      linear-gradient(180deg, #f7fbf4 0%, #eef5ea 40%, #e5efe3 100%);
+      radial-gradient(ellipse 90% 55% at 8% -8%, #ffd10055, transparent 55%),
+      radial-gradient(ellipse 70% 50% at 100% 0%, #e3061328, transparent 52%),
+      radial-gradient(ellipse 45% 40% at 70% 100%, #00205b18, transparent 45%),
+      linear-gradient(180deg, #fafbff 0%, #f0f3fa 45%, #e8eef8 100%);
     background-attachment: fixed;
     min-height: 100%;
   }
@@ -111,16 +122,6 @@
   h2,
   h3 {
     font-family: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  }
-}
-
-@keyframes float-slow {
-  0%,
-  100% {
-    transform: translateY(0) rotate(-2deg);
-  }
-  50% {
-    transform: translateY(-12px) rotate(2deg);
   }
 }
 
@@ -150,10 +151,6 @@
   }
 }
 
-.animate-float-slow {
-  animation: float-slow 7s ease-in-out infinite;
-}
-
 .animate-pulse-ring {
   animation: pulse-ring 2.4s ease-out infinite;
 }
@@ -163,5 +160,5 @@
 }
 
 .produce-grid {
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230c6b45' fill-opacity='0.05'%3E%3Cpath d='M30 5c4 8 4 16 0 24-4-8-4-16 0-24zm0 26c4 8 4 16 0 24-4-8-4-16 0-24zM5 30c8-4 16-4 24 0-8 4-16 4-24 0zm26 0c8-4 16-4 24 0-8 4-16 4-24 0z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300205b' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }

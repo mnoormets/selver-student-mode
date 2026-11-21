@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowRight,
@@ -12,6 +13,7 @@ import {
   Wallet,
   GraduationCap,
   Check,
+  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -25,6 +27,39 @@ import {
   type PlanResult,
   type Prefs,
 } from "@/lib/planner";
+
+const SELVER_URL = "https://www.selver.ee";
+
+function SelverLogoLink({
+  className,
+  priority = false,
+}: {
+  className?: string;
+  priority?: boolean;
+}) {
+  return (
+    <a
+      href={SELVER_URL}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(
+        "group inline-flex shrink-0 rounded-xl outline-none focus-visible:ring-2 focus-visible:ring-selver-red",
+        className,
+      )}
+      aria-label="Ava Selveri veebileht"
+      title="selver.ee"
+    >
+      <Image
+        src="/selver-logo.png"
+        alt="Selver — Hea mõte"
+        width={190}
+        height={220}
+        priority={priority}
+        className="h-auto w-full object-contain transition group-hover:scale-[1.02]"
+      />
+    </a>
+  );
+}
 
 type Stage = "hero" | "setup" | "plan";
 
@@ -112,32 +147,41 @@ export function StudentModeApp() {
 
   return (
     <div className="relative flex flex-1 flex-col">
-      <header className="sticky top-0 z-40 border-b border-border/60 bg-mist/80 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+      <header className="sticky top-0 z-40 border-b border-border/70 bg-white/90 backdrop-blur-md">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6">
           <div className="flex items-center gap-3">
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-2xl bg-grove text-leaf-foreground shadow-sm">
-              <span className="font-display text-lg font-extrabold tracking-tight">
-                S
-              </span>
+            <div className="relative">
+              <SelverLogoLink className="w-[52px] sm:w-[60px]" priority />
               {modeOn && (
-                <span className="absolute inset-0 rounded-2xl border-2 border-citrus animate-pulse-ring" />
+                <span className="pointer-events-none absolute -inset-1 rounded-xl border-2 border-selver-yellow animate-pulse-ring" />
               )}
             </div>
             <div>
-              <p className="font-display text-lg font-bold leading-none tracking-tight text-grove">
+              <p className="font-display text-xl font-extrabold uppercase leading-none tracking-wide text-selver-red sm:text-2xl">
                 Selver
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="mt-0.5 text-xs font-medium tracking-wide text-selver-navy/70">
                 {modeOn ? "Tudengirežiim sees" : "Tudengirežiim"}
               </p>
             </div>
           </div>
-          {modeOn && (
-            <Badge className="bg-citrus text-accent-foreground hover:bg-citrus">
-              <GraduationCap className="size-3.5" />
-              ISIC demo
-            </Badge>
-          )}
+          <div className="flex items-center gap-2">
+            {modeOn && (
+              <Badge className="bg-selver-yellow text-selver-navy hover:bg-selver-yellow">
+                <GraduationCap className="size-3.5" />
+                ISIC demo
+              </Badge>
+            )}
+            <a
+              href={SELVER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden items-center gap-1 rounded-full border border-border px-3 py-1.5 text-xs font-semibold text-selver-navy transition hover:border-selver-red hover:text-selver-red sm:inline-flex"
+            >
+              selver.ee
+              <ExternalLink className="size-3" />
+            </a>
+          </div>
         </div>
       </header>
 
@@ -153,10 +197,16 @@ export function StudentModeApp() {
               className="relative grid min-h-[78vh] items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]"
             >
               <div className="relative z-10 space-y-7">
-                <p className="font-display text-5xl font-extrabold tracking-tight text-grove sm:text-7xl">
-                  Selver
-                </p>
-                <h1 className="max-w-xl font-display text-3xl font-bold leading-[1.05] tracking-tight text-foreground sm:text-5xl">
+                <SelverLogoLink className="w-[120px] sm:w-[150px]" priority />
+                <div className="space-y-2">
+                  <p className="font-display text-5xl font-extrabold uppercase tracking-tight text-selver-red sm:text-7xl">
+                    Selver
+                  </p>
+                  <p className="text-sm font-semibold uppercase tracking-[0.28em] text-selver-navy">
+                    Hea mõte
+                  </p>
+                </div>
+                <h1 className="max-w-xl font-display text-3xl font-bold leading-[1.05] tracking-tight text-selver-navy sm:text-5xl">
                   Tudengirežiim
                 </h1>
                 <p className="max-w-md text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -166,7 +216,7 @@ export function StudentModeApp() {
                 <div className="flex flex-wrap items-center gap-3">
                   <Button
                     size="lg"
-                    className="h-12 rounded-full bg-grove px-7 text-base text-leaf-foreground hover:bg-leaf"
+                    className="h-12 rounded-full bg-selver-red px-7 text-base text-white hover:bg-[#c50510]"
                     onClick={activate}
                   >
                     Lülita sisse
@@ -178,20 +228,20 @@ export function StudentModeApp() {
                 </div>
               </div>
 
-              <div className="relative produce-grid min-h-[340px] overflow-hidden rounded-[2rem] bg-grove text-leaf-foreground shadow-[0_30px_80px_-40px_rgba(8,61,40,0.8)] sm:min-h-[420px]">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#d8f06a55,transparent_45%),radial-gradient(circle_at_80%_70%,#2dd4bf33,transparent_40%)]" />
+              <div className="relative produce-grid min-h-[340px] overflow-hidden rounded-[2rem] bg-selver-navy text-white shadow-[0_30px_80px_-40px_rgba(0,32,91,0.85)] sm:min-h-[420px]">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,#ffd10055,transparent_42%),radial-gradient(circle_at_85%_75%,#e3061344,transparent_40%)]" />
                 <motion.div
                   className="absolute left-[8%] top-[18%] rounded-3xl bg-white/10 px-5 py-4 backdrop-blur-sm"
                   animate={{ y: [0, -10, 0] }}
                   transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                 >
-                  <p className="text-xs uppercase tracking-[0.2em] text-citrus">
+                  <p className="text-xs uppercase tracking-[0.2em] text-selver-yellow">
                     Nädal 1
                   </p>
                   <p className="mt-1 font-display text-2xl font-bold">35 € eelarve</p>
                 </motion.div>
                 <motion.div
-                  className="absolute bottom-[16%] right-[10%] max-w-[220px] rounded-3xl bg-citrus px-5 py-4 text-accent-foreground shadow-lg"
+                  className="absolute bottom-[16%] right-[10%] max-w-[220px] rounded-3xl bg-selver-yellow px-5 py-4 text-selver-navy shadow-lg"
                   animate={{ y: [0, 12, 0] }}
                   transition={{
                     duration: 6,
@@ -205,7 +255,7 @@ export function StudentModeApp() {
                     AI paneb sama sibula mitmesse retsepti
                   </p>
                 </motion.div>
-                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-grove to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-selver-navy to-transparent" />
               </div>
             </motion.section>
           )}
@@ -284,7 +334,7 @@ export function StudentModeApp() {
                         className={cn(
                           "rounded-2xl border px-3 py-3 text-left transition",
                           style === s.id
-                            ? "border-grove bg-grove text-leaf-foreground"
+                            ? "border-selver-navy bg-selver-navy text-white"
                             : "border-border bg-white/80 hover:border-leaf/40",
                         )}
                       >
@@ -328,7 +378,7 @@ export function StudentModeApp() {
 
               <Button
                 size="lg"
-                className="h-12 w-full rounded-full bg-grove text-base text-leaf-foreground hover:bg-leaf sm:w-auto sm:px-8"
+                className="h-12 w-full rounded-full bg-selver-red text-base text-white hover:bg-[#c50510] sm:w-auto sm:px-8"
                 onClick={generate}
                 disabled={pending}
               >
@@ -363,7 +413,7 @@ export function StudentModeApp() {
                     Muuda seadeid
                   </Button>
                   <Button
-                    className="rounded-full bg-grove text-leaf-foreground hover:bg-leaf"
+                    className="rounded-full bg-selver-red text-white hover:bg-[#c50510]"
                     onClick={generate}
                   >
                     Genereeri uuesti
@@ -404,7 +454,7 @@ export function StudentModeApp() {
                     className={cn(
                       "flex-1 rounded-full px-3 py-2 text-sm font-medium transition",
                       tab === id
-                        ? "bg-grove text-leaf-foreground shadow-sm"
+                        ? "bg-selver-navy text-white shadow-sm"
                         : "text-muted-foreground hover:text-foreground",
                     )}
                   >
@@ -600,7 +650,7 @@ function ChatView({
               "max-w-[90%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed",
               m.role === "assistant"
                 ? "bg-mist text-foreground"
-                : "ml-auto bg-grove text-leaf-foreground",
+                : "ml-auto bg-selver-red text-white",
             )}
           >
             {m.text}
@@ -634,7 +684,7 @@ function ChatView({
             }}
           />
           <Button
-            className="h-auto rounded-2xl bg-grove px-4 text-leaf-foreground hover:bg-leaf"
+            className="h-auto rounded-2xl bg-selver-red px-4 text-white hover:bg-[#c50510]"
             onClick={onSend}
           >
             Saada
