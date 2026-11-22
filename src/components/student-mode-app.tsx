@@ -638,6 +638,9 @@ export function StudentModeApp() {
                             <span className="flex-1 text-[17px] font-bold tracking-tight text-black">
                               {item.label}
                             </span>
+                            <span className="inline-flex rounded-[4px] bg-[#e30613] px-1.5 py-[2px] text-[10px] font-bold uppercase tracking-wide text-white">
+                              Uus
+                            </span>
                           </button>
                         </li>
                       );
