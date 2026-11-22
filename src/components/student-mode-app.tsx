@@ -693,7 +693,7 @@ export function StudentModeApp() {
                 </h1>
                 <p className="mt-3 text-sm leading-relaxed text-white/75">
                   Vali nädala eelarve 20–60 € vahemikus, saa näidisplaan ja
-                  ostukorv selle piires. Järgmisena valid tempo ja eelistused.
+                  ostukorv selle piires.
                 </p>
                 <button
                   type="button"
