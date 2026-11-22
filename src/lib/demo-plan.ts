@@ -172,7 +172,7 @@ function buildMealsForDays(
             productId: ing.productId,
             qty: ing.quantity,
           })),
-          tip: "Retsepti kogused on seotud allikaviidetega toote ID-dega.",
+          tip: "",
         },
         cost: eurosFromCents(costCents),
       };
@@ -227,7 +227,7 @@ function mealFromRecipe(
         productId: ing.productId,
         qty: ing.quantity,
       })),
-      tip: "Retsepti kogused on seotud allikaviidetega toote ID-dega.",
+      tip: "",
     },
     cost: eurosFromCents(costCents),
   };

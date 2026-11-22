@@ -1207,12 +1207,7 @@ function MenuView({ plan }: { plan: PlanResult }) {
                     <Timer className="size-3" />
                     {meal.recipe.minutes} min
                   </span>
-                  <span>·</span>
-                  <span>{euros(meal.cost)}</span>
                 </div>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  {meal.recipe.tip}
-                </p>
               </div>
             ))}
           </div>
