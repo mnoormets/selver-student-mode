@@ -14,6 +14,7 @@ import {
   Minus,
   Plus,
   ChevronLeft,
+  ChevronDown,
   Home,
   ListChecks,
   ScanLine,
@@ -58,6 +59,7 @@ import {
   countEggsNeeded,
 } from "@/lib/demo-plan";
 import { dayLabel, type PlanResult, type Prefs } from "@/lib/planner";
+import { productById } from "@/features/student-mode/data/products";
 
 const BOTTOM_TABS = [
   { id: "home", label: "Avaleht", icon: Home },
@@ -1027,7 +1029,9 @@ export function StudentModeApp() {
                 ))}
               </div>
 
-              {tab === "menu" && <MenuView plan={plan} />}
+              {tab === "menu" && (
+                <MenuView plan={plan} pantryApplied={pantryApplied} />
+              )}
               {tab === "basket" && (
                 <BasketView plan={plan} highlightEggs={pantryApplied} />
               )}
@@ -1158,7 +1162,18 @@ function Stat({
   );
 }
 
-function MenuView({ plan }: { plan: PlanResult }) {
+function MenuView({
+  plan,
+  pantryApplied,
+}: {
+  plan: PlanResult;
+  pantryApplied: boolean;
+}) {
+  const [openMealKey, setOpenMealKey] = useState<string | null>(null);
+  const basketIds = useMemo(
+    () => new Set(plan.basket.map((line) => line.productId)),
+    [plan.basket],
+  );
   const byDay = useMemo(() => {
     const map = new Map<number, typeof plan.meals>();
     for (const meal of plan.meals) {
@@ -1191,25 +1206,107 @@ function MenuView({ plan }: { plan: PlanResult }) {
             </p>
           </div>
           <div className="grid gap-2">
-            {meals.map((meal) => (
-              <div
-                key={`${meal.day}-${meal.slot}`}
-                className="rounded-[12px] bg-neutral-50 px-3 py-3"
-              >
-                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                  {meal.slot}
-                </p>
-                <p className="mt-1 font-semibold leading-snug">
-                  {meal.recipe.name}
-                </p>
-                <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                  <span className="inline-flex items-center gap-1">
-                    <Timer className="size-3" />
-                    {meal.recipe.minutes} min
-                  </span>
+            {meals.map((meal) => {
+              const key = `${meal.day}-${meal.slot}`;
+              const open = openMealKey === key;
+              return (
+                <div
+                  key={key}
+                  className={cn(
+                    "rounded-[12px] bg-neutral-50 px-3 py-3 transition",
+                    open && "ring-1 ring-black/10",
+                  )}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenMealKey(open ? null : key)}
+                    className="flex w-full items-start gap-2 text-left"
+                    aria-expanded={open}
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                        {meal.slot}
+                      </p>
+                      <p className="mt-1 font-semibold leading-snug text-black">
+                        {meal.recipe.name}
+                      </p>
+                      <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                        <span className="inline-flex items-center gap-1">
+                          <Timer className="size-3" />
+                          {meal.recipe.minutes} min
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronDown
+                      className={cn(
+                        "mt-1 size-4 shrink-0 text-neutral-400 transition",
+                        open && "rotate-180",
+                      )}
+                    />
+                  </button>
+                  {open && (
+                    <div className="mt-3 space-y-2 border-t border-neutral-200 pt-3">
+                      <p className="text-xs font-bold uppercase tracking-[0.12em] text-neutral-500">
+                        Põhikomponendid
+                      </p>
+                      <ul className="space-y-2">
+                        {meal.recipe.ingredients.map((ing) => {
+                          const product = productById(ing.productId);
+                          const fromHome =
+                            pantryApplied &&
+                            (ing.productId === "eggs" ||
+                              ing.productId === "munad");
+                          const bought = basketIds.has(ing.productId);
+                          const source = fromHome
+                            ? "Kodus olemas"
+                            : bought
+                              ? "Ostetud"
+                              : "Olemas";
+                          const unit =
+                            product.unit === "pcs" ? "tk" : product.unit;
+                          return (
+                            <li
+                              key={`${key}-${ing.productId}`}
+                              className="flex items-start justify-between gap-3"
+                            >
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium leading-snug text-black">
+                                  {product.name}
+                                </p>
+                                <p className="mt-0.5 text-xs text-neutral-500">
+                                  {ing.qty} {unit}
+                                </p>
+                              </div>
+                              <span
+                                className={cn(
+                                  "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide",
+                                  fromHome
+                                    ? "bg-neutral-200 text-neutral-700"
+                                    : bought
+                                      ? "text-white"
+                                      : "bg-neutral-100 text-neutral-600",
+                                )}
+                                style={
+                                  bought && !fromHome
+                                    ? { backgroundColor: PK_ORANGE }
+                                    : undefined
+                                }
+                              >
+                                {source}
+                              </span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                      <p className="text-xs leading-relaxed text-neutral-500">
+                        Retsept: {meal.recipe.name} (~{meal.recipe.minutes}{" "}
+                        min). Sool, pipar ja õli eeldame kodustest varudest.
+                      </p>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </motion.div>
       ))}
