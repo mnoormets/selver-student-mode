@@ -715,10 +715,6 @@ export function StudentModeApp() {
 
           {stage === "cook-chat" && (
             <section className="flex min-h-[520px] flex-col space-y-3 animate-enter font-display">
-              <div className="rounded-[14px] border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
-                Ostukorvi summad põhinevad näidishindadel. Kui kuvatakse
-                „Live Selver“, pärinevad selle toote hind ja link e-Selveri otsingust.
-              </div>
               <ChatView
                 chat={cookChat}
                 draft={cookDraft}
