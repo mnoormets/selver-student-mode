@@ -1308,19 +1308,19 @@ function BasketView({
 
 function HeroCookCard({ onOpen }: { onOpen: () => void }) {
   return (
-    <div className="space-y-3 rounded-[14px] border border-neutral-200 bg-white p-4">
-      <div className="flex items-start gap-3">
+    <div className="space-y-4 rounded-[16px] border border-neutral-200 bg-white p-5">
+      <div className="flex items-start gap-3.5">
         <span
-          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full text-white"
+          className="inline-flex size-12 shrink-0 items-center justify-center rounded-full text-white"
           style={{ backgroundColor: PK_ORANGE }}
         >
-          <MessageCircle className="size-5" strokeWidth={2.2} />
+          <MessageCircle className="size-6" strokeWidth={2.2} />
         </span>
-        <div className="min-w-0 space-y-1">
-          <h2 className="font-display text-base font-bold leading-snug text-black">
+        <div className="min-w-0 space-y-1.5">
+          <h2 className="font-display text-lg font-bold leading-snug text-black">
             Mida ma täna süüa teeks?
           </h2>
-          <p className="text-sm leading-relaxed text-neutral-600">
+          <p className="text-[15px] leading-relaxed text-neutral-600">
             Ütle, mis sul kodus on või mille järele isu on. Pakun roa ja näitan,
             mida vajadusel juurde osta.
           </p>
@@ -1329,7 +1329,7 @@ function HeroCookCard({ onOpen }: { onOpen: () => void }) {
       <button
         type="button"
         onClick={onOpen}
-        className="inline-flex h-[48px] w-full items-center justify-center gap-2 rounded-full border-2 text-[15px] font-bold text-black"
+        className="inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-full border-2 text-[15px] font-bold text-black"
         style={{ borderColor: PK_ORANGE }}
       >
         Ava vestlus
