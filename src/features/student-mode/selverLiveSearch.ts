@@ -8,8 +8,8 @@ import type { CookChatTurnResult } from "./cookChat";
 import { formatEurosFromCents } from "./computeBasket";
 import { productById } from "./data/products";
 
-/** Public client-side key from Selver.ee's own search box (same as selver-mcp). */
-const KLEVU_API_KEY = "klevu-14410928010151845";
+/** Optional; when unset, search falls back to the demo catalog. */
+const KLEVU_API_KEY = process.env.SELVER_KLEVU_API_KEY?.trim() ?? "";
 const KLEVU_SEARCH_URL = "https://eucs3v2.ksearchnet.com/cs/v2/search";
 
 export type LiveSelverHit = {
@@ -105,6 +105,7 @@ export async function searchSelverForProduct(
   productId: string,
 ): Promise<LiveSelverHit> {
   const query = searchQueryForProduct(productId);
+  if (!KLEVU_API_KEY) return catalogFallback(productId, query);
   try {
     const records = await klevuSearch(query, 5, 2500);
     const hit =
