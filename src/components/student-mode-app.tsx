@@ -747,9 +747,6 @@ export function StudentModeApp() {
                 <h2 className="text-2xl font-bold tracking-tight text-black">
                   Seadista oma nädal
                 </h2>
-                <p className="text-sm text-neutral-600">
-                  Eelarve, tempo ja eelistused — plaan valmib sekundiga.
-                </p>
               </div>
 
               <div className="space-y-6 rounded-[14px] border border-neutral-200 bg-white p-4">
