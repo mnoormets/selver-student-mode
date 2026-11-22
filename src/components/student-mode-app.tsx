@@ -53,6 +53,7 @@ import { cn } from "@/lib/utils";
 import { isSpaghettiEggsPrompt, replyToStudent, type ChatMessage } from "@/lib/assistant";
 import { isAdditivePantryFollowUp } from "@/features/student-mode/cookChat";
 import type { BudgetMealContext } from "@/features/student-mode/budgetMeal";
+import type { BudgetPastaChoice } from "@/features/student-mode/budgetPasta";
 import {
   applyPantryStock,
   buildHackathonDemoPlan,
@@ -330,6 +331,7 @@ export function StudentModeApp() {
         pantry?: Record<string, number>;
         recipeId?: string | null;
         budgetMeal?: BudgetMealContext;
+        choices?: BudgetPastaChoice[];
       };
       const reply =
         data.reply ??
@@ -344,6 +346,8 @@ export function StudentModeApp() {
           id: `ca-${Date.now()}`,
           role: "assistant",
           text: reply,
+          pastaChoices:
+            data.choices && data.choices.length > 1 ? data.choices : undefined,
         },
       ]);
     } catch {
@@ -1424,6 +1428,147 @@ function linkifyChatText(text: string, onOrange = false) {
   });
 }
 
+function PastaChoiceMessage({
+  text,
+  choices,
+}: {
+  text: string;
+  choices: BudgetPastaChoice[];
+}) {
+  const [selectedId, setSelectedId] = useState(choices[0]?.id ?? "");
+  const [openSection, setOpenSection] = useState<"shop" | "cook" | null>(null);
+  const selected = choices.find((choice) => choice.id === selectedId) ?? choices[0]!;
+
+  return (
+    <div className="w-full max-w-[100%] space-y-3 rounded-[12px] bg-neutral-100 px-3.5 py-3 text-sm text-black">
+      <p className="font-bold leading-snug text-black">
+        {text.split("\n")[0] ?? "Vali portsjonid"}
+      </p>
+      <div className="grid grid-cols-2 gap-2">
+        {choices.map((choice) => {
+          const active = choice.id === selected.id;
+          return (
+            <button
+              key={choice.id}
+              type="button"
+              onClick={() => {
+                setSelectedId(choice.id);
+                setOpenSection(null);
+              }}
+              className={cn(
+                "rounded-[12px] border px-3 py-3 text-left transition",
+                active
+                  ? "border-black bg-black text-white"
+                  : "border-neutral-200 bg-white text-black",
+              )}
+            >
+              <p className="text-lg font-bold tabular-nums leading-none">
+                {choice.portions}
+              </p>
+              <p
+                className={cn(
+                  "mt-1 text-[11px] font-bold uppercase tracking-wide",
+                  active ? "text-white/70" : "text-neutral-500",
+                )}
+              >
+                portsjonit
+              </p>
+              <p className="mt-2 text-sm font-bold tabular-nums">
+                {choice.totalLabel}
+              </p>
+              <p
+                className={cn(
+                  "mt-0.5 text-[11px]",
+                  active ? "text-white/65" : "text-neutral-500",
+                )}
+              >
+                alles {choice.leftoverLabel}
+              </p>
+              {choice.recommended && (
+                <p
+                  className={cn(
+                    "mt-2 text-[10px] font-bold uppercase tracking-wide",
+                    active ? "text-white" : "text-[#F97D00]",
+                  )}
+                >
+                  Max portsjonid
+                </p>
+              )}
+              {!choice.recommended && (
+                <p
+                  className={cn(
+                    "mt-2 text-[10px] font-bold uppercase tracking-wide",
+                    active ? "text-white/80" : "text-neutral-500",
+                  )}
+                >
+                  Odavam korv
+                </p>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      <p className="text-xs leading-snug text-neutral-600">{selected.dishName}</p>
+
+      <div className="space-y-2">
+        <button
+          type="button"
+          onClick={() =>
+            setOpenSection((current) => (current === "shop" ? null : "shop"))
+          }
+          className="flex w-full items-center justify-between rounded-[10px] border border-neutral-200 bg-white px-3 py-2.5 text-left font-bold text-black"
+        >
+          Ostunimekiri
+          <ChevronDown
+            className={cn(
+              "size-4 text-neutral-400 transition",
+              openSection === "shop" && "rotate-180",
+            )}
+          />
+        </button>
+        {openSection === "shop" && (
+          <ul className="space-y-1.5 rounded-[10px] bg-white px-3 py-2.5 text-xs leading-relaxed text-neutral-700">
+            {selected.shoppingLines.length === 0 ? (
+              <li>Kõik vajalik on kodus olemas.</li>
+            ) : (
+              selected.shoppingLines.map((line) => (
+                <li key={line}>• {line}</li>
+              ))
+            )}
+            {selected.useLines.length > 0 && (
+              <li className="pt-1 text-neutral-500">
+                Kasuta kokku: {selected.useLines.join("; ")}
+              </li>
+            )}
+          </ul>
+        )}
+
+        <button
+          type="button"
+          onClick={() =>
+            setOpenSection((current) => (current === "cook" ? null : "cook"))
+          }
+          className="flex w-full items-center justify-between rounded-[10px] border border-neutral-200 bg-white px-3 py-2.5 text-left font-bold text-black"
+        >
+          Valmistamine
+          <ChevronDown
+            className={cn(
+              "size-4 text-neutral-400 transition",
+              openSection === "cook" && "rotate-180",
+            )}
+          />
+        </button>
+        {openSection === "cook" && (
+          <p className="rounded-[10px] bg-white px-3 py-2.5 text-xs leading-relaxed text-neutral-700">
+            {selected.method}
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function ChatView({
   chat,
   draft,
@@ -1473,22 +1618,26 @@ function ChatView({
         ref={scrollerRef}
         className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4"
       >
-        {chat.map((m) => (
-          <div
-            key={m.id}
-            className={cn(
-              "max-w-[92%] rounded-[12px] px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-line",
-              m.role === "assistant"
-                ? "bg-neutral-100 text-black"
-                : "ml-auto text-white",
-            )}
-            style={
-              m.role === "user" ? { backgroundColor: PK_ORANGE } : undefined
-            }
-          >
-            {linkifyChatText(m.text, m.role === "user")}
-          </div>
-        ))}
+        {chat.map((m) =>
+          m.role === "assistant" && m.pastaChoices && m.pastaChoices.length > 1 ? (
+            <PastaChoiceMessage key={m.id} text={m.text} choices={m.pastaChoices} />
+          ) : (
+            <div
+              key={m.id}
+              className={cn(
+                "max-w-[92%] rounded-[12px] px-3.5 py-2.5 text-sm leading-relaxed whitespace-pre-line",
+                m.role === "assistant"
+                  ? "bg-neutral-100 text-black"
+                  : "ml-auto text-white",
+              )}
+              style={
+                m.role === "user" ? { backgroundColor: PK_ORANGE } : undefined
+              }
+            >
+              {linkifyChatText(m.text, m.role === "user")}
+            </div>
+          ),
+        )}
         {sending && (
           <div className="max-w-[90%] rounded-[12px] bg-neutral-100 px-3.5 py-2.5 text-sm text-neutral-500">
             Mõtlen…

@@ -239,15 +239,18 @@ export async function verifyDemoMath(): Promise<string[]> {
   const pastaQuestion = "Mul on 10 eurot. Tahaks hakklihapastat ja salatit, nii palju kui võimalik.";
   const pasta = answerBudgetPastaQuestion(pastaQuestion, {});
   assert(pasta, "10€ pasta request should be recognized");
-  assert(pasta.reply.startsWith("7 portsjonit"), "10€ pasta should make seven portions");
-  assert(pasta.reply.includes("Korv 9,95 € · alles 0,05 €"), "10€ pasta basket totals");
+  assert(pasta.choices?.length === 2, "10€ pasta should offer two choices");
+  assert(pasta.choices?.[0]?.portions === 7, "10€ pasta should make seven portions");
+  assert(pasta.choices?.[0]?.totalLabel.includes("9,95"), "10€ pasta basket totals");
   assert(
-    pasta.reply.includes("5 portsjonit") && pasta.reply.includes("7,17 €"),
+    pasta.choices?.[1]?.portions === 5 && pasta.choices?.[1]?.totalLabel.includes("7,17"),
     "cheaper pasta alternative",
   );
+  assert(pasta.reply.includes("7 portsjonit") && pasta.reply.includes("5 portsjonit"), "reply lists both choices");
   const tightPasta = answerBudgetPastaQuestion("Mul on 7,20 €. Tahan hakklihaga pastat ja salatit.", {});
   assert(
-    tightPasta?.reply.startsWith("5 portsjonit") && tightPasta.reply.includes("Korv 7,17 €"),
+    tightPasta?.choices?.[0]?.portions === 5 &&
+      tightPasta.choices[0].totalLabel.includes("7,17"),
     "lower budget changes the pasta batch",
   );
   const noFit = answerBudgetPastaQuestion("Mul on 5 €. Tahan hakklihaga pastat ja salatit.", {});
