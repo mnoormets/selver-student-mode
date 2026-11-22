@@ -36,15 +36,6 @@ import {
 /** Measured from Partnerkaart app screenshot CTA — locked default. */
 const PK_ORANGE = "#F97D00";
 
-/** iPhone 14 screen (pt) — exact, then scaled to fit viewport. */
-const IPHONE14 = {
-  w: 390,
-  h: 844,
-  radius: 47.33,
-  status: 47,
-  notchW: 164,
-  notchH: 32,
-} as const;
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
@@ -364,85 +355,13 @@ export function StudentModeApp() {
     }
   }
 
-  const statusLight = stage === "home";
-  const bezel = 12;
-  const frameW = IPHONE14.w + bezel * 2;
-  const frameH = IPHONE14.h + bezel * 2;
-
   return (
-    <div className="relative flex flex-1 flex-col items-center justify-center overflow-hidden bg-neutral-950 px-3 py-4">
-      {/* Exact iPhone 14 canvas (390×844), scaled to viewport */}
-      <div
-        className="relative shrink-0"
-        style={{
-          width: frameW,
-          height: frameH,
-          transform: `scale(min(1, (100vw - 24px) / ${frameW}, (100dvh - 32px) / ${frameH}))`,
-          transformOrigin: "center center",
-        }}
-      >
-        <div
-          aria-hidden
-          className="absolute -left-[3px] top-[120px] h-8 w-[3px] rounded-l-sm bg-[#3a3a3c]"
-        />
-        <div
-          aria-hidden
-          className="absolute -left-[3px] top-[168px] h-14 w-[3px] rounded-l-sm bg-[#3a3a3c]"
-        />
-        <div
-          aria-hidden
-          className="absolute -left-[3px] top-[232px] h-14 w-[3px] rounded-l-sm bg-[#3a3a3c]"
-        />
-        <div
-          aria-hidden
-          className="absolute -right-[3px] top-[190px] h-20 w-[3px] rounded-r-sm bg-[#3a3a3c]"
-        />
-
-        <div
-          className="relative h-full w-full border border-[#2c2c2e] bg-[#1c1c1e] shadow-[0_40px_100px_-24px_rgba(0,0,0,0.85)] ring-1 ring-white/10"
-          style={{ borderRadius: IPHONE14.radius + bezel, padding: bezel }}
-        >
-          <div
-            className={cn(
-              "relative flex flex-col overflow-hidden",
-              statusLight ? "bg-black" : "bg-white",
-            )}
-            style={{
-              width: IPHONE14.w,
-              height: IPHONE14.h,
-              borderRadius: IPHONE14.radius,
-            }}
-          >
-            {/* iPhone 14 notch */}
-            <div
-              className="pointer-events-none absolute left-1/2 top-0 z-50 -translate-x-1/2 bg-black"
-              style={{
-                width: IPHONE14.notchW,
-                height: IPHONE14.notchH,
-                borderRadius: "0 0 18px 18px",
-              }}
-              aria-hidden
-            />
-
-            {/* Status bar — safe area 47pt */}
-            <div
-              className={cn(
-                "relative z-30 flex shrink-0 items-end justify-between px-6 pb-1.5",
-                "bg-black text-white",
-              )}
-              style={{ height: IPHONE14.status }}
-            >
-              <span className="w-[64px] text-[15px] font-semibold tracking-tight">
-                9:41
-              </span>
-              <div className="flex w-[64px] items-center justify-end gap-1.5 text-[12px] font-medium">
-                <span className="opacity-90">5G</span>
-                <span className="inline-flex h-[11px] w-[24px] items-center rounded-[3px] border border-current/80 p-[1px]">
-                  <span className="h-full w-[70%] rounded-[1px] bg-current" />
-                </span>
-              </div>
-            </div>
-
+    <div
+      className={cn(
+        "relative flex min-h-dvh w-full flex-1 flex-col overflow-hidden",
+        stage === "home" ? "bg-black" : "bg-white",
+      )}
+    >
         {inStudentMode ? (
           <header className="sticky top-0 z-40 border-b border-neutral-200 bg-white">
             <div className="flex items-center gap-2 px-3 py-2.5">
@@ -531,7 +450,9 @@ export function StudentModeApp() {
         <main
           className={cn(
             "flex min-h-0 flex-1 flex-col overflow-y-auto",
-            stage === "home" ? "bg-black px-0 pb-0 pt-0" : "px-4 pb-28 pt-4",
+            stage === "home"
+              ? "bg-black px-0 pb-0 pt-0"
+              : "px-4 pb-6 pt-4 md:px-8 lg:px-12",
           )}
         >
           {stage === "home" && (
@@ -1054,7 +975,7 @@ export function StudentModeApp() {
                           openCookChat();
                         }
                       }}
-                      className="absolute bottom-[78px] right-3 z-40 inline-flex items-center gap-2 rounded-full px-3.5 py-2.5 text-sm font-bold text-white shadow-[0_10px_28px_rgba(249,125,0,0.45)]"
+                      className="absolute bottom-24 right-4 z-40 inline-flex items-center gap-2 rounded-full px-3.5 py-2.5 text-sm font-bold text-white shadow-[0_10px_28px_rgba(249,125,0,0.45)] md:right-8"
                       style={{ backgroundColor: PK_ORANGE }}
                       aria-label="Ava tudengiabi"
                     >
@@ -1066,8 +987,8 @@ export function StudentModeApp() {
             )}
 
             {inStudentMode ? (
-              <nav className="absolute inset-x-0 bottom-0 z-20 border-t border-border/70 bg-white/95 px-1 pb-5 pt-1 backdrop-blur-md">
-                <div className="grid grid-cols-5">
+              <nav className="sticky bottom-0 z-20 border-t border-border/70 bg-white/95 px-1 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-1 backdrop-blur-md">
+                <div className="mx-auto grid max-w-3xl grid-cols-5">
                   {BOTTOM_TABS.map((item) => {
                     const Icon = item.icon;
                     const active =
@@ -1098,21 +1019,8 @@ export function StudentModeApp() {
                     );
                   })}
                 </div>
-                <div className="flex justify-center pb-1 pt-1" aria-hidden>
-                  <div className="h-[5px] w-[134px] rounded-full bg-black/80" />
-                </div>
               </nav>
-            ) : (
-              <div
-                className="pointer-events-none absolute inset-x-0 bottom-2 z-20 flex justify-center"
-                aria-hidden
-              >
-                <div className="h-[5px] w-[134px] rounded-full bg-black/85" />
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+            ) : null}
     </div>
   );
 }
