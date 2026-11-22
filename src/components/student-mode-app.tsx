@@ -1378,25 +1378,6 @@ function PlanAskCard({
         </p>
       )}
 
-      <div className="mb-3 flex flex-wrap gap-2">
-        {CHAT_CHIPS.map((c) => (
-          <button
-            key={c}
-            type="button"
-            onClick={() => {
-              if (c.includes("10 muna") && onPantryDemo) {
-                onPantryDemo();
-                return;
-              }
-              setDraft(c);
-            }}
-            className="rounded-full border border-neutral-200 bg-white px-3 py-1 text-left text-[11px] font-bold leading-snug text-neutral-700 hover:border-[#F97D00]"
-          >
-            {c.length > 42 ? `${c.slice(0, 40)}…` : c}
-          </button>
-        ))}
-      </div>
-
       <div className="flex gap-2">
         <Textarea
           value={draft}
