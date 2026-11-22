@@ -123,6 +123,17 @@ const coreProducts: readonly SelverProduct[] = [
     eSelverUrl: "https://www.selver.ee/kodune-hakkliha-maks-moorits-500-g",
     checkedAt: "2026-11-21",
   },
+  {
+    id: "cabbage-carrot",
+    name: "Riivitud porgand ja kapsas, KADARBIKU KÖÖGIVILI",
+    packQuantity: 300,
+    unit: "g",
+    priceCents: 139,
+    sourceUrl: "https://www.selver.ee/ru/riivitud-porgand-ja-kapsas-kadarbiku-koogivili-300-g",
+    selverSku: "T000070088",
+    eSelverUrl: "https://www.selver.ee/riivitud-porgand-ja-kapsas-kadarbiku-koogivili-300-g",
+    checkedAt: "2026-11-21",
+  },
 ];
 
 function mergeImported(

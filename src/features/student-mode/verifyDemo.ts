@@ -7,6 +7,8 @@ import {
   LEGACY_DEMO_TOTAL_CENTS,
 } from "../../lib/demo-plan";
 import { computeBasketCents, eurosFromCents } from "./computeBasket";
+import { answerBudgetPastaQuestion } from "./budgetPasta";
+import { answerCheeseNoodlesQuestion } from "./cheeseNoodles";
 import { answerCookChatTurn } from "./cookChat";
 import { answerPantryCookQuestion } from "./pantryCook";
 import { answerSpaghettiEggsQuickMeal } from "./quickMeal";
@@ -15,6 +17,7 @@ import {
   searchSelverForProduct,
 } from "./selverLiveSearch";
 import { validateDemoCatalog } from "./validateCatalog";
+import { answerWeeklyMealQuestion } from "./weeklyMeals";
 
 function assert(cond: unknown, message: string): asserts cond {
   if (!cond) throw new Error(message);
@@ -226,6 +229,84 @@ export async function verifyDemoMath(): Promise<string[]> {
   );
   logs.push(hakkliha);
   logs.push("hakkliha empty-pantry list without veg ok");
+
+  const pastaQuestion = "Mul on 10 eurot. Tahaks hakklihapastat ja salatit, nii palju kui võimalik.";
+  const pasta = answerBudgetPastaQuestion(pastaQuestion, {});
+  assert(pasta, "10€ pasta request should be recognized");
+  assert(pasta.reply.startsWith("7 portsjonit"), "10€ pasta should make seven portions");
+  assert(pasta.reply.includes("Korv 9,95 € · alles 0,05 €"), "10€ pasta basket totals");
+  assert(
+    pasta.reply.includes("5 portsjonit") && pasta.reply.includes("7,17 €"),
+    "cheaper pasta alternative",
+  );
+  const tightPasta = answerBudgetPastaQuestion("Mul on 7,20 €. Tahan hakklihaga pastat ja salatit.", {});
+  assert(
+    tightPasta?.reply.startsWith("5 portsjonit") && tightPasta.reply.includes("Korv 7,17 €"),
+    "lower budget changes the pasta batch",
+  );
+  const noFit = answerBudgetPastaQuestion("Mul on 5 €. Tahan hakklihaga pastat ja salatit.", {});
+  assert(noFit?.reply.includes("ei mahu"), "underfunded pasta basket should report no fit");
+  const stocked = answerBudgetPastaQuestion("0 € eest hakklihapastat ja salatit", {
+    spaghetti: 90,
+    "minced-meat": 100,
+    "cabbage-carrot": 60,
+  });
+  assert(stocked?.readyToCook && stocked.reply.startsWith("1 portsjon ·"), "pantry can cover a full portion");
+  assert(
+    answerBudgetPastaQuestion("Mul on 30 € nädalaks, tahan hakklihapastat ja salatit.", {}) === null,
+    "weekly requests stay on the existing flow",
+  );
+  logs.push("budget pasta portion, basket, pantry and low-budget checks passed");
+
+  const noodleQuestion = "Mul on kodus pakk nuudleid ja juustu. Mul on 5 €. Mida ma teha saan?";
+  const noodlePrompt = answerCheeseNoodlesQuestion(noodleQuestion, {});
+  assert(noodlePrompt, "noodle request should be recognized");
+  assert(noodlePrompt.reply.includes("Mitu grammi nuudleid ja juustu"), "unknown pack weight needs clarification");
+  assert(noodlePrompt.budgetMeal.budgetCents === 500, "retain the budget for the reply");
+
+  const noodleResult = answerCheeseNoodlesQuestion(
+    "200 g nuudleid ja 100 g juustu",
+    noodlePrompt.pantry,
+    noodlePrompt.budgetMeal,
+  );
+  assert(noodleResult, "quantity follow-up should keep the noodle request active");
+  assert(noodleResult.reply.includes("2 portsjonit juustunuudleid · 0,00 €"), "home ingredients should cover two portions");
+  assert(noodleResult.reply.includes("Korv 4,28 € · alles 0,72 €"), "extras should use catalog pack prices");
+  assert(!noodleResult.reply.includes("× Spagetid") && !noodleResult.reply.includes("× Juust"), "don't rebuy pantry ingredients");
+
+  const cheaperNoodles = answerCheeseNoodlesQuestion(
+    "Aga 3 €?",
+    noodleResult.pantry,
+    noodleResult.budgetMeal,
+  );
+  assert(cheaperNoodles?.reply.includes("ei mahu 3,00 € eelarvesse"), "budget follow-up removes the unaffordable add-on");
+
+  const onePortion = answerCheeseNoodlesQuestion(
+    "Tegelikult on nuudleid 90 g.",
+    noodleResult.pantry,
+    noodleResult.budgetMeal,
+  );
+  assert(onePortion?.reply.includes("1 portsjon juustunuudleid"), "revised pantry quantity changes portions");
+  logs.push("cheese noodles clarification, portions and optional shopping pass");
+
+  const weeklyQuestion = "Mul on nädalaks 30 eurot ja tahan liha ka süüa.";
+  const weeklyPrompt = answerWeeklyMealQuestion(weeklyQuestion, {});
+  assert(weeklyPrompt, "recognize the 30€ weekly request");
+  assert(weeklyPrompt.reply.includes("kolme söögikorda päevas"), "clarify the meal scope");
+
+  const fullWeek = answerWeeklyMealQuestion("Kõik söögikorrad", {}, weeklyPrompt.budgetMeal);
+  assert(fullWeek, "remember the weekly budget after clarification");
+  assert(fullWeek.reply.includes("7/7 päeva · 21 söögikorda · liha 4 päeval"), "cover a week with meat on four days");
+  assert(fullWeek.reply.includes("Korv 29,85 € · alles 0,15 €"), "use one pooled whole-pack basket");
+  assert(fullWeek.reply.includes("1 × Kodune hakkliha"), "reuse one pack of meat across four meals");
+
+  const dinnerWeek = answerWeeklyMealQuestion("Ainult õhtusöögid", {}, fullWeek.budgetMeal);
+  assert(dinnerWeek?.reply.includes("7/7 päeva · 7 söögikorda"), "switch to dinners only");
+  const reducedWeek = answerWeeklyMealQuestion("Aga 27 €?", {}, fullWeek.budgetMeal);
+  assert(reducedWeek?.reply.includes("7/7 päeva") && reducedWeek.reply.includes("Korv 26,56 €"), "use the cheaper weekly variant when needed");
+  const tooTightWeek = answerWeeklyMealQuestion("Aga 1 €?", {}, fullWeek.budgetMeal);
+  assert(tooTightWeek?.reply.includes("ei mahu"), "do not present an over-budget plan as affordable");
+  logs.push("weekly chat scope, 21 meals, pooled basket and lower-budget variant pass");
 
   return logs;
 }
