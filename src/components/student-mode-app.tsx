@@ -102,12 +102,13 @@ type Stage = "home" | "hero" | "setup" | "plan" | "cook-chat";
 /** Fixed default — tarne UI removed from setup. */
 const DEFAULT_DELIVERY = "Tulen ise Selverisse järgi";
 
-const STYLES: { id: Prefs["style"]; label: string; hint: string }[] = [
-  { id: "odav", label: "Odav", hint: "soodsad road" },
-  { id: "kiire", label: "Kiire", hint: "≤ 20 min" },
-  { id: "kvaliteetne", label: "Kvaliteetne", hint: "rohkem aega" },
-  { id: "taimne", label: "Taimetoit", hint: "oad, tofu, kiker" },
-  { id: "liha", label: "Lihaga", hint: "kana & hakk" },
+const STYLES: { id: Prefs["style"]; label: string }[] = [
+  { id: "odav", label: "Odav" },
+  { id: "kiire", label: "Kiire" },
+  { id: "kvaliteetne", label: "Kvaliteetne" },
+  { id: "taimne", label: "Taimetoit" },
+  { id: "liha", label: "Lihaga" },
+  { id: "sysivesikud", label: "Vähe süsivesikuid" },
 ];
 
 const CHAT_CHIPS = [
@@ -857,21 +858,13 @@ export function StudentModeApp() {
                       type="button"
                       onClick={() => setStyle(s.id)}
                       className={cn(
-                        "rounded-[12px] border px-3 py-3 text-left transition",
+                        "rounded-[12px] border px-3 py-3.5 text-left transition",
                         style === s.id
                           ? "border-black bg-black text-white"
                           : "border-neutral-200 bg-white text-black",
                       )}
                     >
-                      <p className="text-sm font-bold">{s.label}</p>
-                      <p
-                        className={cn(
-                          "mt-0.5 text-xs",
-                          style === s.id ? "text-white/70" : "text-neutral-500",
-                        )}
-                      >
-                        {s.hint}
-                      </p>
+                      <p className="text-sm font-bold leading-snug">{s.label}</p>
                     </button>
                   ))}
                 </div>
@@ -912,7 +905,9 @@ export function StudentModeApp() {
                             ? "taimetoit"
                             : style === "liha"
                               ? "lihaga"
-                              : "kiire"}
+                              : style === "sysivesikud"
+                                ? "vähe süsivesikuid"
+                                : "kiire"}
                     </span>
                     <span className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-[11px] font-bold text-black">
                       {plan.days} päeva
