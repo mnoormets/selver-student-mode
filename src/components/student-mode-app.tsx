@@ -49,7 +49,8 @@ import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { replyToStudent, type ChatMessage } from "@/lib/assistant";
+import { isSpaghettiEggsPrompt, replyToStudent, type ChatMessage } from "@/lib/assistant";
+import { isAdditivePantryFollowUp } from "@/features/student-mode/cookChat";
 import type { BudgetMealContext } from "@/features/student-mode/budgetMeal";
 import {
   applyPantryStock,
@@ -146,7 +147,7 @@ export function StudentModeApp() {
     {
       id: "cook-welcome",
       role: "assistant",
-      text: "Tere! Ütle, mis sul kodus on või mille järele isu on — pakun roa retseptivalikust ja näitan, mida juurde osta. Kui AI ühendust pole, saad selgelt märgitud näidisvastuse.",
+      text: "Tere! Ütle, mis sul kodus on või mille järele isu on. Pakun roa ja näitan, mida juurde osta.",
     },
   ]);
   const [cookDraft, setCookDraft] = useState("");
@@ -191,7 +192,7 @@ export function StudentModeApp() {
       {
         id: "cook-welcome",
         role: "assistant",
-        text: "Tere! Ütle, mis sul kodus on või mille järele isu on — pakun roa retseptivalikust ja näitan, mida juurde osta. Kui AI ühendust pole, saad selgelt märgitud näidisvastuse.",
+        text: "Tere! Ütle, mis sul kodus on või mille järele isu on. Pakun roa ja näitan, mida juurde osta.",
       },
     ]);
     setCookDraft("");
@@ -252,14 +253,22 @@ export function StudentModeApp() {
 
   function sendChat() {
     const text = draft.trim();
-    if (!text) return;
+    if (!text || cookPending) return;
+    const lower = text.toLowerCase();
+    if (
+      isSpaghettiEggsPrompt(lower) ||
+      isAdditivePantryFollowUp(lower) ||
+      (cookRecipeId === "egg-pasta" && /k[oö][oö]giviljaseg/.test(lower))
+    ) {
+      void sendCookChat("plan");
+      return;
+    }
     const userMsg: ChatMessage = {
       id: `u-${Date.now()}`,
       role: "user",
       text,
     };
 
-    const lower = text.toLowerCase();
     const isCookIntent =
       lower.includes("teha") ||
       lower.includes("pannkook") ||
@@ -290,16 +299,18 @@ export function StudentModeApp() {
     setDraft("");
   }
 
-  async function sendCookChat() {
-    const text = cookDraft.trim();
+  async function sendCookChat(destination: "cook" | "plan" = "cook") {
+    const text = (destination === "plan" ? draft : cookDraft).trim();
     if (!text || cookPending) return;
+    const append = destination === "plan" ? setChat : setCookChat;
+    const clearDraft = destination === "plan" ? setDraft : setCookDraft;
     const userMsg: ChatMessage = {
       id: `cu-${Date.now()}`,
       role: "user",
       text,
     };
-    setCookChat((c) => [...c, userMsg]);
-    setCookDraft("");
+    append((c) => [...c, userMsg]);
+    clearDraft("");
     setCookPending(true);
     try {
       const res = await fetch("/api/cook-chat", {
@@ -321,12 +332,12 @@ export function StudentModeApp() {
       };
       const reply =
         data.reply ??
-        "Näidisvastus (AI ühenduseta): proovi uuesti või küsi spagettide ja munade kohta.";
-      setCookPantry(data.pantry ?? cookPantry);
+        "Vestlus ei saanud praegu vastata. Proovi hetke pärast uuesti.";
+      if (data.pantry) setCookPantry((previous) => ({ ...previous, ...data.pantry }));
       if (data.budgetMeal) setCookRecipeId(null);
       else if (data.recipeId) setCookRecipeId(data.recipeId);
       setCookBudgetMeal(data.budgetMeal ?? null);
-      setCookChat((c) => [
+      append((c) => [
         ...c,
         {
           id: `ca-${Date.now()}`,
@@ -335,7 +346,7 @@ export function StudentModeApp() {
         },
       ]);
     } catch {
-      setCookChat((c) => [
+      append((c) => [
         ...c,
         {
           id: `ca-${Date.now()}`,
@@ -735,10 +746,8 @@ export function StudentModeApp() {
           {stage === "cook-chat" && (
             <section className="flex min-h-[520px] flex-col space-y-3 animate-enter font-display">
               <div className="rounded-[14px] border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
-                <span className="font-bold">Näidisrežiim</span> — vastused
-                demo + TheMealDB retseptidest (Selveri demokataloog). Proovi
-                hakklihapastat 10 € eelarvega; puudu olev toode otsitakse live
-                Selverist, vajadusel kataloogi fallback.
+                Ostukorvi summad põhinevad näidishindadel. Kui kuvatakse
+                „Live Selver“, pärinevad selle toote hind ja link e-Selveri otsingust.
               </div>
               <ChatView
                 chat={cookChat}
@@ -1098,6 +1107,7 @@ export function StudentModeApp() {
                   setDraft={setDraft}
                   onSend={sendChat}
                   onPantryDemo={() => applyEggsAtHome(10)}
+                  sending={cookPending}
                 />
               )}
 

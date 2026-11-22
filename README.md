@@ -21,7 +21,7 @@ Häkatoni prototüüp: **Tudengirežiim** kui eraldiseisev moodul Partnerkaardi 
 6. Jätka: `Mul on ka 130 g köögiviljasegu` → **Saad kohe teha**, ostunimekiri tühi
 7. Tagasi → **Alusta** avab endiselt nädalaplaani
 
-Ilma `OPENAI_API_KEY`-ta vastab `/api/cook-chat` selgelt märgitud **näidisvastusega**. Võti jääb ainult serverisse.
+Ilma `OPENAI_API_KEY`-ta vastab `/api/cook-chat` kohaliku retseptivaliku põhjal. E-Selveri tooteotsing ei vaja OpenAI võtit. Võti jääb ainult serverisse.
 
 **Tootekataloog:** tuum `src/features/student-mode/data/products.ts` + valikuline import `data/imports/*.json`. Kogu Selveri sortimenti ametlikult demosse ei tule — selleks on vaja partnerifeedi või oma JSON/CSV dump’i:
 

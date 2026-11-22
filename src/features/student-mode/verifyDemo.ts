@@ -115,15 +115,17 @@ export async function verifyDemoMath(): Promise<string[]> {
       cook1.reply.includes("2.39"),
     "shopping list should show one 600 g veg pack at catalog price",
   );
-  assert(cook1.reply.includes("Näidisvastus"), "offline reply must be labeled");
+  assert(cook1.reply.includes("Soovitus retseptivalikust"), "catalog recipe recommendation is labeled");
+  assert(cook1.reply.includes("näidisandmestiku"), "offline basket prices are labeled");
   assert(!cook1.readyToCook, "first turn still needs veg");
 
   const cook2 = answerCookChatTurn(
-    "Mul on ka 130 g köögiviljasegu",
+    "Mul on ka 130 g köögiviljaseg",
     cook1.pantry,
     { demo: true, forceRecipeId: cook1.recipeId },
   );
   assert(cook2.readyToCook, "with 130 g veg should be ready");
+  assert(cook2.pantry.eggs === 2 && cook2.pantry.spaghetti === 100, "follow-up must keep known pantry amounts");
   assert(cook2.shoppingEmpty, "shopping list should be empty");
   assert(cook2.reply.includes("Saad kohe teha"), "should say ready to cook");
   assert(
@@ -131,6 +133,10 @@ export async function verifyDemoMath(): Promise<string[]> {
     "empty shopping list copy",
   );
   logs.push("cook-chat spaghetti→veg follow-up ok");
+  const withoutContext = answerCookChatTurn("Mul on ka 130 g köögiviljaseg");
+  assert(withoutContext.pantry["mixed-veg"] === 130, "keep the new amount even when earlier context is missing");
+  assert(withoutContext.reply.includes("Mis sul veel kodus olemas on?"), "ask for missing context before suggesting purchases");
+  assert(!withoutContext.missingProductIds?.length, "do not search for products without context");
 
   const liveVeg = await searchSelverForProduct("mixed-veg");
   assert(liveVeg.name.toLowerCase().includes("köögiviljas"), "live search name");

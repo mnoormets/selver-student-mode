@@ -19,7 +19,7 @@ function money(n: number): string {
   return `${n.toFixed(2)} €`;
 }
 
-function isSpaghettiEggsPrompt(q: string): boolean {
+export function isSpaghettiEggsPrompt(q: string): boolean {
   const hasPasta =
     q.includes("spagett") || q.includes("pasta") || q.includes("spaget");
   const hasEggs = q.includes("muna");
