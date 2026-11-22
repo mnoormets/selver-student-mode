@@ -931,15 +931,7 @@ export function StudentModeApp() {
                   >
                     Muuda seadeid
                   </Button>
-                  {!pantryApplied ? (
-                    <Button
-                      className="rounded-full font-bold text-white hover:opacity-90"
-                      style={{ backgroundColor: PK_ORANGE }}
-                      onClick={() => applyEggsAtHome(10)}
-                    >
-                      Mul on kodus 10 muna
-                    </Button>
-                  ) : (
+                  {pantryApplied && (
                     <Button
                       variant="outline"
                       className="rounded-full border-neutral-200 font-bold text-black"
