@@ -16,9 +16,10 @@ Häkatoni prototüüp: **Tudengirežiim** kui eraldiseisev moodul Partnerkaardi 
 1. Student Mode avalehel teine kaart: **Mida ma täna süüa teeks?**
 2. **Ava vestlus**
 3. Kirjuta: `Mul on 100 g spagette ja kaks muna. Mida ma kiiresti teha saaks?`
-4. Oota muna-köögiviljaspagette + 130 g köögiviljasegu puudu + **1× 600 g** pakk (2.39 €)
-5. Jätka: `Mul on ka 130 g köögiviljasegu` → **Saad kohe teha**, ostunimekiri tühi
-6. Tagasi → **Alusta** avab endiselt nädalaplaani
+4. Oota muna-köögiviljaspagette + 130 g köögiviljasegu puudu + **1× 600 g** pakk
+5. Allolev **Selveri otsing** näitab live pakki / hinda / linki (Klevu; fallback kataloog)
+6. Jätka: `Mul on ka 130 g köögiviljasegu` → **Saad kohe teha**, ostunimekiri tühi
+7. Tagasi → **Alusta** avab endiselt nädalaplaani
 
 Ilma `OPENAI_API_KEY`-ta vastab `/api/cook-chat` selgelt märgitud **näidisvastusega**. Võti jääb ainult serverisse.
 

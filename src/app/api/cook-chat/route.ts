@@ -7,6 +7,7 @@ import {
   cookChatCatalogPrompt,
   type CookPantry,
 } from "@/features/student-mode/cookChat";
+import { enrichCookChatWithLiveSelver } from "@/features/student-mode/selverLiveSearch";
 import { answerWeeklyMealQuestion } from "@/features/student-mode/weeklyMeals";
 
 export const runtime = "nodejs";
@@ -28,16 +29,19 @@ function isCookChatBody(value: unknown): value is Body {
   if (!isRecord(value)) return false;
   const { message, pantry, recipeId, budgetMeal } = value;
 
-  const validBudgetMeal = budgetMeal == null || (
-    isRecord(budgetMeal) &&
-    (budgetMeal.budgetCents === null ||
-      (typeof budgetMeal.budgetCents === "number" &&
-        Number.isSafeInteger(budgetMeal.budgetCents) &&
-        budgetMeal.budgetCents >= 0 && budgetMeal.budgetCents <= 99_999_999)) &&
-    (budgetMeal.dish === "cheese-noodles" ||
-      (budgetMeal.dish === "weekly-meals" &&
-        (budgetMeal.scope === null || budgetMeal.scope === "all-meals" || budgetMeal.scope === "dinners")))
-  );
+  const validBudgetMeal =
+    budgetMeal == null ||
+    (isRecord(budgetMeal) &&
+      (budgetMeal.budgetCents === null ||
+        (typeof budgetMeal.budgetCents === "number" &&
+          Number.isSafeInteger(budgetMeal.budgetCents) &&
+          budgetMeal.budgetCents >= 0 &&
+          budgetMeal.budgetCents <= 99_999_999)) &&
+      (budgetMeal.dish === "cheese-noodles" ||
+        (budgetMeal.dish === "weekly-meals" &&
+          (budgetMeal.scope === null ||
+            budgetMeal.scope === "all-meals" ||
+            budgetMeal.scope === "dinners"))));
 
   return (
     typeof message === "string" &&
@@ -47,7 +51,10 @@ function isCookChatBody(value: unknown): value is Body {
     (pantry === undefined ||
       (isRecord(pantry) &&
         Object.values(pantry).every(
-          (amount) => typeof amount === "number" && Number.isFinite(amount) && amount >= 0,
+          (amount) =>
+            typeof amount === "number" &&
+            Number.isFinite(amount) &&
+            amount >= 0,
         )))
   );
 }
@@ -68,7 +75,8 @@ function budgetPastaResponse(
 /**
  * Cook-chat turn. Prefer live OpenAI when OPENAI_API_KEY is set; always fall
  * back to deterministic catalog maths (clearly marked as näidisvastus).
- * The API key never leaves the server.
+ * Budget / pantry / weekly intents from mnoormets; missing lines can be
+ * enriched with live Selver search + catalog fallback.
  */
 export async function POST(request: Request) {
   let body: unknown;
@@ -109,15 +117,17 @@ export async function POST(request: Request) {
           demo: false,
           forceRecipeId: ai.recipeId ?? forceRecipeId,
         });
+        const enriched = await enrichCookChatWithLiveSelver(grounded);
         return NextResponse.json({
-          reply: grounded.readyToCook
-            ? grounded.reply
-            : `${ai.preamble ? `${ai.preamble} ` : ""}${grounded.reply}`,
-          pantry: grounded.pantry,
-          recipeId: grounded.recipeId,
+          reply: enriched.readyToCook
+            ? enriched.reply
+            : `${ai.preamble ? `${ai.preamble} ` : ""}${enriched.reply}`,
+          pantry: enriched.pantry,
+          recipeId: enriched.recipeId,
           demo: false,
-          readyToCook: grounded.readyToCook,
-          shoppingEmpty: grounded.shoppingEmpty,
+          readyToCook: enriched.readyToCook,
+          shoppingEmpty: enriched.shoppingEmpty,
+          liveHits: enriched.liveHits ?? [],
         });
       }
     } catch {
@@ -129,7 +139,8 @@ export async function POST(request: Request) {
     demo: true,
     forceRecipeId,
   });
-  return NextResponse.json(demo);
+  const enriched = await enrichCookChatWithLiveSelver(demo);
+  return NextResponse.json(enriched);
 }
 
 async function callOpenAi(
@@ -137,7 +148,11 @@ async function callOpenAi(
   message: string,
   pantry: CookPantry,
   forceRecipeId: string | null,
-): Promise<{ recipeId: string | null; preamble: string; intent: string | null } | null> {
+): Promise<{
+  recipeId: string | null;
+  preamble: string;
+  intent: string | null;
+} | null> {
   const system = `${cookChatCatalogPrompt()}
 
 Return JSON only with recipeId, preamble and intent.

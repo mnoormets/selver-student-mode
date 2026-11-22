@@ -12,6 +12,10 @@ import { answerCheeseNoodlesQuestion } from "./cheeseNoodles";
 import { answerCookChatTurn } from "./cookChat";
 import { answerPantryCookQuestion } from "./pantryCook";
 import { answerSpaghettiEggsQuickMeal } from "./quickMeal";
+import {
+  enrichCookChatWithLiveSelver,
+  searchSelverForProduct,
+} from "./selverLiveSearch";
 import { validateDemoCatalog } from "./validateCatalog";
 import { answerWeeklyMealQuestion } from "./weeklyMeals";
 
@@ -20,7 +24,7 @@ function assert(cond: unknown, message: string): asserts cond {
 }
 
 /** Runnable checks for the locked hackathon demo maths. */
-export function verifyDemoMath(): string[] {
+export async function verifyDemoMath(): Promise<string[]> {
   const logs: string[] = [];
   validateDemoCatalog();
   logs.push("catalog validation ok");
@@ -127,6 +131,22 @@ export function verifyDemoMath(): string[] {
     "empty shopping list copy",
   );
   logs.push("cook-chat spaghetti→veg follow-up ok");
+
+  const liveVeg = await searchSelverForProduct("mixed-veg");
+  assert(liveVeg.name.toLowerCase().includes("köögiviljas"), "live search name");
+  assert(liveVeg.url.includes("selver") || liveVeg.url.includes("http"), "live url");
+  assert(liveVeg.priceLabel.includes("€"), "live price label");
+  logs.push(
+    `live Selver mixed-veg: ${liveVeg.source} · ${liveVeg.name} · ${liveVeg.priceLabel}`,
+  );
+
+  const enriched = await enrichCookChatWithLiveSelver(cook1);
+  assert(
+    enriched.reply.includes("Selveri otsing") &&
+      enriched.reply.toLowerCase().includes("köögiviljas"),
+    "enriched reply should show live/catalog veg hit",
+  );
+  logs.push("cook-chat live Selver enrich ok");
 
   const why = answerCookChatTurn(
     "miks mul köögiviljasegu on vaja hakkliha pannkookide jaoks",
