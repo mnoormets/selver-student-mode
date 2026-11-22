@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
+import type { BudgetMealContext } from "@/features/student-mode/budgetMeal";
+import { answerBudgetPastaQuestion } from "@/features/student-mode/budgetPasta";
+import { answerCheeseNoodlesQuestion } from "@/features/student-mode/cheeseNoodles";
 import {
   answerCookChatTurn,
   cookChatCatalogPrompt,
   type CookPantry,
 } from "@/features/student-mode/cookChat";
+import { answerWeeklyMealQuestion } from "@/features/student-mode/weeklyMeals";
 
 export const runtime = "nodejs";
 
@@ -13,6 +17,7 @@ type Body = {
   message: string;
   pantry?: CookPantry;
   recipeId?: string | null;
+  budgetMeal?: BudgetMealContext | null;
 };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -21,18 +26,43 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isCookChatBody(value: unknown): value is Body {
   if (!isRecord(value)) return false;
-  const { message, pantry, recipeId } = value;
+  const { message, pantry, recipeId, budgetMeal } = value;
+
+  const validBudgetMeal = budgetMeal == null || (
+    isRecord(budgetMeal) &&
+    (budgetMeal.budgetCents === null ||
+      (typeof budgetMeal.budgetCents === "number" &&
+        Number.isSafeInteger(budgetMeal.budgetCents) &&
+        budgetMeal.budgetCents >= 0 && budgetMeal.budgetCents <= 99_999_999)) &&
+    (budgetMeal.dish === "cheese-noodles" ||
+      (budgetMeal.dish === "weekly-meals" &&
+        (budgetMeal.scope === null || budgetMeal.scope === "all-meals" || budgetMeal.scope === "dinners")))
+  );
 
   return (
     typeof message === "string" &&
     message.trim().length > 0 &&
     (recipeId == null || typeof recipeId === "string") &&
+    validBudgetMeal &&
     (pantry === undefined ||
       (isRecord(pantry) &&
         Object.values(pantry).every(
           (amount) => typeof amount === "number" && Number.isFinite(amount) && amount >= 0,
         )))
   );
+}
+
+function budgetPastaResponse(
+  result: { reply: string; readyToCook: boolean },
+  pantry: CookPantry,
+) {
+  return NextResponse.json({
+    ...result,
+    pantry,
+    recipeId: null,
+    demo: true,
+    shoppingEmpty: result.readyToCook,
+  });
 }
 
 /**
@@ -56,11 +86,24 @@ export async function POST(request: Request) {
   const pantryIn = body.pantry ?? {};
   const forceRecipeId = body.recipeId ?? null;
 
+  const weeklyReply = answerWeeklyMealQuestion(message, pantryIn, body.budgetMeal);
+  if (weeklyReply) return NextResponse.json(weeklyReply);
+
+  const budgetReply = answerBudgetPastaQuestion(message, pantryIn);
+  if (budgetReply) return budgetPastaResponse(budgetReply, pantryIn);
+
+  const noodleReply = answerCheeseNoodlesQuestion(message, pantryIn, body.budgetMeal);
+  if (noodleReply) return NextResponse.json(noodleReply);
+
   const apiKey = process.env.OPENAI_API_KEY?.trim();
   if (apiKey) {
     try {
       const ai = await callOpenAi(apiKey, message, pantryIn, forceRecipeId);
       if (ai) {
+        if (ai.intent === "budget-minced-pasta-salad") {
+          const reply = answerBudgetPastaQuestion(message, pantryIn, true);
+          if (reply) return budgetPastaResponse(reply, pantryIn);
+        }
         // Re-run pack maths so shopping list always matches catalog packs.
         const grounded = answerCookChatTurn(message, pantryIn, {
           demo: false,
@@ -94,10 +137,13 @@ async function callOpenAi(
   message: string,
   pantry: CookPantry,
   forceRecipeId: string | null,
-): Promise<{ recipeId: string | null; preamble: string } | null> {
+): Promise<{ recipeId: string | null; preamble: string; intent: string | null } | null> {
   const system = `${cookChatCatalogPrompt()}
 
-Return JSON only: {"recipeId":"<id or null>","preamble":"<one short Estonian sentence>"}
+Return JSON only with recipeId, preamble and intent.
+If the user wants a single meal of minced-meat pasta with a side salad under a stated budget,
+set intent to "budget-minced-pasta-salad" and recipeId to null. For other requests use null intent
+and a catalog recipeId or null. Preamble is a short Estonian sentence without prices or quantities.
 Current pantry (productId → amount): ${JSON.stringify(pantry)}
 Preferred recipeId if any: ${forceRecipeId ?? "null"}`;
 
@@ -128,9 +174,11 @@ Preferred recipeId if any: ${forceRecipeId ?? "null"}`;
   const parsed = JSON.parse(raw) as {
     recipeId?: string | null;
     preamble?: string;
+    intent?: string | null;
   };
   return {
     recipeId: parsed.recipeId ?? forceRecipeId,
     preamble: parsed.preamble ?? "",
+    intent: parsed.intent ?? null,
   };
 }

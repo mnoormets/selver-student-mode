@@ -50,6 +50,7 @@ import { Slider } from "@/components/ui/slider";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { replyToStudent, type ChatMessage } from "@/lib/assistant";
+import type { BudgetMealContext } from "@/features/student-mode/budgetMeal";
 import {
   applyPantryStock,
   buildHackathonDemoPlan,
@@ -151,6 +152,7 @@ export function StudentModeApp() {
   const [cookDraft, setCookDraft] = useState("");
   const [cookPantry, setCookPantry] = useState<Record<string, number>>({});
   const [cookRecipeId, setCookRecipeId] = useState<string | null>(null);
+  const [cookBudgetMeal, setCookBudgetMeal] = useState<BudgetMealContext | null>(null);
   const [cookPending, setCookPending] = useState(false);
 
   const inStudentMode = stage !== "home";
@@ -195,6 +197,7 @@ export function StudentModeApp() {
     setCookDraft("");
     setCookPantry({});
     setCookRecipeId(null);
+    setCookBudgetMeal(null);
   }
 
   function generate() {
@@ -306,6 +309,7 @@ export function StudentModeApp() {
           message: text,
           pantry: cookPantry,
           recipeId: cookRecipeId,
+          budgetMeal: cookBudgetMeal,
         }),
       });
       if (!res.ok) throw new Error(`Cook chat request failed (${res.status})`);
@@ -313,12 +317,15 @@ export function StudentModeApp() {
         reply?: string;
         pantry?: Record<string, number>;
         recipeId?: string | null;
+        budgetMeal?: BudgetMealContext;
       };
       const reply =
         data.reply ??
         "Näidisvastus (AI ühenduseta): proovi uuesti või küsi spagettide ja munade kohta.";
       setCookPantry(data.pantry ?? cookPantry);
-      if (data.recipeId) setCookRecipeId(data.recipeId);
+      if (data.budgetMeal) setCookRecipeId(null);
+      else if (data.recipeId) setCookRecipeId(data.recipeId);
+      setCookBudgetMeal(data.budgetMeal ?? null);
       setCookChat((c) => [
         ...c,
         {
@@ -730,7 +737,7 @@ export function StudentModeApp() {
               <div className="rounded-[14px] border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-950">
                 <span className="font-bold">Näidisrežiim</span> — vastused
                 demo + TheMealDB retseptidest (kaardistatud Selveri
-                demokataloogile). Spageti + muna näide töötab alati.
+                demokataloogile). Proovi hakklihapastat 10 € eelarvega.
               </div>
               <ChatView
                 chat={cookChat}
@@ -738,6 +745,9 @@ export function StudentModeApp() {
                 setDraft={setCookDraft}
                 onSend={() => void sendCookChat()}
                 chips={[
+                  "30 € nädalaks, soovin ka liha",
+                  "10 € eest hakklihapastat ja salatit",
+                  "Kodus on nuudlid ja juust, eelarve 5 €",
                   "Mul on 100 g spagette ja kaks muna. Mida ma kiiresti teha saaks?",
                   "Mul on ka 130 g köögiviljasegu",
                   "Mul on kodus taigen ja mune, tahan hakkliha pannkooke — mida osta?",
