@@ -1308,16 +1308,16 @@ function BasketView({
 
 function HeroCookCard({ onOpen }: { onOpen: () => void }) {
   return (
-    <div className="space-y-4 rounded-[16px] border border-neutral-200 bg-white p-5">
-      <div className="flex items-start gap-3.5">
+    <div className="space-y-5 rounded-[16px] border border-neutral-200 bg-white px-5 pb-5 pt-6">
+      <div className="flex flex-col items-start gap-3">
         <span
-          className="inline-flex size-12 shrink-0 items-center justify-center rounded-full text-white"
+          className="inline-flex size-14 shrink-0 items-center justify-center rounded-full text-white"
           style={{ backgroundColor: PK_ORANGE }}
         >
-          <MessageCircle className="size-6" strokeWidth={2.2} />
+          <MessageCircle className="size-7" strokeWidth={2.2} />
         </span>
-        <div className="min-w-0 space-y-1.5">
-          <h2 className="font-display text-lg font-bold leading-snug text-black">
+        <div className="min-w-0 space-y-2">
+          <h2 className="font-display text-xl font-bold leading-snug text-black">
             Mida ma täna süüa teeks?
           </h2>
           <p className="text-[15px] leading-relaxed text-neutral-600">
