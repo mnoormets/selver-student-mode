@@ -920,7 +920,6 @@ export function StudentModeApp() {
                     Sinu {plan.days === 7 ? "nädal" : `${plan.days} päeva`} on
                     valmis
                   </h2>
-                  <p className="mt-1 text-sm text-neutral-600">{plan.summary}</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Button
