@@ -9,7 +9,7 @@ import {
 export type Prefs = {
   budget: number;
   days: number;
-  style: "kiire" | "odav" | "taimne" | "liha";
+  style: "kiire" | "odav" | "kvaliteetne" | "taimne" | "liha" | "sysivesikud";
   delivery: string;
 };
 
@@ -80,6 +80,19 @@ function matchesStyle(recipe: Recipe, style: Prefs["style"]): boolean {
   }
   if (style === "kiire") {
     return recipe.minutes <= 22 || recipe.tags.includes("kiire");
+  }
+  if (style === "kvaliteetne") {
+    return recipe.minutes >= 25 || !recipe.tags.includes("kiire");
+  }
+  if (style === "sysivesikud") {
+    return (
+      recipe.tags.includes("liha") ||
+      recipe.tags.includes("valk") ||
+      (!recipe.name.toLowerCase().includes("spaget") &&
+        !recipe.name.toLowerCase().includes("pasta") &&
+        !recipe.name.toLowerCase().includes("riis") &&
+        !recipe.name.toLowerCase().includes("kaera"))
+    );
   }
   return recipe.tags.includes("odav") || recipeCost(recipe) < 3.5;
 }

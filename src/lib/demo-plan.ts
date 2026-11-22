@@ -83,10 +83,14 @@ function styleLabel(style: Prefs["style"]): string {
   switch (style) {
     case "odav":
       return "soodne";
+    case "kvaliteetne":
+      return "kvaliteetne";
     case "taimne":
       return "taimne";
     case "liha":
       return "liha";
+    case "sysivesikud":
+      return "vähe süsivesikuid";
     default:
       return "kiire";
   }
@@ -98,7 +102,26 @@ function pickRecipeId(
   slot: "breakfast" | "lunch" | "dinner",
 ): string {
   const preferred = recipeById(preferredId);
-  if (style === "kiire" || style === "odav") return preferredId;
+  if (
+    style === "kiire" ||
+    style === "odav" ||
+    style === "kvaliteetne" ||
+    style === "sysivesikud"
+  ) {
+    if (style === "sysivesikud") {
+      const lowCarb = recipes.find(
+        (r) =>
+          !r.vegetarian &&
+          r.mealSlots.includes(slot) &&
+          !r.title.toLowerCase().includes("spaget") &&
+          !r.title.toLowerCase().includes("pasta") &&
+          !r.title.toLowerCase().includes("oats") &&
+          !r.title.toLowerCase().includes("rice"),
+      );
+      return lowCarb?.id ?? preferredId;
+    }
+    return preferredId;
+  }
 
   if (style === "taimne") {
     if (preferred.vegetarian) return preferredId;
@@ -149,7 +172,7 @@ function buildMealsForDays(
             productId: ing.productId,
             qty: ing.quantity,
           })),
-          tip: "Retsepti kogused on seotud allikaviidetega toote ID-dega.",
+          tip: "",
         },
         cost: eurosFromCents(costCents),
       };
@@ -204,7 +227,7 @@ function mealFromRecipe(
         productId: ing.productId,
         qty: ing.quantity,
       })),
-      tip: "Retsepti kogused on seotud allikaviidetega toote ID-dega.",
+      tip: "",
     },
     cost: eurosFromCents(costCents),
   };

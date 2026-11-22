@@ -14,6 +14,7 @@ import {
   Minus,
   Plus,
   ChevronLeft,
+  ChevronDown,
   Home,
   ListChecks,
   ScanLine,
@@ -58,6 +59,7 @@ import {
   countEggsNeeded,
 } from "@/lib/demo-plan";
 import { dayLabel, type PlanResult, type Prefs } from "@/lib/planner";
+import { productById } from "@/features/student-mode/data/products";
 
 const BOTTOM_TABS = [
   { id: "home", label: "Avaleht", icon: Home },
@@ -99,17 +101,16 @@ const MAIN_MENU: {
 
 type Stage = "home" | "hero" | "setup" | "plan" | "cook-chat";
 
-const DELIVERY_OPTIONS = [
-  "Kojutoomine täna",
-  "Kojutoomine homme",
-  "Express 2 h",
-  "Tulen ise Selverisse järgi",
-];
+/** Fixed default — tarne UI removed from setup. */
+const DEFAULT_DELIVERY = "Tulen ise Selverisse järgi";
 
-const STYLES: { id: Prefs["style"]; label: string; hint: string }[] = [
-  { id: "kiire", label: "Kiirelt valmis", hint: "≤ 20 min" },
-  { id: "taimne", label: "Taimetoit", hint: "oad, tofu, kiker" },
-  { id: "liha", label: "Sisaldab liha", hint: "kana & hakk" },
+const STYLES: { id: Prefs["style"]; label: string }[] = [
+  { id: "odav", label: "Odav" },
+  { id: "kiire", label: "Kiire" },
+  { id: "kvaliteetne", label: "Kvaliteetne" },
+  { id: "taimne", label: "Taimetoit" },
+  { id: "liha", label: "Lihaga" },
+  { id: "sysivesikud", label: "Vähe süsivesikuid" },
 ];
 
 const CHAT_CHIPS = [
@@ -128,7 +129,7 @@ export function StudentModeApp() {
   const [budget, setBudget] = useState(35);
   const [days, setDays] = useState(7);
   const [style, setStyle] = useState<Prefs["style"]>("kiire");
-  const [delivery, setDelivery] = useState(DELIVERY_OPTIONS[0]!);
+  const delivery = DEFAULT_DELIVERY;
   const [plan, setPlan] = useState<PlanResult | null>(null);
   const [basePlan, setBasePlan] = useState<PlanResult | null>(null);
   const [pantryApplied, setPantryApplied] = useState(false);
@@ -159,7 +160,7 @@ export function StudentModeApp() {
   const inStudentMode = stage !== "home";
   const prefs: Prefs = useMemo(
     () => ({ budget, days, style, delivery }),
-    [budget, days, style, delivery],
+    [budget, days, style],
   );
   const eggLine = plan?.basket.find(
     (l) => l.productId === "eggs" || l.productId === "munad",
@@ -535,14 +536,9 @@ export function StudentModeApp() {
                 <div className="mb-5 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <User className="size-[22px] text-white" strokeWidth={1.6} />
-                    <div>
-                      <p className="text-[17px] font-bold tracking-tight">
-                        Demo Kasutaja
-                      </p>
-                      <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/55">
-                        Näidisandmed
-                      </p>
-                    </div>
+                    <p className="text-[17px] font-bold tracking-tight">
+                      Aaron Siimon
+                    </p>
                   </div>
                   <button
                     type="button"
@@ -566,10 +562,7 @@ export function StudentModeApp() {
                         Boonuspunktid
                       </p>
                       <p className="mt-0.5 text-[28px] font-bold leading-none tracking-tight text-white">
-                        25,00 €
-                      </p>
-                      <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.08em] text-white/45">
-                        Näidis
+                        0,47 €
                       </p>
                     </div>
                   </div>
@@ -612,13 +605,10 @@ export function StudentModeApp() {
                       </span>
                     </div>
                   </div>
-                  <div className="relative flex items-end justify-between gap-3 font-mono text-[12px] font-medium tracking-wider text-black">
-                    <span>0000 1111 2222 3333</span>
-                    <span className="shrink-0">01/2031</span>
+                  <div className="relative flex items-end justify-between font-mono text-[12px] font-medium tracking-wider text-black">
+                    <span>9233 6600 4795 1885</span>
+                    <span>10/2028</span>
                   </div>
-                  <p className="relative mt-2 text-[10px] font-bold uppercase tracking-[0.08em] text-black/40">
-                    Näidiskaart · ei ole päris Partnerkaart
-                  </p>
                 </div>
               </div>
 
@@ -650,6 +640,9 @@ export function StudentModeApp() {
                             />
                             <span className="flex-1 text-[17px] font-bold tracking-tight text-black">
                               {item.label}
+                            </span>
+                            <span className="inline-flex rounded-[4px] bg-[#e30613] px-1.5 py-[2px] text-[10px] font-bold uppercase tracking-wide text-white">
+                              Uus!
                             </span>
                           </button>
                         </li>
@@ -702,36 +695,13 @@ export function StudentModeApp() {
                   Student Mode
                 </h1>
                 <p className="mt-3 text-sm leading-relaxed text-white/75">
-                  Kiired toidud sinu eelarve piires — otse Partnerkaardi äpis.
-                </p>
-                <div className="mt-4 grid grid-cols-2 gap-2">
-                  <div className="rounded-[10px] bg-white/10 px-3 py-2.5">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/55">
-                      Eelarve
-                    </p>
-                    <p className="text-xl font-bold">20–60 €</p>
-                  </div>
-                  <div
-                    className="rounded-[10px] px-3 py-2.5 text-black"
-                    style={{ backgroundColor: PK_ORANGE }}
-                  >
-                    <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
-                      Fookus
-                    </p>
-                    <p className="text-xl font-bold">Kiire · pasta</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-3 rounded-[14px] border border-neutral-200 bg-white p-4">
-                <p className="text-sm leading-relaxed text-neutral-600">
-                  Vali nädala eelarve 20–60 € (odav tudengile), saa näidisplaan
-                  ja ostukorv selle piires. Siis ütle, mis kodus juba on.
+                  Vali nädala eelarve 20–60 € vahemikus, saa näidisplaan ja
+                  ostukorv selle piires.
                 </p>
                 <button
                   type="button"
                   onClick={activate}
-                  className="inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[15px] font-bold uppercase tracking-[0.04em] text-white"
+                  className="mt-5 inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[15px] font-bold uppercase tracking-[0.04em] text-black"
                   style={{ backgroundColor: PK_ORANGE }}
                 >
                   Alusta
@@ -780,9 +750,6 @@ export function StudentModeApp() {
                 <h2 className="text-2xl font-bold tracking-tight text-black">
                   Seadista oma nädal
                 </h2>
-                <p className="text-sm text-neutral-600">
-                  Eelarve, tempo ja eelistused — plaan valmib sekundiga.
-                </p>
               </div>
 
               <div className="space-y-6 rounded-[14px] border border-neutral-200 bg-white p-4">
@@ -893,52 +860,15 @@ export function StudentModeApp() {
                       type="button"
                       onClick={() => setStyle(s.id)}
                       className={cn(
-                        "rounded-[12px] border px-3 py-3 text-left transition",
+                        "rounded-[12px] border px-3 py-3.5 text-left transition",
                         style === s.id
                           ? "border-black bg-black text-white"
                           : "border-neutral-200 bg-white text-black",
                       )}
                     >
-                      <p className="text-sm font-bold">{s.label}</p>
-                      <p
-                        className={cn(
-                          "mt-0.5 text-xs",
-                          style === s.id ? "text-white/70" : "text-neutral-500",
-                        )}
-                      >
-                        {s.hint}
-                      </p>
+                      <p className="text-sm font-bold leading-snug">{s.label}</p>
                     </button>
                   ))}
-                </div>
-
-                <div className="space-y-2">
-                  <p className="text-sm font-bold text-black">Tarne üle Eesti</p>
-                  <p className="text-xs text-neutral-500">
-                    e-Selveri kojutoomine — kiire ja üleriigiline
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {DELIVERY_OPTIONS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        onClick={() => setDelivery(option)}
-                        className={cn(
-                          "rounded-full border px-3 py-1.5 text-sm font-bold transition",
-                          delivery === option
-                            ? "border-transparent text-white"
-                            : "border-neutral-200 bg-white text-black",
-                        )}
-                        style={
-                          delivery === option
-                            ? { backgroundColor: PK_ORANGE }
-                            : undefined
-                        }
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
                 </div>
               </div>
 
@@ -970,12 +900,16 @@ export function StudentModeApp() {
                     </span>
                     <span className="rounded-full bg-black px-2.5 py-0.5 text-[11px] font-bold text-white">
                       {style === "odav"
-                        ? "soodne"
-                        : style === "taimne"
-                          ? "taimne"
-                          : style === "liha"
-                            ? "liha"
-                            : "kiire"}
+                        ? "odav"
+                        : style === "kvaliteetne"
+                          ? "kvaliteetne"
+                          : style === "taimne"
+                            ? "taimetoit"
+                            : style === "liha"
+                              ? "lihaga"
+                              : style === "sysivesikud"
+                                ? "vähe süsivesikuid"
+                                : "kiire"}
                     </span>
                     <span className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-[11px] font-bold text-black">
                       {plan.days} päeva
@@ -988,7 +922,6 @@ export function StudentModeApp() {
                     Sinu {plan.days === 7 ? "nädal" : `${plan.days} päeva`} on
                     valmis
                   </h2>
-                  <p className="mt-1 text-sm text-neutral-600">{plan.summary}</p>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Button
@@ -998,15 +931,7 @@ export function StudentModeApp() {
                   >
                     Muuda seadeid
                   </Button>
-                  {!pantryApplied ? (
-                    <Button
-                      className="rounded-full font-bold text-white hover:opacity-90"
-                      style={{ backgroundColor: PK_ORANGE }}
-                      onClick={() => applyEggsAtHome(10)}
-                    >
-                      Mul on kodus 10 muna
-                    </Button>
-                  ) : (
+                  {pantryApplied && (
                     <Button
                       variant="outline"
                       className="rounded-full border-neutral-200 font-bold text-black"
@@ -1037,23 +962,6 @@ export function StudentModeApp() {
                 )}
               </div>
 
-              <PlanAskCard
-                draft={draft}
-                setDraft={setDraft}
-                onSend={() => {
-                  sendChat();
-                  setTab("chat");
-                }}
-                onPantryDemo={() => {
-                  applyEggsAtHome(10);
-                  setTab("basket");
-                }}
-                onOpenChat={() => setTab("chat")}
-                lastAssistant={
-                  [...chat].reverse().find((m) => m.role === "assistant")?.text
-                }
-              />
-
               <div className="grid grid-cols-1 gap-2">
                 <Stat
                   label="Korvi summa"
@@ -1068,7 +976,7 @@ export function StudentModeApp() {
                 <Stat
                   label="Järelejäänud"
                   value={euros(Math.max(0, plan.leftoverBudget))}
-                  hint={delivery}
+                  hint="eelarvest"
                 />
               </div>
 
@@ -1096,7 +1004,9 @@ export function StudentModeApp() {
                 ))}
               </div>
 
-              {tab === "menu" && <MenuView plan={plan} />}
+              {tab === "menu" && (
+                <MenuView plan={plan} pantryApplied={pantryApplied} />
+              )}
               {tab === "basket" && (
                 <BasketView plan={plan} highlightEggs={pantryApplied} />
               )}
@@ -1227,7 +1137,18 @@ function Stat({
   );
 }
 
-function MenuView({ plan }: { plan: PlanResult }) {
+function MenuView({
+  plan,
+  pantryApplied,
+}: {
+  plan: PlanResult;
+  pantryApplied: boolean;
+}) {
+  const [openMealKey, setOpenMealKey] = useState<string | null>(null);
+  const basketIds = useMemo(
+    () => new Set(plan.basket.map((line) => line.productId)),
+    [plan.basket],
+  );
   const byDay = useMemo(() => {
     const map = new Map<number, typeof plan.meals>();
     for (const meal of plan.meals) {
@@ -1260,30 +1181,107 @@ function MenuView({ plan }: { plan: PlanResult }) {
             </p>
           </div>
           <div className="grid gap-2">
-            {meals.map((meal) => (
-              <div
-                key={`${meal.day}-${meal.slot}`}
-                className="rounded-[12px] bg-neutral-50 px-3 py-3"
-              >
-                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                  {meal.slot}
-                </p>
-                <p className="mt-1 font-semibold leading-snug">
-                  {meal.recipe.name}
-                </p>
-                <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                  <span className="inline-flex items-center gap-1">
-                    <Timer className="size-3" />
-                    {meal.recipe.minutes} min
-                  </span>
-                  <span>·</span>
-                  <span>{euros(meal.cost)}</span>
+            {meals.map((meal) => {
+              const key = `${meal.day}-${meal.slot}`;
+              const open = openMealKey === key;
+              return (
+                <div
+                  key={key}
+                  className={cn(
+                    "rounded-[12px] bg-neutral-50 px-3 py-3 transition",
+                    open && "ring-1 ring-black/10",
+                  )}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setOpenMealKey(open ? null : key)}
+                    className="flex w-full items-start gap-2 text-left"
+                    aria-expanded={open}
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                        {meal.slot}
+                      </p>
+                      <p className="mt-1 font-semibold leading-snug text-black">
+                        {meal.recipe.name}
+                      </p>
+                      <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                        <span className="inline-flex items-center gap-1">
+                          <Timer className="size-3" />
+                          {meal.recipe.minutes} min
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronDown
+                      className={cn(
+                        "mt-1 size-4 shrink-0 text-neutral-400 transition",
+                        open && "rotate-180",
+                      )}
+                    />
+                  </button>
+                  {open && (
+                    <div className="mt-3 space-y-2 border-t border-neutral-200 pt-3">
+                      <p className="text-xs font-bold uppercase tracking-[0.12em] text-neutral-500">
+                        Põhikomponendid
+                      </p>
+                      <ul className="space-y-2">
+                        {meal.recipe.ingredients.map((ing) => {
+                          const product = productById(ing.productId);
+                          const fromHome =
+                            pantryApplied &&
+                            (ing.productId === "eggs" ||
+                              ing.productId === "munad");
+                          const bought = basketIds.has(ing.productId);
+                          const source = fromHome
+                            ? "Kodus olemas"
+                            : bought
+                              ? "Ostetud"
+                              : "Olemas";
+                          const unit =
+                            product.unit === "pcs" ? "tk" : product.unit;
+                          return (
+                            <li
+                              key={`${key}-${ing.productId}`}
+                              className="flex items-start justify-between gap-3"
+                            >
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium leading-snug text-black">
+                                  {product.name}
+                                </p>
+                                <p className="mt-0.5 text-xs text-neutral-500">
+                                  {ing.qty} {unit}
+                                </p>
+                              </div>
+                              <span
+                                className={cn(
+                                  "shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide",
+                                  fromHome
+                                    ? "bg-neutral-200 text-neutral-700"
+                                    : bought
+                                      ? "text-white"
+                                      : "bg-neutral-100 text-neutral-600",
+                                )}
+                                style={
+                                  bought && !fromHome
+                                    ? { backgroundColor: PK_ORANGE }
+                                    : undefined
+                                }
+                              >
+                                {source}
+                              </span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                      <p className="text-xs leading-relaxed text-neutral-500">
+                        Retsept: {meal.recipe.name} (~{meal.recipe.minutes}{" "}
+                        min). Sool, pipar ja õli eeldame kodustest varudest.
+                      </p>
+                    </div>
+                  )}
                 </div>
-                <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  {meal.recipe.tip}
-                </p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </motion.div>
       ))}
@@ -1368,19 +1366,19 @@ function BasketView({
 
 function HeroCookCard({ onOpen }: { onOpen: () => void }) {
   return (
-    <div className="space-y-3 rounded-[14px] border border-neutral-200 bg-white p-4">
-      <div className="flex items-start gap-3">
+    <div className="space-y-5 rounded-[16px] border border-neutral-200 bg-white px-5 pb-5 pt-6">
+      <div className="flex flex-col items-start gap-3">
         <span
-          className="inline-flex size-10 shrink-0 items-center justify-center rounded-full text-white"
+          className="inline-flex size-14 shrink-0 items-center justify-center rounded-full text-white"
           style={{ backgroundColor: PK_ORANGE }}
         >
-          <MessageCircle className="size-5" strokeWidth={2.2} />
+          <MessageCircle className="size-7" strokeWidth={2.2} />
         </span>
-        <div className="min-w-0 space-y-1">
-          <h2 className="font-display text-base font-bold leading-snug text-black">
+        <div className="min-w-0 space-y-2">
+          <h2 className="font-display text-xl font-bold leading-snug text-black">
             Mida ma täna süüa teeks?
           </h2>
-          <p className="text-sm leading-relaxed text-neutral-600">
+          <p className="text-[15px] leading-relaxed text-neutral-600">
             Ütle, mis sul kodus on või mille järele isu on. Pakun roa ja näitan,
             mida vajadusel juurde osta.
           </p>
@@ -1389,104 +1387,12 @@ function HeroCookCard({ onOpen }: { onOpen: () => void }) {
       <button
         type="button"
         onClick={onOpen}
-        className="inline-flex h-[48px] w-full items-center justify-center gap-2 rounded-full border-2 text-[15px] font-bold text-black"
+        className="inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-full border-2 text-[15px] font-bold text-black"
         style={{ borderColor: PK_ORANGE }}
       >
         Ava vestlus
         <ArrowRight className="size-4" style={{ color: PK_ORANGE }} />
       </button>
-    </div>
-  );
-}
-
-function PlanAskCard({
-  draft,
-  setDraft,
-  onSend,
-  onPantryDemo,
-  onOpenChat,
-  lastAssistant,
-}: {
-  draft: string;
-  setDraft: (v: string) => void;
-  onSend: () => void;
-  onPantryDemo?: () => void;
-  onOpenChat: () => void;
-  lastAssistant?: string;
-}) {
-  return (
-    <div
-      className="rounded-[14px] border-2 bg-white p-4 shadow-[0_8px_24px_rgba(249,125,0,0.12)]"
-      style={{ borderColor: PK_ORANGE }}
-    >
-      <div className="mb-2 flex items-start justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <MessageCircle className="size-5" style={{ color: PK_ORANGE }} />
-          <div>
-            <p className="font-display text-base font-bold text-black">
-              Küsi tudengiabilt
-            </p>
-            <p className="text-xs text-neutral-500">
-              Ütle, mis kodus on — arvutame, mida osta.
-            </p>
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={onOpenChat}
-          className="shrink-0 text-xs font-bold underline underline-offset-2"
-          style={{ color: PK_ORANGE }}
-        >
-          Ava vestlus
-        </button>
-      </div>
-
-      {lastAssistant && (
-        <p className="mb-3 line-clamp-3 rounded-[10px] bg-neutral-50 px-3 py-2 text-xs leading-relaxed text-neutral-700">
-          {lastAssistant}
-        </p>
-      )}
-
-      <div className="mb-3 flex flex-wrap gap-2">
-        {CHAT_CHIPS.map((c) => (
-          <button
-            key={c}
-            type="button"
-            onClick={() => {
-              if (c.includes("10 muna") && onPantryDemo) {
-                onPantryDemo();
-                return;
-              }
-              setDraft(c);
-            }}
-            className="rounded-full border border-neutral-200 bg-white px-3 py-1 text-left text-[11px] font-bold leading-snug text-neutral-700 hover:border-[#F97D00]"
-          >
-            {c.length > 42 ? `${c.slice(0, 40)}…` : c}
-          </button>
-        ))}
-      </div>
-
-      <div className="flex gap-2">
-        <Textarea
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          placeholder="Nt: mul on kodus taigen ja mune…"
-          className="min-h-[44px] resize-none bg-white"
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              onSend();
-            }
-          }}
-        />
-        <Button
-          className="h-auto rounded-[12px] px-4 font-bold text-white hover:opacity-90"
-          style={{ backgroundColor: PK_ORANGE }}
-          onClick={onSend}
-        >
-          Saada
-        </Button>
-      </div>
     </div>
   );
 }
