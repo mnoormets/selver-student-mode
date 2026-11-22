@@ -99,17 +99,15 @@ const MAIN_MENU: {
 
 type Stage = "home" | "hero" | "setup" | "plan" | "cook-chat";
 
-const DELIVERY_OPTIONS = [
-  "Kojutoomine täna",
-  "Kojutoomine homme",
-  "Express 2 h",
-  "Tulen ise Selverisse järgi",
-];
+/** Fixed default — tarne UI removed from setup. */
+const DEFAULT_DELIVERY = "Tulen ise Selverisse järgi";
 
 const STYLES: { id: Prefs["style"]; label: string; hint: string }[] = [
-  { id: "kiire", label: "Kiirelt valmis", hint: "≤ 20 min" },
+  { id: "odav", label: "Odav", hint: "soodsad road" },
+  { id: "kiire", label: "Kiire", hint: "≤ 20 min" },
+  { id: "kvaliteetne", label: "Kvaliteetne", hint: "rohkem aega" },
   { id: "taimne", label: "Taimetoit", hint: "oad, tofu, kiker" },
-  { id: "liha", label: "Sisaldab liha", hint: "kana & hakk" },
+  { id: "liha", label: "Lihaga", hint: "kana & hakk" },
 ];
 
 const CHAT_CHIPS = [
@@ -128,7 +126,7 @@ export function StudentModeApp() {
   const [budget, setBudget] = useState(35);
   const [days, setDays] = useState(7);
   const [style, setStyle] = useState<Prefs["style"]>("kiire");
-  const [delivery, setDelivery] = useState(DELIVERY_OPTIONS[0]!);
+  const delivery = DEFAULT_DELIVERY;
   const [plan, setPlan] = useState<PlanResult | null>(null);
   const [basePlan, setBasePlan] = useState<PlanResult | null>(null);
   const [pantryApplied, setPantryApplied] = useState(false);
@@ -159,7 +157,7 @@ export function StudentModeApp() {
   const inStudentMode = stage !== "home";
   const prefs: Prefs = useMemo(
     () => ({ budget, days, style, delivery }),
-    [budget, days, style, delivery],
+    [budget, days, style],
   );
   const eggLine = plan?.basket.find(
     (l) => l.productId === "eggs" || l.productId === "munad",
@@ -535,14 +533,9 @@ export function StudentModeApp() {
                 <div className="mb-5 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
                     <User className="size-[22px] text-white" strokeWidth={1.6} />
-                    <div>
-                      <p className="text-[17px] font-bold tracking-tight">
-                        Demo Kasutaja
-                      </p>
-                      <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-white/55">
-                        Näidisandmed
-                      </p>
-                    </div>
+                    <p className="text-[17px] font-bold tracking-tight">
+                      Aaron Siimon
+                    </p>
                   </div>
                   <button
                     type="button"
@@ -566,10 +559,7 @@ export function StudentModeApp() {
                         Boonuspunktid
                       </p>
                       <p className="mt-0.5 text-[28px] font-bold leading-none tracking-tight text-white">
-                        25,00 €
-                      </p>
-                      <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.08em] text-white/45">
-                        Näidis
+                        0,47 €
                       </p>
                     </div>
                   </div>
@@ -612,13 +602,10 @@ export function StudentModeApp() {
                       </span>
                     </div>
                   </div>
-                  <div className="relative flex items-end justify-between gap-3 font-mono text-[12px] font-medium tracking-wider text-black">
-                    <span>0000 1111 2222 3333</span>
-                    <span className="shrink-0">01/2031</span>
+                  <div className="relative flex items-end justify-between font-mono text-[12px] font-medium tracking-wider text-black">
+                    <span>9233 6600 4795 1885</span>
+                    <span>10/2028</span>
                   </div>
-                  <p className="relative mt-2 text-[10px] font-bold uppercase tracking-[0.08em] text-black/40">
-                    Näidiskaart · ei ole päris Partnerkaart
-                  </p>
                 </div>
               </div>
 
@@ -702,36 +689,13 @@ export function StudentModeApp() {
                   Student Mode
                 </h1>
                 <p className="mt-3 text-sm leading-relaxed text-white/75">
-                  Kiired toidud sinu eelarve piires — otse Partnerkaardi äpis.
-                </p>
-                <div className="mt-4 grid grid-cols-2 gap-2">
-                  <div className="rounded-[10px] bg-white/10 px-3 py-2.5">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/55">
-                      Eelarve
-                    </p>
-                    <p className="text-xl font-bold">20–60 €</p>
-                  </div>
-                  <div
-                    className="rounded-[10px] px-3 py-2.5 text-black"
-                    style={{ backgroundColor: PK_ORANGE }}
-                  >
-                    <p className="text-[10px] font-bold uppercase tracking-wider opacity-80">
-                      Fookus
-                    </p>
-                    <p className="text-xl font-bold">Kiire · pasta</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-3 rounded-[14px] border border-neutral-200 bg-white p-4">
-                <p className="text-sm leading-relaxed text-neutral-600">
                   Vali nädala eelarve 20–60 € (odav tudengile), saa näidisplaan
                   ja ostukorv selle piires. Siis ütle, mis kodus juba on.
                 </p>
                 <button
                   type="button"
                   onClick={activate}
-                  className="inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[15px] font-bold uppercase tracking-[0.04em] text-white"
+                  className="mt-5 inline-flex h-[52px] w-full items-center justify-center gap-2 rounded-full text-[15px] font-bold uppercase tracking-[0.04em] text-black"
                   style={{ backgroundColor: PK_ORANGE }}
                 >
                   Alusta
@@ -911,35 +875,6 @@ export function StudentModeApp() {
                     </button>
                   ))}
                 </div>
-
-                <div className="space-y-2">
-                  <p className="text-sm font-bold text-black">Tarne üle Eesti</p>
-                  <p className="text-xs text-neutral-500">
-                    e-Selveri kojutoomine — kiire ja üleriigiline
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {DELIVERY_OPTIONS.map((option) => (
-                      <button
-                        key={option}
-                        type="button"
-                        onClick={() => setDelivery(option)}
-                        className={cn(
-                          "rounded-full border px-3 py-1.5 text-sm font-bold transition",
-                          delivery === option
-                            ? "border-transparent text-white"
-                            : "border-neutral-200 bg-white text-black",
-                        )}
-                        style={
-                          delivery === option
-                            ? { backgroundColor: PK_ORANGE }
-                            : undefined
-                        }
-                      >
-                        {option}
-                      </button>
-                    ))}
-                  </div>
-                </div>
               </div>
 
               <button
@@ -970,12 +905,14 @@ export function StudentModeApp() {
                     </span>
                     <span className="rounded-full bg-black px-2.5 py-0.5 text-[11px] font-bold text-white">
                       {style === "odav"
-                        ? "soodne"
-                        : style === "taimne"
-                          ? "taimne"
-                          : style === "liha"
-                            ? "liha"
-                            : "kiire"}
+                        ? "odav"
+                        : style === "kvaliteetne"
+                          ? "kvaliteetne"
+                          : style === "taimne"
+                            ? "taimetoit"
+                            : style === "liha"
+                              ? "lihaga"
+                              : "kiire"}
                     </span>
                     <span className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-[11px] font-bold text-black">
                       {plan.days} päeva
@@ -1068,7 +1005,7 @@ export function StudentModeApp() {
                 <Stat
                   label="Järelejäänud"
                   value={euros(Math.max(0, plan.leftoverBudget))}
-                  hint={delivery}
+                  hint="eelarvest"
                 />
               </div>
 

@@ -83,6 +83,8 @@ function styleLabel(style: Prefs["style"]): string {
   switch (style) {
     case "odav":
       return "soodne";
+    case "kvaliteetne":
+      return "kvaliteetne";
     case "taimne":
       return "taimne";
     case "liha":
@@ -98,7 +100,9 @@ function pickRecipeId(
   slot: "breakfast" | "lunch" | "dinner",
 ): string {
   const preferred = recipeById(preferredId);
-  if (style === "kiire" || style === "odav") return preferredId;
+  if (style === "kiire" || style === "odav" || style === "kvaliteetne") {
+    return preferredId;
+  }
 
   if (style === "taimne") {
     if (preferred.vegetarian) return preferredId;

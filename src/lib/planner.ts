@@ -9,7 +9,7 @@ import {
 export type Prefs = {
   budget: number;
   days: number;
-  style: "kiire" | "odav" | "taimne" | "liha";
+  style: "kiire" | "odav" | "kvaliteetne" | "taimne" | "liha";
   delivery: string;
 };
 
@@ -80,6 +80,9 @@ function matchesStyle(recipe: Recipe, style: Prefs["style"]): boolean {
   }
   if (style === "kiire") {
     return recipe.minutes <= 22 || recipe.tags.includes("kiire");
+  }
+  if (style === "kvaliteetne") {
+    return recipe.minutes >= 25 || !recipe.tags.includes("kiire");
   }
   return recipe.tags.includes("odav") || recipeCost(recipe) < 3.5;
 }
