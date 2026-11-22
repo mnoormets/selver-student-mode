@@ -970,23 +970,6 @@ export function StudentModeApp() {
                 )}
               </div>
 
-              <PlanAskCard
-                draft={draft}
-                setDraft={setDraft}
-                onSend={() => {
-                  sendChat();
-                  setTab("chat");
-                }}
-                onPantryDemo={() => {
-                  applyEggsAtHome(10);
-                  setTab("basket");
-                }}
-                onOpenChat={() => setTab("chat")}
-                lastAssistant={
-                  [...chat].reverse().find((m) => m.role === "assistant")?.text
-                }
-              />
-
               <div className="grid grid-cols-1 gap-2">
                 <Stat
                   label="Korvi summa"
@@ -1418,79 +1401,6 @@ function HeroCookCard({ onOpen }: { onOpen: () => void }) {
         Ava vestlus
         <ArrowRight className="size-4" style={{ color: PK_ORANGE }} />
       </button>
-    </div>
-  );
-}
-
-function PlanAskCard({
-  draft,
-  setDraft,
-  onSend,
-  onPantryDemo,
-  onOpenChat,
-  lastAssistant,
-}: {
-  draft: string;
-  setDraft: (v: string) => void;
-  onSend: () => void;
-  onPantryDemo?: () => void;
-  onOpenChat: () => void;
-  lastAssistant?: string;
-}) {
-  return (
-    <div
-      className="rounded-[14px] border-2 bg-white p-4 shadow-[0_8px_24px_rgba(249,125,0,0.12)]"
-      style={{ borderColor: PK_ORANGE }}
-    >
-      <div className="mb-2 flex items-start justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <MessageCircle className="size-5" style={{ color: PK_ORANGE }} />
-          <div>
-            <p className="font-display text-base font-bold text-black">
-              Küsi tudengiabilt
-            </p>
-            <p className="text-xs text-neutral-500">
-              Ütle, mis kodus on — arvutame, mida osta.
-            </p>
-          </div>
-        </div>
-        <button
-          type="button"
-          onClick={onOpenChat}
-          className="shrink-0 text-xs font-bold underline underline-offset-2"
-          style={{ color: PK_ORANGE }}
-        >
-          Ava vestlus
-        </button>
-      </div>
-
-      {lastAssistant && (
-        <p className="mb-3 line-clamp-3 rounded-[10px] bg-neutral-50 px-3 py-2 text-xs leading-relaxed text-neutral-700">
-          {lastAssistant}
-        </p>
-      )}
-
-      <div className="flex gap-2">
-        <Textarea
-          value={draft}
-          onChange={(e) => setDraft(e.target.value)}
-          placeholder="Nt: mul on kodus taigen ja mune…"
-          className="min-h-[44px] resize-none bg-white"
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              onSend();
-            }
-          }}
-        />
-        <Button
-          className="h-auto rounded-[12px] px-4 font-bold text-white hover:opacity-90"
-          style={{ backgroundColor: PK_ORANGE }}
-          onClick={onSend}
-        >
-          Saada
-        </Button>
-      </div>
     </div>
   );
 }
