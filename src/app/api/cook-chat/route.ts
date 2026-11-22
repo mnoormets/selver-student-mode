@@ -74,7 +74,7 @@ function budgetPastaResponse(
 
 /**
  * Cook-chat turn. Prefer live OpenAI when OPENAI_API_KEY is set; always fall
- * back to deterministic catalog maths (clearly marked as näidisvastus).
+ * back to a local recipe recommendation and example basket prices.
  * Budget / pantry / weekly intents from mnoormets; missing lines can be
  * enriched with live Selver search + catalog fallback.
  */

@@ -113,14 +113,14 @@ export async function searchSelverForProduct(
 
     const priceRaw = hit.salePrice || hit.price;
     const priceNum = priceRaw ? Number(priceRaw) : NaN;
-    const priceLabel = Number.isFinite(priceNum)
-      ? `${priceNum.toFixed(2)} €`
-      : catalogFallback(productId, query).priceLabel;
+    if (!Number.isFinite(priceNum) || priceNum <= 0) {
+      return catalogFallback(productId, query);
+    }
 
     const packMatch = hit.name.match(/(\d[\d\s]*(?:g|kg|ml|l|tk))/i);
     return {
       name: hit.name,
-      priceLabel,
+      priceLabel: `${priceNum.toFixed(2)} €`,
       url:
         hit.url ||
         `https://www.selver.ee/otsing?q=${encodeURIComponent(query)}`,

@@ -20,6 +20,10 @@ export type CookChatTurnResult = {
   missingProductIds?: string[];
 };
 
+export function isAdditivePantryFollowUp(question: string): boolean {
+  return /^(?:mul on ka|mul on lisaks|lisaks on mul|lisaks on kodus)\b/i.test(question.trim());
+}
+
 const WORD_NUMBERS: Record<string, number> = {
   üks: 1,
   uhe: 1,
@@ -315,6 +319,17 @@ export function answerCookChatTurn(
     };
   }
 
+  if (Object.keys(pantryIn).length === 0 && isAdditivePantryFollowUp(q)) {
+    return {
+      reply: "Panin selle kirja. Mis sul veel kodus olemas on? Siis saan öelda, kas pead midagi juurde ostma.",
+      pantry,
+      recipeId: opts.forceRecipeId ?? null,
+      demo,
+      readyToCook: false,
+      shoppingEmpty: true,
+    };
+  }
+
   const recipeId =
     detectExplicitRecipeId(q) ??
     detectRecipeId(q, pantry) ??
@@ -431,7 +446,7 @@ export function answerCookChatTurn(
       lines.push("", "Sul on juba:", ...haveBullets);
     }
     lines.push("", "Osta poest:", ...buyBullets);
-    lines.push("", `Kokku ~${formatEurosFromCents(basket.totalCents)}`);
+    lines.push("", `Kokku näidisandmestiku põhjal ~${formatEurosFromCents(basket.totalCents)}`);
   }
 
   return {
@@ -447,7 +462,7 @@ export function answerCookChatTurn(
 
 function demoPrefix(demo: boolean, text: string): string {
   if (!demo) return text;
-  return `Näidisvastus:\n${text}`;
+  return `Soovitus retseptivalikust\n${text}`;
 }
 
 /** Catalog snapshot for an LLM system prompt (no secrets). */
