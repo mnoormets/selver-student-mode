@@ -19,6 +19,16 @@ export const metadata: Metadata = {
   title: "Tudengirežiim · Partnerkaart",
   description:
     "Selveri tudengirežiim Partnerkaardi äpis — AI nädala menüü ja ostukorv tudengi eelarvele.",
+  applicationName: "Tudengirežiim",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Tudengirežiim",
+    statusBarStyle: "black-translucent",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

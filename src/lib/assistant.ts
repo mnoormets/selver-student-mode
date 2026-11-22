@@ -7,10 +7,14 @@ import { SPAGHETTI_EGGS_PROMPT } from "@/features/student-mode/quickMeal";
 import { PRODUCTS, RECIPES, unitPrice } from "./catalog";
 import type { PlanResult } from "./planner";
 
+import type { BudgetPastaChoice } from "@/features/student-mode/budgetPasta";
+
 export type ChatMessage = {
   id: string;
   role: "user" | "assistant";
   text: string;
+  /** Structured 10€ pasta-style choices rendered as pickable cards. */
+  pastaChoices?: BudgetPastaChoice[];
 };
 
 export { SPAGHETTI_EGGS_PROMPT };
